@@ -227,11 +227,11 @@ public class RedisService{
 			if(map.size()>0){
 				Object obj = clazz.newInstance();
 				if(obj instanceof RedisInterface &&!(obj instanceof RedisListInterface)){
-					if(map.size()!=((RedisInterface)obj).getFieldLength()){
-						logger.info("+-+ redis getObjectFromHash:"+ clazz.getName() +" expire.hash list size is more than expact. map:"+JSON.toJSONString(map));
-						jedis.expire(key, 0);
-						return null;
-					}
+//					if(map.size()!=((RedisInterface)obj).getFieldLength()){
+//						logger.info("+-+ redis getObjectFromHash:"+ clazz.getName() +" expire.hash list size is more than expact. map:"+JSON.toJSONString(map));
+//						jedis.expire(key, 0);
+//						return null;
+//					}
 				}
 				map.put(uniqueKey, key.split("#")[1]);
 				if(seconds>=0){

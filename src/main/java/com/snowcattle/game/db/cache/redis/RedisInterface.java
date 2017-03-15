@@ -12,7 +12,6 @@ import java.util.Map;
 public interface RedisInterface {
 	public Map<String,String> getAllFeildsToHash();
 	public String getUniqueKey();
-	public int getFieldLength();
-	public RedisKeyEnum getRedisKeyEnum();
+	public String getRedisKeyEnumString();
 }
 
