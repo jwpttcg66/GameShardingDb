@@ -121,7 +121,8 @@ public class ObjectUtils {
         System.arraycopy(b, 0, rt, a.length, b.length);
         return rt;
     }
-    private static Object getFieldsValueObj(Object obj,String fieldName){
+
+    public static Object getFieldsValueObj(Object obj,String fieldName){
         Field field = getDeclaredField(obj,fieldName);
         field.setAccessible(true);
         try {
