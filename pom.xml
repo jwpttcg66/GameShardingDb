@@ -130,7 +130,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.20</version>
+            <version>1.2.28</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
@@ -138,6 +138,12 @@
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jwpttcg66</groupId>
+            <artifactId>spring-sharding-mybaits</artifactId>
+            <version>1.1</version>
         </dependency>
 
     </dependencies>
