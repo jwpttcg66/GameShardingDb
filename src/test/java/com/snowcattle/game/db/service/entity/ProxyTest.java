@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.entity;
 
 import com.snowcattle.game.db.service.proxy.DbProxyService;
 import com.snowcattle.game.db.service.proxy.EntityProxy;
+import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import junit.framework.Test;
 
 import java.util.Date;
@@ -16,10 +17,9 @@ public class ProxyTest {
         testEntity.setDeleted(false);
         testEntity.setDeleteTime(new Date());
         DbProxyService dbProxyService = new DbProxyService();
-        EntityProxy entityProxy = dbProxyService.createProxy(testEntity);
-        TestEntity proxyTestEntity = (TestEntity) dbProxyService.getProxyEntity(entityProxy);
-        proxyTestEntity.setId(2L);
-        System.out.println(entityProxy.isDirtyFlag());
-
+        EntityProxyWrapper<TestEntity> entityEntityProxyWrapper = dbProxyService.createEntityProxyWrapper(testEntity);
+        TestEntity proxyEntity = entityEntityProxyWrapper.getProxyEntity();
+        proxyEntity.setId(2L);
+        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
     }
 }
