@@ -7,22 +7,10 @@ import com.snowcattle.game.db.entity.BaseEntity;
  */
 public class EntityProxyWrapper<T extends BaseEntity> {
 
-    //代理后的对象
-    private T proxyEntity;
-
     private EntityProxy entityProxy;
 
-    public EntityProxyWrapper(T proxyEntity, EntityProxy entityProxy) {
-        this.proxyEntity = proxyEntity;
+    public EntityProxyWrapper(EntityProxy entityProxy) {
         this.entityProxy = entityProxy;
-    }
-
-    public T getProxyEntity() {
-        return proxyEntity;
-    }
-
-    public void setProxyEntity(T proxyEntity) {
-        this.proxyEntity = proxyEntity;
     }
 
     public EntityProxy getEntityProxy() {

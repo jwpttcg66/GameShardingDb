@@ -4,6 +4,9 @@ import com.snowcattle.game.db.entity.BaseEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.stereotype.Service;
+import org.apache.commons.beanutils.BeanUtils;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by jwp on 2017/3/16.
@@ -15,28 +18,22 @@ public class DbProxyService {
         return new EntityProxy(entity);
     }
 
-    private IEntity createProxyEntity(EntityProxy entityProxy){
+    private BaseEntity createProxyEntity(EntityProxy entityProxy){
         Enhancer enhancer = new Enhancer();
         //设置需要创建子类的类
         enhancer.setSuperclass(entityProxy.getEntity().getClass());
         enhancer.setCallback(entityProxy);
         //通过字节码技术动态创建子类实例
-        return (IEntity) enhancer.create();
+        return (BaseEntity) enhancer.create();
     }
 
-    public EntityProxyWrapper createEntityProxyWrapper(BaseEntity entity){
+    public <T > T initProxyWrapper(Class<T> entityClass,  BaseEntity entity) throws Exception {
         EntityProxy entityProxy = createProxy(entity);
-        IEntity proxyEntity = createProxyEntity(entityProxy);
-        return new EntityProxyWrapper((BaseEntity) proxyEntity, entityProxy);
-    }
-
-    public <T > T initProxyWrapper(Class<T> entityClass,  BaseEntity entity){
-        EntityProxyWrapper entityProxyWrapper = createEntityProxyWrapper(entity);
-        BaseEntity proxyEntity = entityProxyWrapper.getProxyEntity();
-        proxyEntity.setEntityProxyWrapper(entityProxyWrapper);
-
+        EntityProxyWrapper entityProxyWrapper = new EntityProxyWrapper(entityProxy);
+        BaseEntity proxyEntity = createProxyEntity(entityProxy);
         //注入对象 数值
-
-        return (T) entityProxyWrapper.getProxyEntity();
+        BeanUtils.copyProperties(proxyEntity,entity);
+        proxyEntity.setEntityProxyWrapper(entityProxyWrapper);
+        return (T) proxyEntity;
     }
 }
