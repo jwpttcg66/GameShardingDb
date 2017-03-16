@@ -97,4 +97,5 @@ public class EntityProxy implements MethodInterceptor {
     public void setChangeParamSet(Map<String, Object> changeParamSet) {
         this.changeParamSet = changeParamSet;
     }
+
 }

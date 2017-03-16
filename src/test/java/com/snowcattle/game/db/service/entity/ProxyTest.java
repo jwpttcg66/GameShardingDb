@@ -17,11 +17,16 @@ public class ProxyTest {
         testEntity.setDeleted(false);
         testEntity.setDeleteTime(new Date());
         DbProxyService dbProxyService = new DbProxyService();
-        EntityProxyWrapper<TestEntity> entityEntityProxyWrapper = dbProxyService.createEntityProxyWrapper(testEntity);
-        TestEntity proxyEntity = entityEntityProxyWrapper.getProxyEntity();
+//        EntityProxyWrapper<TestEntity> entityEntityProxyWrapper = dbProxyService.createEntityProxyWrapper(testEntity);
+//        TestEntity proxyEntity = entityEntityProxyWrapper.getProxyEntity();
+//        proxyEntity.setId(2L);
+//        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
+//        proxyEntity.setId(2L);
+//        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
+        TestEntity proxyEntity = dbProxyService.initProxyWrapper(TestEntity.class, testEntity);
         proxyEntity.setId(2L);
-        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
+        System.out.println(proxyEntity.getEntityProxyWrapper().getEntityProxy().isDirtyFlag());
         proxyEntity.setId(2L);
-        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
+        System.out.println(proxyEntity.getEntityProxyWrapper().getEntityProxy().isDirtyFlag());
     }
 }
