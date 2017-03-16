@@ -1,13 +1,17 @@
 package com.snowcattle.game.db.service.proxy;
 
+import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.util.ObjectUtils;
+import org.slf4j.Logger;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by jiangwenping on 17/3/16.
@@ -15,13 +19,18 @@ import java.lang.reflect.Method;
  */
 public class EntityProxy implements MethodInterceptor {
 
+    private Logger logger = Loggers.dbProxyLogger;
     //实体对象
     private IEntity entity;
 
     //是否需要存储
     private boolean dirtyFlag;
 
+    //那些字段存在变化
+    private Map<String, Object> changeParamSet;
+
     public EntityProxy(IEntity entity) {
+        this.changeParamSet = new ConcurrentHashMap<>();
         this.entity = entity;
     }
 
@@ -37,7 +46,10 @@ public class EntityProxy implements MethodInterceptor {
             //检查对象原来数值
             String filedName = methodSaveProxyAnnotation.proxy();
             Object oldObject = ObjectUtils.getFieldsValueObj(entity, filedName);
-//            System.out.println(oldObject);
+            if(logger.isDebugEnabled()){
+                logger.debug(filedName + "替换前为" + oldObject);
+            }
+
             //获取新参数
             Object newObject = args[0];
             result = proxy.invokeSuper(obj, args);
@@ -49,7 +61,10 @@ public class EntityProxy implements MethodInterceptor {
             }
 
             if(dirtyFlag){
-                System.out.println("数据变换");
+                if(logger.isDebugEnabled()) {
+                    logger.debug(filedName + "替换后为" + newObject);
+                }
+                changeParamSet.put(filedName, newObject);
             }
         }else{
             result = proxy.invokeSuper(obj, args);
@@ -73,5 +88,13 @@ public class EntityProxy implements MethodInterceptor {
 
     public void setDirtyFlag(boolean dirtyFlag) {
         this.dirtyFlag = dirtyFlag;
+    }
+
+    public Map<String, Object> getChangeParamSet() {
+        return changeParamSet;
+    }
+
+    public void setChangeParamSet(Map<String, Object> changeParamSet) {
+        this.changeParamSet = changeParamSet;
     }
 }

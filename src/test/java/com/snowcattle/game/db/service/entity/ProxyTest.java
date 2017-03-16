@@ -21,5 +21,7 @@ public class ProxyTest {
         TestEntity proxyEntity = entityEntityProxyWrapper.getProxyEntity();
         proxyEntity.setId(2L);
         System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
+        proxyEntity.setId(2L);
+        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
     }
 }
