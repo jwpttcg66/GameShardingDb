@@ -15,21 +15,14 @@ import java.lang.reflect.Method;
  */
 public class EntityProxy implements MethodInterceptor {
 
-    //代理的队形
+    //实体对象
     private IEntity entity;
-
-    private Enhancer enhancer = new Enhancer();
 
     //是否需要存储
     private boolean dirtyFlag;
 
-    public IEntity getProxy(IEntity entity){
-        //设置需要创建子类的类
-        enhancer.setSuperclass(entity.getClass());
-        enhancer.setCallback(this);
+    public EntityProxy(IEntity entity) {
         this.entity = entity;
-        //通过字节码技术动态创建子类实例
-        return (IEntity) enhancer.create();
     }
 
     //实现MethodInterceptor接口方法
@@ -63,5 +56,22 @@ public class EntityProxy implements MethodInterceptor {
         }
 
         return result;
+    }
+
+
+    public IEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(IEntity entity) {
+        this.entity = entity;
+    }
+
+    public boolean isDirtyFlag() {
+        return dirtyFlag;
+    }
+
+    public void setDirtyFlag(boolean dirtyFlag) {
+        this.dirtyFlag = dirtyFlag;
     }
 }
