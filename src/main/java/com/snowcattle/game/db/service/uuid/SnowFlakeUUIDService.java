@@ -1,9 +1,12 @@
 package com.snowcattle.game.db.service.uuid;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Created by jiangwenping on 17/3/16.
  * 低16为为同一时间序列号65536, 中间9位位服务器节点最大为512， 高38位位当前时间跟开始时间的差值，(1L << 38) / (1000L * 60 * 60 * 24 * 365) 可以用8年
  */
+@Service
 public class SnowFlakeUUIDService implements IUUIDService{
     // ==============================Fields===========================================
     /** 开始时间截 (2017-01-01) */
@@ -38,6 +41,10 @@ public class SnowFlakeUUIDService implements IUUIDService{
     //节点号（0-512）
     private int nodeId;
 
+    //用于spring构造
+    public SnowFlakeUUIDService() {
+
+    }
     /**
      * A snowflake is designed to operate as a singleton instance within the context of a node.
      * If you deploy different nodes, supplying a unique node id will guarantee the uniqueness
