@@ -9,5 +9,6 @@ public interface IOrderService {
     public int insertOrder(Order order);
     public Order getOrder(long userId, long orderId);
     void updateOrder(Order order);
+    void deleteOrder(Order order);
 }
 

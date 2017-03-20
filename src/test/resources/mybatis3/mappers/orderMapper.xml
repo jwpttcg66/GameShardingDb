@@ -12,17 +12,21 @@
     <select id="getOrder" resultType="order" parameterType="map">
         select order_id, user_id, status
         from `t_order_${sharding_table_index}`
-        where user_id = #{userId} and order_id= #{orderId}#;
+        where user_id=#{userId} and order_id=#{orderId};
     </select>
 
     <update id="updateOrderByMap" parameterType="map">
         update `t_order_${sharding_table_index}`
         <trim prefix="SET" suffixOverrides=",">
             <if test="status!=null and status!='' ">
-                status = #{status},
+                status=#{status},
             </if>
         </trim>
-        where user_id = #{userId} and order_id= #{orderId}#;
+        where user_id=#{userId} and order_id=#{orderId};
     </update>
+
+    <delete id="deleteOrder" parameterType="order" >
+        delete from `t_order_${sharding_table_index}` where user_id=#{userId} and order_id=#{orderId};
+    </delete>
 
 </mapper>

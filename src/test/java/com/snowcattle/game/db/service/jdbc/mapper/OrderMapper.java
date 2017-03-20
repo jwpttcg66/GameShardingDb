@@ -12,4 +12,5 @@ public interface OrderMapper {
     int insertOrder(Order order);
     Order getOrder(Map map);
     void updateOrderByMap(Map map);
+    void deleteOrder(Order order);
 }

@@ -52,4 +52,11 @@ public class OrderService implements IOrderService{
         }
         orderMapper.updateOrderByMap(hashMap);
     }
+
+    @Override
+    public void deleteOrder(Order order) {
+        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, order.getUserId()));
+        order.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(order.getUserId()));
+        orderMapper.deleteOrder(order);
+    }
 }
