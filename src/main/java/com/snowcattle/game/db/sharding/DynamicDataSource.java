@@ -1,7 +1,5 @@
 package com.snowcattle.game.db.sharding;
 
-
-import com.snowcattle.demo.sharding.*;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 /**
@@ -11,6 +9,6 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 public class DynamicDataSource extends AbstractRoutingDataSource {
     @Override
     protected Object determineCurrentLookupKey() {
-        return com.snowcattle.demo.sharding.CustomerContextHolder.getCustomerType();
+        return CustomerContextHolder.getCustomerType();
     }
 }

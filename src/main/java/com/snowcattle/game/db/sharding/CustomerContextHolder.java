@@ -1,6 +1,5 @@
 package com.snowcattle.game.db.sharding;
 
-import com.snowcattle.demo.sharding.DataSourceType;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,10 +1,10 @@
 package com.snowcattle.game.db.entity;
 
-import com.snowcattle.demo.entity.ShardingTable;
 import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
+import com.snowcattle.game.db.sharding.ShardingTable;
 
 import java.util.Date;
 

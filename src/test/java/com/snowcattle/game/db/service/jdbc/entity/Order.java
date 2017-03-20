@@ -1,8 +1,8 @@
 package com.snowcattle.game.db.service.jdbc.entity;
 
-import com.snowcattle.demo.entity.AbstractShardingTable;
+import com.snowcattle.game.db.entity.BaseEntity;
 
-public class Order extends AbstractShardingTable {
+public class Order extends BaseEntity {
     private Integer orderId;
 
     private Integer userId;

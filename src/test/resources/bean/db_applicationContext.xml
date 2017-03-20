@@ -22,6 +22,7 @@
 
     <context:property-placeholder location="classpath:db_jdbc.properties" />
 
+
     <!-- 控制层配置 -->
-    <import resource="/bean/db_applicationContext_datasource.xml"/>
+    <import resource="/db_applicationContext_datasource.xml"/>
 </beans>

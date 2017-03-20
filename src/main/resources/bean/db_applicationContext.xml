@@ -18,10 +18,10 @@
 
     <context:annotation-config />
 
-    <context:component-scan base-package="com.snowcattle.game.db" />
+    <context:component-scan base-package="com.snowcattle.game." />
 
     <context:property-placeholder location="classpath:db_jdbc.properties" />
 
     <!-- 控制层配置 -->
-    <import resource="/bean/db_applicationContext_datasource.xml"/>
+    <import resource="/db_applicationContext_datasource.xml"/>
 </beans>
