@@ -29,13 +29,13 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dynamicDataSource" />
-        <property name="typeAliasesPackage" value="com.snowcattle.game.db.entity.impl"/>
-        <property name="typeHandlersPackage" value="com.snowcattle.game.db.handler"/>
+        <property name="typeAliasesPackage" value="com.snowcattle.game.db.service.jdbc.entity"/>
+        <property name="typeHandlersPackage" value="com.snowcattle.game.db.service.jdbc.handler"/>
         <property name="configLocation"  value="classpath:mybatis3/sqlMapConfig.xml"/>
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.snowcattle.game.db.mapper"/>
+        <property name="basePackage" value="com.snowcattle.game.db.service.jdbc.mapper"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
