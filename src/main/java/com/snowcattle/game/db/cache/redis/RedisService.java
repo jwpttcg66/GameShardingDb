@@ -10,6 +10,7 @@ import com.snowcattle.game.db.util.ObjectUtils;
 import com.snowcattle.game.db.util.TimeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Tuple;
@@ -17,6 +18,7 @@ import redis.clients.jedis.Tuple;
 import java.util.*;
 import java.util.Map.Entry;
 
+@Service
 public class RedisService{
 	
 	protected static Logger logger = Loggers.dbLogger;
