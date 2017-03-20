@@ -11,4 +11,5 @@ import java.util.Map;
 public interface OrderMapper {
     int insertOrder(Order order);
     Order getOrder(Map map);
+    void updateOrderByMap(Map map);
 }

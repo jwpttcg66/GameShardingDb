@@ -1,42 +1,20 @@
 package com.snowcattle.game.db.service.jdbc.entity;
 
+import com.snowcattle.game.db.common.annotation.EntitySave;
+import com.snowcattle.game.db.common.annotation.FieldSave;
+import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.entity.BaseEntity;
 
+@EntitySave
 public class Order extends BaseEntity {
-    private int orderId;
 
+    @FieldSave
+    private int orderId;
+    @FieldSave
     private int userId;
 
+    @FieldSave
     private String status;
-
-
-    /**
-     * @return order_id
-     */
-    public int getOrderId() {
-        return orderId;
-    }
-
-    /**
-     * @param orderId
-     */
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-    /**
-     * @return user_id
-     */
-    public int getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId
-     */
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     /**
      * @return status
@@ -48,6 +26,7 @@ public class Order extends BaseEntity {
     /**
      * @param status
      */
+    @MethodSaveProxy(proxy="status")
     public void setStatus(String status) {
         this.status = status;
     }
@@ -59,5 +38,21 @@ public class Order extends BaseEntity {
                 ", userId=" + userId +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

@@ -8,5 +8,6 @@ import com.snowcattle.game.db.service.jdbc.entity.Order;
 public interface IOrderService {
     public int insertOrder(Order order);
     public Order getOrder(long userId, long orderId);
+    void updateOrder(Order order);
 }
 
