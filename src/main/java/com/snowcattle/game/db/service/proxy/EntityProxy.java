@@ -5,7 +5,6 @@ import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.util.ObjectUtils;
 import org.slf4j.Logger;
-import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
@@ -29,6 +28,9 @@ public class EntityProxy implements MethodInterceptor {
     //那些字段存在变化
     private Map<String, Object> changeParamSet;
 
+    //初始化标志，只有初始化之后才会采集变化字段
+    private boolean collectFlag;
+
     public EntityProxy(IEntity entity) {
         this.changeParamSet = new ConcurrentHashMap<>();
         this.entity = entity;
@@ -39,35 +41,39 @@ public class EntityProxy implements MethodInterceptor {
                             MethodProxy proxy) throws Throwable {
         //通过代理类调用父类中的方法
         Object result = null;
-        //检查MethodProxy注解
-        MethodSaveProxy methodSaveProxyAnnotation = (MethodSaveProxy) method
-                .getAnnotation(MethodSaveProxy.class);
-        if (methodSaveProxyAnnotation != null) {
-            //检查对象原来数值
-            String filedName = methodSaveProxyAnnotation.proxy();
-            Object oldObject = ObjectUtils.getFieldsValueObj(entity, filedName);
-            if(logger.isDebugEnabled()){
-                logger.debug(filedName + "替换前为" + oldObject);
-            }
-
-            //获取新参数
-            Object newObject = args[0];
+        if(!collectFlag){
             result = proxy.invokeSuper(obj, args);
-
-            if(oldObject == null){
-                dirtyFlag = true;
-            }else if(!oldObject.equals(newObject)){
-                dirtyFlag = true;
-            }
-
-            if(dirtyFlag){
-                if(logger.isDebugEnabled()) {
-                    logger.debug(filedName + "替换后为" + newObject);
+        }else {
+            //检查MethodProxy注解
+            MethodSaveProxy methodSaveProxyAnnotation = (MethodSaveProxy) method
+                    .getAnnotation(MethodSaveProxy.class);
+            if (methodSaveProxyAnnotation != null) {
+                //检查对象原来数值
+                String filedName = methodSaveProxyAnnotation.proxy();
+                Object oldObject = ObjectUtils.getFieldsValueObj(entity, filedName);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(filedName + "替换前为" + oldObject);
                 }
-                changeParamSet.put(filedName, newObject);
+
+                //获取新参数
+                Object newObject = args[0];
+                result = proxy.invokeSuper(obj, args);
+
+                if (oldObject == null) {
+                    dirtyFlag = true;
+                } else if (!oldObject.equals(newObject)) {
+                    dirtyFlag = true;
+                }
+
+                if (dirtyFlag) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(filedName + "替换后为" + newObject);
+                    }
+                    changeParamSet.put(filedName, newObject);
+                }
+            } else {
+                result = proxy.invokeSuper(obj, args);
             }
-        }else{
-            result = proxy.invokeSuper(obj, args);
         }
 
         return result;
@@ -98,4 +104,11 @@ public class EntityProxy implements MethodInterceptor {
         this.changeParamSet = changeParamSet;
     }
 
+    public boolean isCollectFlag() {
+        return collectFlag;
+    }
+
+    public void setCollectFlag(boolean collectFlag) {
+        this.collectFlag = collectFlag;
+    }
 }
