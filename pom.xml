@@ -139,13 +139,6 @@
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.jwpttcg66</groupId>
-            <artifactId>spring-sharding-mybaits</artifactId>
-            <version>1.1</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
         <dependency>
             <groupId>commons-beanutils</groupId>

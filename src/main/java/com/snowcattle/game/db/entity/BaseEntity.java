@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.entity;
 
+import com.snowcattle.demo.entity.ShardingTable;
 import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
@@ -11,7 +12,7 @@ import java.util.Date;
  * Created by jiangwenping on 17/3/16.
  */
 @EntitySave
-public abstract  class BaseEntity implements ISoftDeleteEntity<Long>{
+public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEntity<Long>{
 
     @FieldSave
     private boolean deleted;
