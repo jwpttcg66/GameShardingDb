@@ -14,7 +14,7 @@ public class JdbcTest {
 //        insertTest(classPathXmlApplicationContext);
         Order order = getTest(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
-        deleteTest(classPathXmlApplicationContext, order);
+//        deleteTest(classPathXmlApplicationContext, order);
     }
 
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
