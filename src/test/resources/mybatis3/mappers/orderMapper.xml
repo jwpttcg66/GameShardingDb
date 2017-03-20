@@ -9,10 +9,10 @@
         VALUES (#{orderId},#{userId},#{status})
     </insert>
 
-    <select id="getOrder" resultType="order" >
+    <select id="getOrder" resultType="order" parameterType="map">
         select order_id, user_id, status
-        from `t_order_${0}`
-        where user_id = #{1} and order_id= #{2}#;
+        from `t_order_${sharding_table_index}`
+        where user_id = #{userId} and order_id= #{orderId}#;
     </select>
 
 </mapper>

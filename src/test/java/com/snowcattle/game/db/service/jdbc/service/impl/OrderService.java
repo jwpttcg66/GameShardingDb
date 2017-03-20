@@ -8,6 +8,9 @@ import com.snowcattle.game.db.sharding.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by jiangwenping on 17/3/20.
  */
@@ -27,6 +30,10 @@ public class OrderService implements IOrderService{
     public Order getOrder(long userId, long orderId) {
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, userId));
         int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(userId);
-        return orderMapper.getOrder(sharding_table_index, userId, orderId);
+        Map hashMap = new HashMap<>();
+        hashMap.put("sharding_table_index", sharding_table_index);
+        hashMap.put("userId", userId);
+        hashMap.put("orderId", orderId);
+        return orderMapper.getOrder(hashMap);
     }
 }
