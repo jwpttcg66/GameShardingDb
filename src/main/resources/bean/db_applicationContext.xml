@@ -18,7 +18,7 @@
 
     <context:annotation-config />
 
-    <context:component-scan base-package="com.snowcattle.game." />
+    <context:component-scan base-package="com.snowcattle.game.db" />
 
     <context:property-placeholder location="classpath:db_jdbc.properties" />
 
