@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * Created by jwp on 2017/3/16.
  */
 @Service
-public class DbProxyService <T extends IEntity>{
+public class DbProxyService{
 
     private EntityProxy createProxy(IEntity entity){
         return new EntityProxy(entity);
