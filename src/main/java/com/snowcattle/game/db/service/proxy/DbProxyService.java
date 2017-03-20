@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * Created by jwp on 2017/3/16.
  */
 @Service
-public class DbProxyService {
+public class DbProxyService <T extends IEntity>{
 
     private EntityProxy createProxy(IEntity entity){
         return new EntityProxy(entity);
@@ -25,7 +25,7 @@ public class DbProxyService {
         return (BaseEntity) enhancer.create();
     }
 
-    public <T > T initProxyWrapper(Class<T> entityClass,  BaseEntity entity) throws Exception {
+    public <T > T initProxyWrapper(BaseEntity entity) throws Exception {
         EntityProxy entityProxy = createProxy(entity);
         EntityProxyWrapper entityProxyWrapper = new EntityProxyWrapper(entityProxy);
         BaseEntity proxyEntity = createProxyEntity(entityProxy);

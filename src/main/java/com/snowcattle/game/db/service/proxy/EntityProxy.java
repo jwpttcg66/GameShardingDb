@@ -16,11 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by jiangwenping on 17/3/16.
  * db存储的代理对象
  */
-public class EntityProxy implements MethodInterceptor {
+public class EntityProxy< T extends IEntity> implements MethodInterceptor {
 
     private Logger logger = Loggers.dbProxyLogger;
     //实体对象
-    private IEntity entity;
+    private T entity;
 
     //是否需要存储
     private boolean dirtyFlag;
@@ -31,7 +31,7 @@ public class EntityProxy implements MethodInterceptor {
     //初始化标志，只有初始化之后才会采集变化字段
     private boolean collectFlag;
 
-    public EntityProxy(IEntity entity) {
+    public EntityProxy(T entity) {
         this.changeParamSet = new ConcurrentHashMap<>();
         this.entity = entity;
     }
@@ -84,7 +84,7 @@ public class EntityProxy implements MethodInterceptor {
         return entity;
     }
 
-    public void setEntity(IEntity entity) {
+    public void setEntity(T entity) {
         this.entity = entity;
     }
 
