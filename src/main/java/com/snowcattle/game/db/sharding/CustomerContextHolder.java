@@ -22,12 +22,12 @@ public class CustomerContextHolder {
         contextHolder.set(customerType);
     }
 
-    public  static String getShardingDBKeyByUserId(DataSourceType dataSourceType, int userId) {
-        int dbIndex = userId % DB_COUNT;
+    public  static String getShardingDBKeyByUserId(DataSourceType dataSourceType, long userId) {
+        long dbIndex = userId % DB_COUNT;
         return dataSourceType.toString() + dbIndex;
     }
 
-    public static int getShardingDBTableIndexByUserId(int userId){
-        return userId%TABLE_COUNT;
+    public static int getShardingDBTableIndexByUserId(long userId){
+        return (int) (userId%TABLE_COUNT);
     }
 }

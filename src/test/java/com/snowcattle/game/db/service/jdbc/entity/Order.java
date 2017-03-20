@@ -3,9 +3,9 @@ package com.snowcattle.game.db.service.jdbc.entity;
 import com.snowcattle.game.db.entity.BaseEntity;
 
 public class Order extends BaseEntity {
-    private Integer orderId;
+    private int orderId;
 
-    private Integer userId;
+    private int userId;
 
     private String status;
 
@@ -13,28 +13,28 @@ public class Order extends BaseEntity {
     /**
      * @return order_id
      */
-    public Integer getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
     /**
      * @param orderId
      */
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
     /**
      * @return user_id
      */
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
     /**
      * @param userId
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

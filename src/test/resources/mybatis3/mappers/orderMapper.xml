@@ -9,4 +9,10 @@
         VALUES (#{orderId},#{userId},#{status})
     </insert>
 
+    <select id="getOrder" resultType="order" >
+        select order_id, user_id, status
+        from `t_order_${0}`
+        where user_id = #{1} and order_id= #{2}#;
+    </select>
+
 </mapper>
