@@ -40,7 +40,7 @@ public class JdbcTest {
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, Order order) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         DbProxyService dbProxyService = (DbProxyService) classPathXmlApplicationContext.getBean("dbProxyService");
-        Order proxyOrder = (Order) dbProxyService.initProxyWrapper(order);
+        Order proxyOrder = dbProxyService.initProxyWrapper(order);
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 

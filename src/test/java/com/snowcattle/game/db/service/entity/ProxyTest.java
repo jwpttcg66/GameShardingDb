@@ -20,7 +20,7 @@ public class ProxyTest {
 //        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
 //        proxyEntity.setId(2L);
 //        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
-        TestEntity proxyEntity = (TestEntity) dbProxyService.initProxyWrapper(testEntity);
+        TestEntity proxyEntity = dbProxyService.initProxyWrapper(testEntity);
         proxyEntity.setId(2L);
         System.out.println(proxyEntity.getEntityProxyWrapper().getEntityProxy().isDirtyFlag());
         proxyEntity.setId(2L);

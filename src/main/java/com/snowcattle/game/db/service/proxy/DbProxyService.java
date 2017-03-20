@@ -25,7 +25,7 @@ public class DbProxyService{
         return (BaseEntity) enhancer.create();
     }
 
-    public <T > T initProxyWrapper(BaseEntity entity) throws Exception {
+    public <T extends  BaseEntity> T initProxyWrapper(BaseEntity entity) throws Exception {
         EntityProxy entityProxy = createProxy(entity);
         EntityProxyWrapper entityProxyWrapper = new EntityProxyWrapper(entityProxy);
         BaseEntity proxyEntity = createProxyEntity(entityProxy);
