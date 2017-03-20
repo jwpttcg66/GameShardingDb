@@ -12,5 +12,6 @@ public class redisTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
         RedisService redisService = (RedisService) BeanUtil.getBean("redisService");
         redisService.setString("test", "2");
+        System.out.println(redisService.getString("test"));
     }
 }
