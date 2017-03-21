@@ -4,7 +4,7 @@
 <mapper namespace="com.snowcattle.game.db.service.jdbc.mapper.OrderMapper">
 
     <!--批量插入-->
-    <insert id="insertOrder" parameterType="order">
+    <insert id="insertEntity" parameterType="order">
         INSERT INTO `t_order_${sharding_table_index}` (order_id, user_id, status)
         VALUES (#{orderId},#{userId},#{status})
     </insert>

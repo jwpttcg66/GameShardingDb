@@ -8,8 +8,7 @@ import java.util.Map;
 /**
  * Created by jiangwenping on 17/3/6.
  */
-public interface OrderMapper {
-    int insertOrder(Order order);
+public interface OrderMapper extends IDBMapper<Order>{
     Order getOrder(Map map);
     void updateOrderByMap(Map map);
     void deleteOrder(Order order);

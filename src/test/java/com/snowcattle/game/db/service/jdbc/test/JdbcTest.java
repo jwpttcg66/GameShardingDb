@@ -11,8 +11,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class JdbcTest {
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
-//        insertTest(classPathXmlApplicationContext);
-        Order order = getTest(classPathXmlApplicationContext);
+        insertTest(classPathXmlApplicationContext);
+//        Order order = getTest(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
     }
@@ -20,7 +20,9 @@ public class JdbcTest {
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        for(int i = 0; i < 12; i++){
+        int startSize = 13;
+        int endSize = 15;
+        for(int i = startSize; i < endSize; i++){
             Order order = new Order();
             order.setUserId(i);
             order.setOrderId(i);
