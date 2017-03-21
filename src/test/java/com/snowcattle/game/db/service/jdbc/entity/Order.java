@@ -10,8 +10,6 @@ public class Order extends BaseEntity {
 
     @FieldSave
     private int orderId;
-    @FieldSave
-    private int userId;
 
     @FieldSave
     private String status;
@@ -35,7 +33,7 @@ public class Order extends BaseEntity {
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
-                ", userId=" + userId +
+                ", userId=" + getUserId() +
                 ", status='" + status + '\'' +
                 '}';
     }
@@ -48,11 +46,4 @@ public class Order extends BaseEntity {
         this.orderId = orderId;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 }

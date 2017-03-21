@@ -23,6 +23,9 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
     @FieldSave
     private Long id;
 
+    @FieldSave
+    private long userId;
+
     //用于记录数据库封装对象
     private EntityProxyWrapper entityProxyWrapper;
 
@@ -53,6 +56,14 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
     @MethodSaveProxy(proxy="id")
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+    @MethodSaveProxy(proxy="userId")
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public EntityProxyWrapper getEntityProxyWrapper() {

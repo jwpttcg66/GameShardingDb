@@ -23,8 +23,6 @@ public class OrderService extends EntityService<Order> implements IOrderService{
     private OrderMapper orderMapper;
 
     public int insertOrder(Order order) {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, order.getUserId()));
-        order.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(order.getUserId()));
         return insertEntity(orderMapper, order);
     }
 
