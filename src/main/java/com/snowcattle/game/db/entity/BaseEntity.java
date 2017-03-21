@@ -3,6 +3,7 @@ package com.snowcattle.game.db.entity;
 import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
+import com.snowcattle.game.db.service.entity.EntityKeyShardingStrategyEnum;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.ShardingTable;
 
@@ -72,5 +73,9 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
 
     public void setEntityProxyWrapper(EntityProxyWrapper entityProxyWrapper) {
         this.entityProxyWrapper = entityProxyWrapper;
+    }
+
+    public EntityKeyShardingStrategyEnum getEntityKeyShardingStrategyEnum(){
+        return EntityKeyShardingStrategyEnum.USER_ID;
     }
 }

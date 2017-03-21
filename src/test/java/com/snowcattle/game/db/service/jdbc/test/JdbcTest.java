@@ -20,8 +20,8 @@ public class JdbcTest {
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        int startSize = 15;
-        int endSize = 16;
+        int startSize = 16;
+        int endSize = 17;
         for(int i = startSize; i < endSize; i++){
             Order order = new Order();
             order.setUserId(i);
