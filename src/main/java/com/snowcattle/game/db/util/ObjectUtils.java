@@ -18,54 +18,6 @@ import java.util.regex.Pattern;
 public class ObjectUtils {
 
     /**
-     * 截取某列表的部分数据
-     * @param <T>
-     * @param list
-     * @param skip
-     * @param pageSize
-     */
-    public static <T> List<T> getSubListPage(List<T> list, int skip, int pageSize) {
-        if(list==null||list.isEmpty()){
-            return null;
-        }
-        int startIndex = skip;
-        int endIndex = skip+pageSize;
-        if(startIndex>endIndex||startIndex>list.size()){
-            return null;
-        }
-        if(endIndex>list.size()){
-            endIndex = list.size();
-        }
-        return list.subList(startIndex, endIndex);
-    }
-
-    /**
-     * 判断某个地址是否是IP地址
-     * @param content
-     */
-    public static boolean isIpAddress(String content){
-        String rt = parseIpAddress(content);
-        if(!StringUtils.isEmpty(rt)){
-            if(rt.equals(content)){
-                return true;
-            }
-        }
-        return false;
-    }
-    /*
-     * 解释IP地址
-     */
-    private static String parseIpAddress(String content){
-        String regexIp = "((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|[1-9])";
-        Pattern pattern = Pattern.compile(regexIp);
-        Matcher matcher = pattern.matcher(content);
-        String rt = null;
-        while(matcher.find()){
-            rt = matcher.group();
-        }
-        return rt;
-    }
-    /**
      * 获取某个对象某些字段的Map
      * @param obj
      */

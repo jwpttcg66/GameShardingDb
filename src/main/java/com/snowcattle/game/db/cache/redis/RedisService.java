@@ -3,10 +3,8 @@ package com.snowcattle.game.db.cache.redis;
 
 import com.snowcattle.game.db.common.GlobalConstants;
 import com.snowcattle.game.db.common.Loggers;
-import com.snowcattle.game.db.util.CodecUtil;
-import com.snowcattle.game.db.util.JsonUtils;
-import com.snowcattle.game.db.util.ObjectUtils;
-import com.snowcattle.game.db.util.TimeUtils;
+import com.snowcattle.game.db.entity.IEntity;
+import com.snowcattle.game.db.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -91,8 +89,8 @@ public class RedisService{
 	 * @param key
 	 * @param object
 	 */
-	public void setObjectToHash(String key,RedisInterface object){
-		setObjectToHash(key, object, GlobalConstants.RedisKeyConfig.NORMAL_LIFECYCLE);
+	public void setObjectToHash(String key, IEntity entity){
+		setObjectToHash(key, entity, GlobalConstants.RedisKeyConfig.NORMAL_LIFECYCLE);
 	}
 	/**
 	 * 将对象保存到hash中,并且设置生命周期
@@ -100,16 +98,16 @@ public class RedisService{
 	 * @param object
 	 * @param seconds
 	 */
-	public boolean setObjectToHash(String key,RedisInterface object,int seconds){
+	public boolean setObjectToHash(String key,IEntity entity,int seconds){
 		Jedis jedis = null;
 		boolean sucess = true;
 		try{
 			jedis=jedisPool.getResource();
-//			Map<String, String> map = object.getAllFeildsToHash();
-//			jedis.hmset(key, map);
-//			if(seconds>=0){
-//				jedis.expire(key, seconds);
-//			}
+			Map<String, String> map = EntityUtils.getCacheValueMap(entity);
+			jedis.hmset(key, map);
+			if(seconds>=0){
+				jedis.expire(key, seconds);
+			}
 		}catch (Exception e) {
 			sucess = false;
 			returnBrokenResource(jedis, "setObjectToHash:"+key, e);
@@ -218,7 +216,7 @@ public class RedisService{
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getObjectFromHash(String key,Class<?> clazz, int second){
-		return (T)getObjectFromHash(key, clazz, "id",second);
+		return (T)getObjectFromHash(key, clazz, unionKey,second);
 	}
 	/*
 	 * 通过反射从缓存里获取一个对象
@@ -324,7 +322,7 @@ public class RedisService{
 //					mapFields=JsonUtils.getMapFromJson(entry.getValue());
 					po = (RedisListInterface) clazz.newInstance();
 					mapFields.put(po.getUniqueKey(), key.split("#")[1]);
-					keyNames=po.getSubUniqueKey();
+//					keyNames=po.getSubUniqueKey();
 					String uniqueKeys[]=fieldKey.split("#");
 					for(int i=0,j=keyNames.length;i<j;i++){
 						mapFields.put(keyNames[i], uniqueKeys[i]);
@@ -785,7 +783,7 @@ public class RedisService{
 				int size = keys.size();
 				int page = size / GlobalConstants.RedisKeyConfig.MGET_MAX_KEY + ((size % GlobalConstants.RedisKeyConfig.MGET_MAX_KEY)>0?1:0);
 				for(int i=0;i<page;i++){
-					tmp.addAll(ObjectUtils.getSubListPage(keys, i*GlobalConstants.RedisKeyConfig.MGET_MAX_KEY, GlobalConstants.RedisKeyConfig.MGET_MAX_KEY));
+					tmp.addAll(PageUtils.getSubListPage(keys, i * GlobalConstants.RedisKeyConfig.MGET_MAX_KEY, GlobalConstants.RedisKeyConfig.MGET_MAX_KEY));
 					rt.addAll(jedis.mget(tmp.toArray(new String[0])));
 					tmp.clear();
 				}
