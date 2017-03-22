@@ -15,7 +15,7 @@
         where user_id=#{userId} and id=#{id};
     </select>
 
-    <update id="updateOrderByMap" parameterType="map">
+    <update id="updateEntityByMap" parameterType="map">
         update `t_order_${sharding_table_index}`
         <trim prefix="SET" suffixOverrides=",">
             <if test="status!=null and status!='' ">

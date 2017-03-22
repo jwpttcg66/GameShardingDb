@@ -20,7 +20,7 @@ public class DbProxyService{
     private <T extends  IEntity> T  createProxyEntity(EntityProxy entityProxy){
         Enhancer enhancer = new Enhancer();
         //设置需要创建子类的类
-        enhancer.setSuperclass(entityProxy.getClass());
+        enhancer.setSuperclass(entityProxy.getEntity().getClass());
         enhancer.setCallback(entityProxy);
         //通过字节码技术动态创建子类实例
         return (T) enhancer.create();

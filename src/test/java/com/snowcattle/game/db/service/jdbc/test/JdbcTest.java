@@ -13,7 +13,7 @@ public class JdbcTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
         Order order = getTest(classPathXmlApplicationContext);
-//        updateTest(classPathXmlApplicationContext, order);
+        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
     }
 
@@ -33,8 +33,8 @@ public class JdbcTest {
 
     public static Order getTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        long userId = 16;
-        long id = 16;
+        long userId = 2;
+        long id = 2;
         Order order = orderService.getOrder(userId, id);
         System.out.println(order);
         return order;
@@ -50,7 +50,7 @@ public class JdbcTest {
         long userId = 2;
         long id = 2;
         Order queryOrder = orderService.getOrder(userId, id);
-        System.out.println(queryOrder);
+        System.out.println(queryOrder.getStatus());
     }
 
     public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, Order order) throws Exception {

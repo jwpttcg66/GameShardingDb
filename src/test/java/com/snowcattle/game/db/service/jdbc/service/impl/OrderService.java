@@ -34,17 +34,7 @@ public class OrderService extends EntityService<Order> implements IOrderService{
 
     @Override
     public void updateOrder(Order order) {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, order.getUserId()));
-        int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(order.getUserId());
-        Map hashMap = new HashMap<>();
-        hashMap.put("sharding_table_index", sharding_table_index);
-        hashMap.put("userId", order.getUserId());
-        hashMap.put("id", order.getId());
-        EntityProxyWrapper entityProxyWrapper = order.getEntityProxyWrapper();
-        if(entityProxyWrapper != null){
-            hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
-        }
-        orderMapper.updateOrderByMap(hashMap);
+        updateEntity(orderMapper, order);
     }
 
     @Override

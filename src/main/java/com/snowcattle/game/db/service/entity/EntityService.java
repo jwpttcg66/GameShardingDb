@@ -36,7 +36,20 @@ public class EntityService<T extends BaseEntity>{
     }
 
 
-
+    public void updateEntity(IDBMapper<T> idbMapper, T entity) {
+        long selectId = getShardingId(entity);
+        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
+        int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
+        Map hashMap = new HashMap<>();
+        hashMap.put("sharding_table_index", sharding_table_index);
+        hashMap.put("userId", entity.getUserId());
+        hashMap.put("id", entity.getId());
+        EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
+        if(entityProxyWrapper != null){
+            hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
+        }
+        idbMapper.updateEntityByMap(hashMap);
+    }
 
     //获取分库主键
     private long getShardingId(T entity){
