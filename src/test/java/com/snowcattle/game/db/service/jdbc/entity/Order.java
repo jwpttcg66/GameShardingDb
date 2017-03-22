@@ -9,9 +9,6 @@ import com.snowcattle.game.db.entity.BaseEntity;
 public class Order extends BaseEntity {
 
     @FieldSave
-    private int orderId;
-
-    @FieldSave
     private String status;
 
     /**
@@ -32,18 +29,9 @@ public class Order extends BaseEntity {
     @Override
     public String toString() {
         return "Order{" +
-                "orderId=" + orderId +
+                "orderId=" + getId() +
                 ", userId=" + getUserId() +
                 ", status='" + status + '\'' +
                 '}';
     }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
 }

@@ -11,8 +11,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class JdbcTest {
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
-        insertTest(classPathXmlApplicationContext);
-//        Order order = getTest(classPathXmlApplicationContext);
+//        insertTest(classPathXmlApplicationContext);
+        Order order = getTest(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
     }
@@ -20,12 +20,12 @@ public class JdbcTest {
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        int startSize = 16;
-        int endSize = 17;
+        int startSize = 0;
+        int endSize = 12;
         for(int i = startSize; i < endSize; i++){
             Order order = new Order();
             order.setUserId(i);
-            order.setOrderId(i);
+            order.setId((long) i);
             order.setStatus("测试插入" + i);
             orderService.insertOrder(order);
         }
@@ -33,9 +33,9 @@ public class JdbcTest {
 
     public static Order getTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        long userId = 2;
-        long orderId = 2;
-        Order order = orderService.getOrder(userId, orderId);
+        long userId = 16;
+        long id = 16;
+        Order order = orderService.getOrder(userId, id);
         System.out.println(order);
         return order;
     }
@@ -48,8 +48,8 @@ public class JdbcTest {
         orderService.updateOrder(proxyOrder);
 
         long userId = 2;
-        long orderId = 2;
-        Order queryOrder = orderService.getOrder(userId, orderId);
+        long id = 2;
+        Order queryOrder = orderService.getOrder(userId, id);
         System.out.println(queryOrder);
     }
 
@@ -57,8 +57,8 @@ public class JdbcTest {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         orderService.deleteOrder(order);
         long userId = 2;
-        long orderId = 2;
-        Order queryOrder = orderService.getOrder(userId, orderId);
+        long id = 2;
+        Order queryOrder = orderService.getOrder(userId, id);
         System.out.println(queryOrder);
     }
 }

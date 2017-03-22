@@ -5,14 +5,14 @@
 
     <!--批量插入-->
     <insert id="insertEntity" parameterType="order">
-        INSERT INTO `t_order_${sharding_table_index}` (order_id, user_id, status)
-        VALUES (#{orderId},#{userId},#{status})
+        INSERT INTO `t_order_${sharding_table_index}` (id, user_id, status)
+        VALUES (#{id},#{userId},#{status})
     </insert>
 
-    <select id="getOrder" resultType="order" parameterType="map">
-        select order_id, user_id, status
+    <select id="getEntity" resultType="order" parameterType="map">
+        select id, user_id, status
         from `t_order_${sharding_table_index}`
-        where user_id=#{userId} and order_id=#{orderId};
+        where user_id=#{userId} and id=#{id};
     </select>
 
     <update id="updateOrderByMap" parameterType="map">
@@ -22,11 +22,11 @@
                 status=#{status},
             </if>
         </trim>
-        where user_id=#{userId} and order_id=#{orderId};
+        where user_id=#{userId} and id=#{id};
     </update>
 
     <delete id="deleteOrder" parameterType="order" >
-        delete from `t_order_${sharding_table_index}` where user_id=#{userId} and order_id=#{orderId};
+        delete from `t_order_${sharding_table_index}` where user_id=#{userId} and id=#{id};
     </delete>
 
 </mapper>

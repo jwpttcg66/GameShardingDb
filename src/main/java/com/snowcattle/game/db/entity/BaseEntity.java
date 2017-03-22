@@ -22,10 +22,10 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
     private Date deleteTime;
 
     @FieldSave
-    private Long id;
+    private long id;
 
     @FieldSave
-    private long userId;
+    private Long userId;
 
     //用于记录数据库封装对象
     private EntityProxyWrapper entityProxyWrapper;

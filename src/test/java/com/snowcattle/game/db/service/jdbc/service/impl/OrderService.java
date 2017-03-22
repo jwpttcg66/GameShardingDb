@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.jdbc.service.impl;
 
+import com.snowcattle.game.db.service.entity.EntityKeyShardingStrategyEnum;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.mapper.OrderMapper;
@@ -28,13 +29,7 @@ public class OrderService extends EntityService<Order> implements IOrderService{
 
     @Override
     public Order getOrder(long userId, long orderId) {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, userId));
-        int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(userId);
-        Map hashMap = new HashMap<>();
-        hashMap.put("sharding_table_index", sharding_table_index);
-        hashMap.put("userId", userId);
-        hashMap.put("orderId", orderId);
-        return orderMapper.getOrder(hashMap);
+        return (Order) getEntity(orderMapper, userId, orderId, EntityKeyShardingStrategyEnum.USER_ID);
     }
 
     @Override
@@ -44,7 +39,7 @@ public class OrderService extends EntityService<Order> implements IOrderService{
         Map hashMap = new HashMap<>();
         hashMap.put("sharding_table_index", sharding_table_index);
         hashMap.put("userId", order.getUserId());
-        hashMap.put("orderId", order.getOrderId());
+        hashMap.put("id", order.getId());
         EntityProxyWrapper entityProxyWrapper = order.getEntityProxyWrapper();
         if(entityProxyWrapper != null){
             hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
