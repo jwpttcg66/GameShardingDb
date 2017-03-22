@@ -1,16 +1,10 @@
 package com.snowcattle.game.db.cache.redis;
 
-
-
-import java.util.Map;
-
 /**
- * 获取所有需import java.util.Map;
-必须为"uid"
- * 2、po的所有需要保存的属性必须和数据库里的属性命名一致
+ * Created by jiangwenping on 17/3/16.
+ * 默认保存为map, 保证更新不会被覆盖
  */
 public interface RedisInterface {
-	public Map<String,String> getAllFeildsToHash();
 	public String getUniqueKey();
 	public String getRedisKeyEnumString();
 }

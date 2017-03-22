@@ -1,7 +1,6 @@
 package com.snowcattle.game.db.cache.redis;
 
 
-import com.alibaba.fastjson.JSON;
 import com.snowcattle.game.db.common.GlobalConstants;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.util.CodecUtil;
@@ -18,9 +17,19 @@ import redis.clients.jedis.Tuple;
 import java.util.*;
 import java.util.Map.Entry;
 
+/**
+ * Created by jiangwenping on 17/3/16.
+ * 缓存服务
+ */
+
 @Service
 public class RedisService{
-	
+
+	/**
+	 * 默认的唯一字符
+	 */
+	public static String unionKey = "id";
+
 	protected static Logger logger = Loggers.dbLogger;
 	/*
 	 * 数据源
@@ -96,11 +105,11 @@ public class RedisService{
 		boolean sucess = true;
 		try{
 			jedis=jedisPool.getResource();
-			Map<String, String> map = object.getAllFeildsToHash();
-			jedis.hmset(key, map);
-			if(seconds>=0){
-				jedis.expire(key, seconds);
-			}
+//			Map<String, String> map = object.getAllFeildsToHash();
+//			jedis.hmset(key, map);
+//			if(seconds>=0){
+//				jedis.expire(key, seconds);
+//			}
 		}catch (Exception e) {
 			sucess = false;
 			returnBrokenResource(jedis, "setObjectToHash:"+key, e);
@@ -128,7 +137,6 @@ public class RedisService{
 	 */
 	
 	public void updateHashMap(String key,Map<String,Object> map,String unique){
-		map.remove("_platform");
 		Jedis jedis = null;
 		boolean sucess = true;
 		try{
@@ -273,9 +281,9 @@ public class RedisService{
 			Map<String,String> map=new HashMap<String, String>();
 			Map<String,String> keyMap=null;
 			String[] keyNames=null;
-			for(RedisListInterface po:list){
-				map.put(ObjectUtils.getFieldsValueStr(po, po.getSubUniqueKey()), JsonUtils.getJsonStr(po.getAllFeildsToHash()));
-			}
+//			for(RedisListInterface po:list){
+//				map.put(ObjectUtils.getFieldsValueStr(po, po.getSubUniqueKey()), JsonUtils.getJsonStr(po.getAllFeildsToHash()));
+//			}
 			jedis=jedisPool.getResource();
 			jedis.hmset(key, map);
 			if(seconds >= 0){
