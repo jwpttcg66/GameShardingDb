@@ -3,6 +3,7 @@ package com.snowcattle.game.db.service.proxy;
 import com.snowcattle.game.db.entity.BaseEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.cglib.proxy.Callback;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,16 @@ public class DbProxyService{
         return new EntityProxy(entity);
     }
 
-    private BaseEntity createProxyEntity(EntityProxy entityProxy){
+    private <T extends  IEntity> T  createProxyEntity(EntityProxy entityProxy){
         Enhancer enhancer = new Enhancer();
         //设置需要创建子类的类
-        enhancer.setSuperclass(entityProxy.getEntity().getClass());
+        enhancer.setSuperclass(entityProxy.getClass());
         enhancer.setCallback(entityProxy);
         //通过字节码技术动态创建子类实例
-        return (BaseEntity) enhancer.create();
+        return (T) enhancer.create();
     }
 
-    public <T extends  BaseEntity> T initProxyWrapper(BaseEntity entity) throws Exception {
+    public <T extends  IEntity> T initProxyWrapper(T entity) throws Exception {
         EntityProxy entityProxy = createProxy(entity);
         EntityProxyWrapper entityProxyWrapper = new EntityProxyWrapper(entityProxy);
         BaseEntity proxyEntity = createProxyEntity(entityProxy);
