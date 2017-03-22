@@ -12,10 +12,16 @@ import java.util.Map;
 
 /**
  * Created by jiangwenping on 17/3/21.
- * 实体服务
+ * 模版实体数据提服务
  */
 public class EntityService<T extends BaseEntity>{
 
+    /**
+     * 插入实体
+     * @param idbMapper
+     * @param entity
+     * @return
+     */
     public int insertEntity(IDBMapper<T> idbMapper, T entity){
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -23,7 +29,14 @@ public class EntityService<T extends BaseEntity>{
         return idbMapper.insertEntity(entity);
     }
 
-
+    /**
+     * 查询实体
+     * @param idbMapper
+     * @param id
+     * @param userId
+     * @param entityKeyShardingStrategyEnum
+     * @return
+     */
     public IEntity getEntity(IDBMapper<T> idbMapper, long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum){
         long selectId = getShardingId(id, userId, entityKeyShardingStrategyEnum);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -35,7 +48,11 @@ public class EntityService<T extends BaseEntity>{
         return idbMapper.getEntity(hashMap);
     }
 
-
+    /**
+     * 修改实体
+     * @param idbMapper
+     * @param entity
+     */
     public void updateEntity(IDBMapper<T> idbMapper, T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -51,6 +68,18 @@ public class EntityService<T extends BaseEntity>{
         idbMapper.updateEntityByMap(hashMap);
     }
 
+    /**
+     * 删除实体
+     * @param idbMapper
+     * @param entity
+     */
+    public void deleteEntity(IDBMapper<T> idbMapper, T entity){
+        long selectId = getShardingId(entity);;
+        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
+        entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        idbMapper.deleteEntity(entity);
+    }
+
     //获取分库主键
     private long getShardingId(T entity){
         long shardingId = entity.getUserId();
@@ -60,6 +89,7 @@ public class EntityService<T extends BaseEntity>{
         return shardingId;
     }
 
+    //获取分库主键
     private long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum){
         long shardingId = userId;
         if(entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.ID)){

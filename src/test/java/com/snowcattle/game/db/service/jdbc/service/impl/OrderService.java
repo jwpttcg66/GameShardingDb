@@ -39,8 +39,6 @@ public class OrderService extends EntityService<Order> implements IOrderService{
 
     @Override
     public void deleteOrder(Order order) {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, order.getUserId()));
-        order.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(order.getUserId()));
-        orderMapper.deleteOrder(order);
+        deleteEntity(orderMapper, order);
     }
 }

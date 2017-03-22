@@ -13,8 +13,8 @@ public class JdbcTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
         Order order = getTest(classPathXmlApplicationContext);
-        updateTest(classPathXmlApplicationContext, order);
-//        deleteTest(classPathXmlApplicationContext, order);
+//        updateTest(classPathXmlApplicationContext, order);
+        deleteTest(classPathXmlApplicationContext, order);
     }
 
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){

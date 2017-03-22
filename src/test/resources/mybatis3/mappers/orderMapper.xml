@@ -25,7 +25,7 @@
         where user_id=#{userId} and id=#{id};
     </update>
 
-    <delete id="deleteOrder" parameterType="order" >
+    <delete id="deleteEntity" parameterType="order" >
         delete from `t_order_${sharding_table_index}` where user_id=#{userId} and id=#{id};
     </delete>
 
