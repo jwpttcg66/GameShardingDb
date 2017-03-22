@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.jdbc.mapper;
 
 import com.snowcattle.game.db.entity.IEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Map;
 public interface IDBMapper<T extends IEntity> {
     public int insertEntity(T entity);
     public IEntity getEntity(Map map);
+    public List<T> getEntityList(Map map);
     public void updateEntityByMap(Map map);
     public void deleteEntity(T entity);
 }

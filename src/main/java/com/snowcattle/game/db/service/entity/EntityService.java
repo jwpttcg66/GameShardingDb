@@ -8,6 +8,7 @@ import com.snowcattle.game.db.sharding.CustomerContextHolder;
 import com.snowcattle.game.db.sharding.DataSourceType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +38,7 @@ public class EntityService<T extends BaseEntity>{
      * @param entityKeyShardingStrategyEnum
      * @return
      */
-    public IEntity getEntity(IDBMapper<T> idbMapper, long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum){
+    public IEntity getEntity(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId, long id){
         long selectId = getShardingId(id, userId, entityKeyShardingStrategyEnum);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
@@ -46,6 +47,16 @@ public class EntityService<T extends BaseEntity>{
         hashMap.put("id", id);
         hashMap.put("userId", userId);
         return idbMapper.getEntity(hashMap);
+    }
+
+    public List<T> getEntityList(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId){
+        long selectId = userId;
+        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
+        int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
+        Map hashMap = new HashMap<>();
+        hashMap.put("sharding_table_index", sharding_table_index);
+        hashMap.put("userId", userId);
+        return idbMapper.getEntityList(hashMap);
     }
 
     /**

@@ -11,7 +11,9 @@ import com.snowcattle.game.db.sharding.DataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,8 +30,13 @@ public class OrderService extends EntityService<Order> implements IOrderService{
     }
 
     @Override
-    public Order getOrder(long userId, long orderId) {
-        return (Order) getEntity(orderMapper, userId, orderId, EntityKeyShardingStrategyEnum.USER_ID);
+    public Order getOrder(long userId, long id) {
+        return (Order) getEntity(orderMapper, EntityKeyShardingStrategyEnum.USER_ID, userId, id);
+    }
+
+    @Override
+    public List<Order> getOrderList(long userId) {
+        return getEntityList(orderMapper, EntityKeyShardingStrategyEnum.USER_ID, userId);
     }
 
     @Override

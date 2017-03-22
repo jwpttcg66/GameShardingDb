@@ -15,6 +15,12 @@
         where user_id=#{userId} and id=#{id};
     </select>
 
+    <select id="getEntityList" resultType="order" parameterType="map">
+        select id, user_id, status
+        from `t_order_${sharding_table_index}`
+        where user_id=#{userId};
+    </select>
+
     <update id="updateEntityByMap" parameterType="map">
         update `t_order_${sharding_table_index}`
         <trim prefix="SET" suffixOverrides=",">
