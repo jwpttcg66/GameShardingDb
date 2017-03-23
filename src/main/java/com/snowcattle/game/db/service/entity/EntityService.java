@@ -18,6 +18,7 @@ import java.util.Map;
  */
 public class EntityService<T extends BaseEntity> implements IEntityService<T>{
 
+
     /**
      * 插入实体
      * @param idbMapper

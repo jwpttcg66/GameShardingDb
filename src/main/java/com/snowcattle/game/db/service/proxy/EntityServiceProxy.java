@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.proxy;
 
+import com.snowcattle.game.db.cache.redis.RedisService;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.IEntity;
@@ -14,6 +15,13 @@ import java.lang.reflect.Method;
  * 实体存储服务代理
  */
 public class EntityServiceProxy<T extends EntityService>  implements MethodInterceptor {
+
+    private RedisService redisService;
+
+    public EntityServiceProxy(RedisService redisService) {
+        this.redisService = redisService;
+    }
+
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         Object result = null;
