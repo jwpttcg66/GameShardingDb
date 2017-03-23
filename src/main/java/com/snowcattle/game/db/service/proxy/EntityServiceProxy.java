@@ -1,6 +1,7 @@
 package com.snowcattle.game.db.service.proxy;
 
 import com.snowcattle.game.db.common.annotation.DbOperation;
+import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import org.springframework.cglib.proxy.MethodInterceptor;
@@ -21,7 +22,10 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
             result = methodProxy.invokeSuper(obj, args);
         }else{
             //进行数据库操作
+            DbOperationEnum dbOperationEnum = DbOperationEnum.valueOf(dbOperation.operation());
+            if(dbOperationEnum.equals(DbOperationEnum.insert)){
 
+            }
         }
         return result;
     }

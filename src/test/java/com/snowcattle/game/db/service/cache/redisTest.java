@@ -3,7 +3,6 @@ package com.snowcattle.game.db.service.cache;
 import com.snowcattle.game.db.cache.redis.RedisService;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.proxy.EnityProxyService;
-import com.snowcattle.game.db.util.BeanUtil;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -12,7 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class redisTest {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
-        RedisService redisService = (RedisService) BeanUtil.getBean("redisService");
+        RedisService redisService = (RedisService) classPathXmlApplicationContext.getBean("redisService");
 //        redisService.setString("test", "2");
 //        System.out.println(redisService.getString("test"));
         Order order = new Order();
