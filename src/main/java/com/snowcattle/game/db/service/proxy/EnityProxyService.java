@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Created by jwp on 2017/3/16.
+ * 实体代理服务
  */
 @Service
 public class EnityProxyService {

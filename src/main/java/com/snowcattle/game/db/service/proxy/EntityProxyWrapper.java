@@ -4,6 +4,7 @@ import com.snowcattle.game.db.entity.BaseEntity;
 
 /**
  * Created by jwp on 2017/3/16.
+ * 代理封装
  */
 public class EntityProxyWrapper<T extends BaseEntity> {
 
