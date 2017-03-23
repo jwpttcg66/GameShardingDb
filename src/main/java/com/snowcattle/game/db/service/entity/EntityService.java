@@ -25,7 +25,7 @@ public class EntityService<T extends BaseEntity> implements IEntityService<T>{
      * @return
      */
     @Override
-    @InsertOperation
+    @DbOperation(operation = "insert")
     public int insertEntity(IDBMapper<T> idbMapper, T entity){
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -41,7 +41,7 @@ public class EntityService<T extends BaseEntity> implements IEntityService<T>{
      * @param entityKeyShardingStrategyEnum
      * @return
      */
-    @QueryOperation
+    @DbOperation(operation = "query")
     public IEntity getEntity(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId, long id){
         long selectId = getShardingId(id, userId, entityKeyShardingStrategyEnum);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -53,7 +53,7 @@ public class EntityService<T extends BaseEntity> implements IEntityService<T>{
         return idbMapper.getEntity(hashMap);
     }
 
-    @QueryListOperation
+    @DbOperation(operation = "queryList")
     public List<T> getEntityList(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId){
         long selectId = userId;
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -69,7 +69,7 @@ public class EntityService<T extends BaseEntity> implements IEntityService<T>{
      * @param idbMapper
      * @param entity
      */
-    @UpdateOperation
+    @DbOperation(operation = "upadte")
     public void updateEntity(IDBMapper<T> idbMapper, T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -90,7 +90,7 @@ public class EntityService<T extends BaseEntity> implements IEntityService<T>{
      * @param idbMapper
      * @param entity
      */
-    @DeleteOperation
+    @DbOperation(operation = "delete")
     public void deleteEntity(IDBMapper<T> idbMapper, T entity){
         long selectId = getShardingId(entity);;
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));

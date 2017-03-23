@@ -38,11 +38,11 @@ public class EntityProxy< T extends IEntity> implements MethodInterceptor {
 
     //实现MethodInterceptor接口方法
     public Object intercept(Object obj, Method method, Object[] args,
-                            MethodProxy proxy) throws Throwable {
+                            MethodProxy methodProxy) throws Throwable {
         //通过代理类调用父类中的方法
         Object result = null;
         if(!collectFlag){
-            result = proxy.invokeSuper(obj, args);
+            result = methodProxy.invokeSuper(obj, args);
         }else {
             //检查MethodProxy注解
             MethodSaveProxy methodSaveProxyAnnotation = (MethodSaveProxy) method
@@ -57,7 +57,7 @@ public class EntityProxy< T extends IEntity> implements MethodInterceptor {
 
                 //获取新参数
                 Object newObject = args[0];
-                result = proxy.invokeSuper(obj, args);
+                result = methodProxy.invokeSuper(obj, args);
 
                 if (oldObject == null) {
                     dirtyFlag = true;
@@ -72,7 +72,7 @@ public class EntityProxy< T extends IEntity> implements MethodInterceptor {
                     changeParamSet.put(filedName, newObject);
                 }
             } else {
-                result = proxy.invokeSuper(obj, args);
+                result = methodProxy.invokeSuper(obj, args);
             }
         }
 

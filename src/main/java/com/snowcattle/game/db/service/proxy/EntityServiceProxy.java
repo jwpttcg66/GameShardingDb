@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.proxy;
 
+import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import org.springframework.cglib.proxy.MethodInterceptor;
@@ -13,7 +14,16 @@ import java.lang.reflect.Method;
  */
 public class EntityServiceProxy<T extends EntityService>  implements MethodInterceptor {
     @Override
-    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-        return null;
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+        Object result = null;
+        DbOperation dbOperation = method.getDeclaredAnnotation(DbOperation.class);
+        if(dbOperation == null) {
+            result = methodProxy.invokeSuper(obj, args);
+        }else{
+            //进行数据库操作
+
+        }
+        return result;
     }
+
 }
