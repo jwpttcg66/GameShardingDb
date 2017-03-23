@@ -38,7 +38,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 result = methodProxy.invokeSuper(obj, args);
                 BaseEntity baseEntity = (BaseEntity) args[1];
                 if(baseEntity != null){
-                    if(obj instanceof  RedisInterface){
+                    if(baseEntity instanceof  RedisInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;
                         redisService.setObjectToHash(redisInterface.getRedisKeyEnumString() + redisInterface.getUniqueKey(), baseEntity);
                     }else if(obj instanceof RedisListInterface){

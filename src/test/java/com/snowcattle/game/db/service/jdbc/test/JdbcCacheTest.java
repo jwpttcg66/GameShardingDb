@@ -27,15 +27,12 @@ public class JdbcCacheTest {
         EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
 
         orderService = entityServiceProxyService.createProxyServiceEntity(orderService);
-        int startSize = 202;
-        int endSize = 203;
-        for(int i = startSize; i < endSize; i++){
-            Order order = new Order();
-            order.setUserId(i);
-            order.setId((long) i);
-            order.setStatus("测试插入" + i);
-            orderService.insertOrder(order);
-        }
+        long i = 206;
+        Order order = new Order();
+        order.setUserId(i);
+        order.setId((long) i);
+        order.setStatus("测试插入" + i);
+        orderService.insertOrder(order);
     }
 
     public static Order getTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
