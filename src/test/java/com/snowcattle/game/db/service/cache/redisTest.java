@@ -21,6 +21,7 @@ public class redisTest {
         order.setId(id);
         order.setUserId(userId);
         order.setStatus(status);
+        order.setDeleted(false);
         String key = "test";
         redisService.setObjectToHash(key, order);
         Order queryOrder= redisService.getObjectFromHash(key, Order.class);

@@ -1,6 +1,7 @@
 package com.snowcattle.game.db.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.jdbc.Null;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -87,6 +88,10 @@ public class ObjectUtils {
 
     public static String getFieldsValueStr(Object obj,String fieldName){
         Object o = ObjectUtils.getFieldsValueObj(obj, fieldName);
+        //如果为空则输出为""
+        if(o == null){
+            return "";
+        }
         if(o instanceof Date){
             return TimeUtils.dateToString((Date)o);
         }
