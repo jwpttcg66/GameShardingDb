@@ -2,7 +2,7 @@ package com.snowcattle.game.db.service.cache;
 
 import com.snowcattle.game.db.cache.redis.RedisService;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
-import com.snowcattle.game.db.service.proxy.DbProxyService;
+import com.snowcattle.game.db.service.proxy.EnityProxyService;
 import com.snowcattle.game.db.util.BeanUtil;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -28,8 +28,8 @@ public class redisTest {
         Order queryOrder= redisService.getObjectFromHash(key, Order.class);
         System.out.println(queryOrder);
 
-        DbProxyService dbProxyService = new DbProxyService();
-        Order proxyOrder = dbProxyService.initProxyWrapper(queryOrder);
+        EnityProxyService enityProxyService = new EnityProxyService();
+        Order proxyOrder = enityProxyService.createProxyEntity(queryOrder);
         proxyOrder.setStatus("test");
         redisService.updateObjectHashMap(key, proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
         queryOrder= redisService.getObjectFromHash(key, Order.class);

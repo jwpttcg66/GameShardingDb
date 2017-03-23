@@ -2,7 +2,7 @@ package com.snowcattle.game.db.service.jdbc.test;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
-import com.snowcattle.game.db.service.proxy.DbProxyService;
+import com.snowcattle.game.db.service.proxy.EnityProxyService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
@@ -53,8 +53,8 @@ public class JdbcTest {
 
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, Order order) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        DbProxyService dbProxyService = (DbProxyService) classPathXmlApplicationContext.getBean("dbProxyService");
-        Order proxyOrder = dbProxyService.initProxyWrapper(order);
+        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("dbProxyService");
+        Order proxyOrder = enityProxyService.createProxyEntity(order);
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 
