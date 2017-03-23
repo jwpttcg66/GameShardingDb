@@ -23,7 +23,7 @@ public class EntityServiceProxyService {
         return new EntityServiceProxy<>(redisService);
     }
 
-    private <T extends  EntityService> T  createProxyEntity(T entityService, EntityServiceProxy entityServiceProxy){
+    private <T extends  EntityService> T  createProxyService(T entityService, EntityServiceProxy entityServiceProxy){
         Enhancer enhancer = new Enhancer();
         //设置需要创建子类的类
         enhancer.setSuperclass(entityService.getClass());
@@ -32,8 +32,8 @@ public class EntityServiceProxyService {
         return (T) enhancer.create();
     }
 
-    public <T extends  EntityService> T createProxyServiceEntity(T entityService) throws Exception {
-        T proxyEntityService = (T) createProxyEntity(entityService, createProxy(entityService));
+    public <T extends  EntityService> T createProxyService(T entityService) throws Exception {
+        T proxyEntityService = (T) createProxyService(entityService, createProxy(entityService));
         BeanUtils.copyProperties(proxyEntityService,entityService);
         return proxyEntityService;
     }

@@ -26,7 +26,7 @@ public class JdbcCacheTest {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
 
-        orderService = entityServiceProxyService.createProxyServiceEntity(orderService);
+        orderService = entityServiceProxyService.createProxyService(orderService);
         long i = 206;
         Order order = new Order();
         order.setUserId(i);
