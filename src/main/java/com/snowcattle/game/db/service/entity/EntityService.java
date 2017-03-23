@@ -16,8 +16,7 @@ import java.util.Map;
  * Created by jiangwenping on 17/3/21.
  * 模版实体数据提服务
  */
-public class EntityService<T extends BaseEntity> implements IEntityService<T>{
-
+public abstract class EntityService<T extends BaseEntity> implements IEntityService<T>{
 
     /**
      * 插入实体

@@ -31,6 +31,7 @@ public class redisTest {
         Order proxyOrder = enityProxyService.createProxyEntity(queryOrder);
         proxyOrder.setStatus("test");
         redisService.updateObjectHashMap(key, proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+        key = "od#202";
         queryOrder= redisService.getObjectFromHash(key, Order.class);
         System.out.println(queryOrder);
     }

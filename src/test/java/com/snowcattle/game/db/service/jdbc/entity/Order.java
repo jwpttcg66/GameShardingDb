@@ -1,12 +1,14 @@
 package com.snowcattle.game.db.service.jdbc.entity;
 
+import com.snowcattle.game.db.cache.redis.RedisInterface;
+import com.snowcattle.game.db.cache.redis.RedisKeyEnum;
 import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.entity.BaseEntity;
 
 @EntitySave
-public class Order extends BaseEntity {
+public class Order extends BaseEntity implements RedisInterface{
 
     @FieldSave
     private String status;
@@ -33,5 +35,15 @@ public class Order extends BaseEntity {
                 ", userId=" + getUserId() +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getUniqueKey() {
+        return String.valueOf(getId());
+    }
+
+    @Override
+    public String getRedisKeyEnumString() {
+        return "od#";
     }
 }

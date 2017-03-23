@@ -33,7 +33,9 @@ public class EntityServiceProxyService {
     }
 
     public <T extends  EntityService> T createProxyServiceEntity(T entityService) throws Exception {
-        return (T) createProxyEntity(entityService, createProxy(entityService));
+        T proxyEntityService = (T) createProxyEntity(entityService, createProxy(entityService));
+        BeanUtils.copyProperties(proxyEntityService,entityService);
+        return proxyEntityService;
     }
 
     public RedisService getRedisService() {
