@@ -23,11 +23,6 @@ import java.util.Map.Entry;
 @Service
 public class RedisService{
 
-	/**
-	 * 默认的唯一字符
-	 */
-	public static String unionKey = "id";
-
 	protected static Logger logger = Loggers.dbLogger;
 	/*
 	 * 数据源
@@ -186,17 +181,6 @@ public class RedisService{
 		return result;
 	}
 	/**
-	 * 通过反射从缓存里获取一个对象 缺省默认时间，默认的key是有uid这个字段拼接而成
-	 * @param <T>
-	 * @param key
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getObjectFromHash(String key,Class<?> clazz){
-		return (T)getObjectFromHash(key, clazz, GlobalConstants.RedisKeyConfig.NORMAL_LIFECYCLE);
-	}
-	/**
 	 * 通过反射从缓存里获取一个对象 缺省默认时间
 	 * @param <T>
 	 * @param key
@@ -205,19 +189,10 @@ public class RedisService{
 	 */
 	
 	@SuppressWarnings("unchecked")
-	public <T> T getObjectFromHash(String key,Class<?> clazz,String uniqueKey){
-		return (T)getObjectFromHash(key, clazz, uniqueKey, GlobalConstants.RedisKeyConfig.NORMAL_LIFECYCLE);
+	public <T> T getObjectFromHash(String key,Class<?> clazz){
+		return (T)getObjectFromHash(key, clazz, GlobalConstants.RedisKeyConfig.NORMAL_LIFECYCLE);
 	}
-	/*
-	 * 通过反射从缓存里获取一个对象，默认的key是有uid这个字段拼接而成
-	 * @param key
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getObjectFromHash(String key,Class<?> clazz, int second){
-		return (T)getObjectFromHash(key, clazz, unionKey,second);
-	}
+
 	/*
 	 * 通过反射从缓存里获取一个对象
 	 * @param key
@@ -226,7 +201,7 @@ public class RedisService{
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getObjectFromHash(String key,Class<?> clazz,String uniqueKey, int seconds){
+	public <T> T getObjectFromHash(String key,Class<?> clazz, int seconds){
 		Jedis jedis = null;
 		boolean sucess = true;
 		try {
@@ -234,14 +209,6 @@ public class RedisService{
 			Map<String, String> map=jedis.hgetAll(key);
 			if(map.size()>0){
 				Object obj = clazz.newInstance();
-				if(obj instanceof RedisInterface &&!(obj instanceof RedisListInterface)){
-//					if(map.size()!=((RedisInterface)obj).getFieldLength()){
-//						logger.info("+-+ redis getObjectFromHash:"+ clazz.getName() +" expire.hash list size is more than expact. map:"+JSON.toJSONString(map));
-//						jedis.expire(key, 0);
-//						return null;
-//					}
-				}
-				map.put(uniqueKey, key.split("#")[1]);
 				if(seconds>=0){
 					jedis.expire(key, seconds);
 				}

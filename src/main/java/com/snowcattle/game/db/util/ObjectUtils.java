@@ -147,6 +147,11 @@ public class ObjectUtils {
     public static <T> T getObjFromMap(Map<String,String> map, Object obj){
         try {
             for(String key:map.keySet()){
+                String value = map.get(key);
+                //如果为空放弃，默认设置为空
+                if(StringUtils.isEmpty(value)){
+                    continue;
+                }
                 Field field=getDeclaredField(obj, key);
                 Method method=getSetMethod(obj, buildSetMethod(key), field.getType());
                 if(field.getType()==Integer.class||field.getType()==int.class){

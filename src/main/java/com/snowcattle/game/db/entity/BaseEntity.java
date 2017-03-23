@@ -14,7 +14,7 @@ import java.util.Date;
  * Created by jiangwenping on 17/3/16.
  */
 @EntitySave
-public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEntity<Long>{
+public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEntity{
 
     @FieldSave
     private boolean deleted;
@@ -53,12 +53,12 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
     }
 
     @Override
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
     @MethodSaveProxy(proxy="id")
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
