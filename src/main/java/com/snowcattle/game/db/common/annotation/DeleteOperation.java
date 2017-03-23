@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
  * Created by jwp on 2017/3/23.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 public @interface DeleteOperation {
 }

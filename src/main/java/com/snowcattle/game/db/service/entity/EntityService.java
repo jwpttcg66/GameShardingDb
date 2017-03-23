@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.entity;
 
+import com.snowcattle.game.db.common.annotation.*;
 import com.snowcattle.game.db.entity.BaseEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
@@ -15,7 +16,7 @@ import java.util.Map;
  * Created by jiangwenping on 17/3/21.
  * 模版实体数据提服务
  */
-public class EntityService<T extends BaseEntity>{
+public class EntityService<T extends BaseEntity> implements IEntityService<T>{
 
     /**
      * 插入实体
@@ -23,6 +24,8 @@ public class EntityService<T extends BaseEntity>{
      * @param entity
      * @return
      */
+    @Override
+    @InsertOperation
     public int insertEntity(IDBMapper<T> idbMapper, T entity){
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -38,6 +41,7 @@ public class EntityService<T extends BaseEntity>{
      * @param entityKeyShardingStrategyEnum
      * @return
      */
+    @QueryOperation
     public IEntity getEntity(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId, long id){
         long selectId = getShardingId(id, userId, entityKeyShardingStrategyEnum);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -49,6 +53,7 @@ public class EntityService<T extends BaseEntity>{
         return idbMapper.getEntity(hashMap);
     }
 
+    @QueryListOperation
     public List<T> getEntityList(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId){
         long selectId = userId;
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -64,6 +69,7 @@ public class EntityService<T extends BaseEntity>{
      * @param idbMapper
      * @param entity
      */
+    @UpdateOperation
     public void updateEntity(IDBMapper<T> idbMapper, T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -84,6 +90,7 @@ public class EntityService<T extends BaseEntity>{
      * @param idbMapper
      * @param entity
      */
+    @DeleteOperation
     public void deleteEntity(IDBMapper<T> idbMapper, T entity){
         long selectId = getShardingId(entity);;
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -108,5 +115,4 @@ public class EntityService<T extends BaseEntity>{
         }
         return shardingId;
     }
-
 }
