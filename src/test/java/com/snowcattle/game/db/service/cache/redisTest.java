@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.cache;
 
 import com.snowcattle.game.db.cache.redis.RedisService;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
+import com.snowcattle.game.db.service.proxy.DbProxyService;
 import com.snowcattle.game.db.util.BeanUtil;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -9,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Created by jiangwenping on 17/3/20.
  */
 public class redisTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
         RedisService redisService = (RedisService) BeanUtil.getBean("redisService");
 //        redisService.setString("test", "2");
@@ -25,6 +26,13 @@ public class redisTest {
         String key = "test";
         redisService.setObjectToHash(key, order);
         Order queryOrder= redisService.getObjectFromHash(key, Order.class);
+        System.out.println(queryOrder);
+
+        DbProxyService dbProxyService = new DbProxyService();
+        Order proxyOrder = dbProxyService.initProxyWrapper(queryOrder);
+        proxyOrder.setStatus("test");
+        redisService.updateObjectHashMap(key, proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+        queryOrder= redisService.getObjectFromHash(key, Order.class);
         System.out.println(queryOrder);
     }
 }

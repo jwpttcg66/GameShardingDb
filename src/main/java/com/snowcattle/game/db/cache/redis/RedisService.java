@@ -82,7 +82,7 @@ public class RedisService{
 	/**
 	 * 将对象保存到hash中,并且设置默认生命周期
 	 * @param key
-	 * @param object
+	 * @param entity
 	 */
 	public void setObjectToHash(String key, IEntity entity){
 		setObjectToHash(key, entity, GlobalConstants.RedisKeyConfig.NORMAL_LIFECYCLE);
@@ -90,7 +90,7 @@ public class RedisService{
 	/**
 	 * 将对象保存到hash中,并且设置生命周期
 	 * @param key
-	 * @param object
+	 * @param entity
 	 * @param seconds
 	 */
 	public boolean setObjectToHash(String key,IEntity entity,int seconds){
@@ -113,15 +113,6 @@ public class RedisService{
 		}
 		return sucess;
 	}
-	/**
-	 * 按字段更新缓存里的hash值，默认key有uid拼接
-	 * @param key
-	 * @param map
-	 */
-	
-	public void updateHashMap(String key,Map<String,Object> map){
-		updateHashMap(key, map, "uid");
-	}
 	/*
 	 * 更新缓存里的hash值
 	 * @param key
@@ -129,11 +120,10 @@ public class RedisService{
 	 * @param unique 此key是由哪个字段拼接而成的
 	 */
 	
-	public void updateHashMap(String key,Map<String,Object> map,String unique){
+	public void updateObjectHashMap(String key,Map<String,Object> map){
 		Jedis jedis = null;
 		boolean sucess = true;
 		try{
-			map.remove(unique);
 			Map<String,String> mapToUpdate=new HashMap<String, String>();
 			for(Entry<String, Object> entry:map.entrySet()){
 				String temp=entry.getKey();
@@ -553,7 +543,6 @@ public class RedisService{
 	
 	/**
 	 * 删除key
-	 * @param key
 	 */
 	public void deleteKeys(String... keys){
 		Jedis jedis = null;
@@ -1056,10 +1045,6 @@ public class RedisService{
 		return result;
 	}
 
-	/**
-	 * 
-	 * @param type
-	 */
 	public Set<String> zrangeByScore(String key, long min, long max, int limit){
 		Jedis jedis = null;
 		boolean sucess = true;
@@ -1128,9 +1113,6 @@ public class RedisService{
 	
 	/**
 	 * 增加成员
-	 * @param key
-	 * @param tongId
-	 * @param weight
 	 * @return
 	 */
 	public boolean zAddMap(String key, Map<String, Double> scoreMembers){
@@ -1285,7 +1267,6 @@ public class RedisService{
 	
 	/**
 	 * 返回在分数之类的所有的成员以及分数.
-	 * @param type
 	 */
 	public Set<Tuple> zrangeByScoreWithScores(String key, long min, long max, int offset, int limit){
 		Jedis jedis = null;
