@@ -2,7 +2,6 @@ package com.snowcattle.game.db.entity;
 
 import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
-import com.snowcattle.game.db.common.annotation.FileldCacheNotSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.service.entity.EntityKeyShardingStrategyEnum;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
@@ -23,11 +22,9 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
     private Date deleteTime;
 
     @FieldSave
-    @FileldCacheNotSave
     private long id;
 
     @FieldSave
-    @FileldCacheNotSave
     private long userId;
 
     //用于记录数据库封装对象
