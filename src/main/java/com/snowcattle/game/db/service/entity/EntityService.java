@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by jiangwenping on 17/3/21.
  * 模版实体数据提服务
  */
-public abstract class EntityService<T extends BaseEntity> implements IEntityService<T>{
+public abstract class EntityService<T extends BaseEntity> implements IEntityService<T> {
 
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
@@ -30,52 +30,74 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
 
 
     private static final Logger logger = Loggers.dbLogger;
+
     /**
      * 插入实体
+     *
      * @param entity
      * @return
      */
     @Override
     @DbOperation(operation = "insert")
-    public long insertEntity(T entity){
+    public long insertEntity(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
-        long result = idbMapper.insertEntity(entity);
-        closeSession();
+        long result = -1;
+        try {
+            result = idbMapper.insertEntity(entity);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        } finally {
+            closeSession();
+        }
         return result;
     }
 
     /**
      * 查询实体
+     *
      * @return
      */
     @DbOperation(operation = "query")
-    public IEntity getEntity(T entity){
+    public IEntity getEntity(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
-        IEntity result = idbMapper.getEntity(entity);
-        closeSession();
+        IEntity result = null;
+        try {
+
+            result = idbMapper.getEntity(entity);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        } finally {
+            closeSession();
+        }
         return result;
     }
 
     @DbOperation(operation = "queryList")
-    public List<T> getEntityList(T entity){
+    public List<T> getEntityList(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
-        List<T> result = idbMapper.getEntityList(entity);
-        closeSession();
+        List<T> result = null;
+        try {
+            idbMapper.getEntityList(entity);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        } finally {
+            closeSession();
+        }
         return result;
     }
 
     /**
      * 修改实体
-     * @param idbMapper
+     *
      * @param entity
      */
     @DbOperation(operation = "update")
@@ -89,65 +111,77 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         hashMap.put("id", entity.getId());
         EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
         //只有数据变化的时候才会更新
-        if(entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
+        if (entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
             if (entityProxyWrapper != null) {
                 hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
             }
             IDBMapper<T> idbMapper = getMapper(entity);
-            idbMapper.updateEntityByMap(hashMap);
-            closeSession();
-        }else {
+            try {
+                idbMapper.updateEntityByMap(hashMap);
+            } catch (Exception e) {
+                logger.error(e.toString(), e);
+            } finally {
+                closeSession();
+            }
+        } else {
             logger.error("updateEntity cance " + entity.getClass().getSimpleName() + "id:" + entity.getId() + " userId:" + entity.getUserId());
         }
     }
 
     /**
      * 删除实体
-     * @param idbMapper
+     *
      * @param entity
      */
     @DbOperation(operation = "delete")
-    public void deleteEntity(T entity){
-        long selectId = getShardingId(entity);;
+    public void deleteEntity(T entity) {
+        long selectId = getShardingId(entity);
+        ;
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
-        idbMapper.deleteEntity(entity);
-        closeSession();
+        try {
+            idbMapper.deleteEntity(entity);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        } finally {
+            closeSession();
+        }
     }
 
     //获取分库主键
-    private long getShardingId(T entity){
+    private long getShardingId(T entity) {
         long shardingId = entity.getUserId();
-        if(entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
+        if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
             shardingId = entity.getId();
         }
         return shardingId;
     }
 
     //获取分库主键
-    private long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum){
+    private long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum) {
         long shardingId = userId;
-        if(entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.ID)){
+        if (entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.ID)) {
             shardingId = id;
         }
         return shardingId;
     }
 
-    public IDBMapper<T> getMapper(T entity){
+    public IDBMapper<T> getMapper(T entity) {
         DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
         SqlSession sqlSession = getSession();
         return (IDBMapper<T>) sqlSessionFactory.openSession().getMapper(mapper.mapper());
     }
+
     /**
      * Function  : 获取sqlSession
      */
-    public SqlSession getSession(){
+    public SqlSession getSession() {
         SqlSession session = threadLocal.get();
 
-        if(session ==null){
+        if (session == null) {
             //如果sqlSessionFactory不为空则获取sqlSession，否则返回null
-            session = (sqlSessionFactory!=null) ? sqlSessionFactory.openSession(): null;
+            session = (sqlSessionFactory != null) ? sqlSessionFactory.openSession() : null;
             threadLocal.set(session);
         }
         return session;
@@ -156,11 +190,12 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     /**
      * Function  : 关闭sqlSession
      */
-    public void closeSession(){
+    public void closeSession() {
         SqlSession session = threadLocal.get();
-        threadLocal.set(null);
-        if(session!=null){
+        if (session != null) {
+            System.out.println("销毁");
             session.close();
+            threadLocal.set(null);
         }
     }
 
