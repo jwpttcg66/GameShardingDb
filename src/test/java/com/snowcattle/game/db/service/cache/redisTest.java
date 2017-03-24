@@ -1,15 +1,36 @@
 package com.snowcattle.game.db.service.cache;
 
+import com.snowcattle.game.db.cache.redis.RedisInterface;
+import com.snowcattle.game.db.cache.redis.RedisListInterface;
 import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.entity.IEntity;
+import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.proxy.EnityProxyService;
+import com.snowcattle.game.db.util.EntityUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by jiangwenping on 17/3/20.
  */
 public class redisTest {
     public static void main(String[] args) throws Exception {
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
+        RedisService redisService = (RedisService) classPathXmlApplicationContext.getBean("redisService");
+        MoreOrder moreOrder = new MoreOrder();
+        moreOrder.setId(1);
+        moreOrder.setUserId(2);
+        List<RedisListInterface> list = new ArrayList<RedisListInterface>();
+        list.add(moreOrder);
+        redisService.setListToHash(EntityUtils.getRedisKey(moreOrder), list);
+
+    }
+
+    public static void testObject() throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
         RedisService redisService = (RedisService) classPathXmlApplicationContext.getBean("redisService");
 //        redisService.setString("test", "2");

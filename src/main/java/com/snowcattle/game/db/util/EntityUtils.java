@@ -16,6 +16,8 @@ import java.util.Map;
  */
 public class EntityUtils {
 
+    //
+    public static String ENTITY_SPLIT_STRING="#";
     /**
      * 获取所有缓存的字段跟值
      * @param iEntity

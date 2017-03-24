@@ -6,6 +6,7 @@ import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.util.EntityUtils;
 
 @EntitySave
 public class Order extends BaseEntity implements RedisInterface{
@@ -39,7 +40,7 @@ public class Order extends BaseEntity implements RedisInterface{
 
     @Override
     public String getUniqueKey() {
-        return String.valueOf(getId());
+        return String.valueOf(getUserId()+ EntityUtils.ENTITY_SPLIT_STRING + getId());
     }
 
     @Override
