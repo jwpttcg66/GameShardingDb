@@ -14,14 +14,15 @@ import java.util.List;
  */
 public class JdbcCacheTest {
 
-    public static final long id = 207;
+    public static final long oldId = 208;
+    public static final long id = 208;
     public static final long userId = id;
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
 //        insertListTest(classPathXmlApplicationContext);
         Order order = getTest(classPathXmlApplicationContext);
-//        updateTest(classPathXmlApplicationContext, order);
+        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
 //        getListTest(classPathXmlApplicationContext);
     }
@@ -52,8 +53,10 @@ public class JdbcCacheTest {
         orderService.insertOrder(order);
     }
 
-    public static Order getTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
+    public static Order getTest( ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
+        EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
+        orderService = entityServiceProxyService.createProxyService(orderService);
         Order order = orderService.getOrder(userId, id);
         System.out.println(order);
         return order;
@@ -68,13 +71,15 @@ public class JdbcCacheTest {
 
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, Order order) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("dbProxyService");
+        EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
+        orderService = entityServiceProxyService.createProxyService(orderService);
+        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
         Order proxyOrder = enityProxyService.createProxyEntity(order);
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 
         Order queryOrder = orderService.getOrder(userId, id);
-        System.out.println(queryOrder.getStatus());
+        System.out.println(queryOrder);
     }
 
     public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, Order order) throws Exception {
