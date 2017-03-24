@@ -27,9 +27,6 @@ import java.util.Map;
 public abstract class EntityService<T extends BaseEntity> implements IEntityService<T> {
 
     @Autowired
-    private SqlSessionFactory sqlSessionFactory;
-
-    @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Autowired
@@ -179,7 +176,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     public IDBMapper<T> getMapper(T entity) {
         DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
         SqlSession sqlSession = getSession();
-        return (IDBMapper<T>) sqlSessionFactory.openSession().getMapper(mapper.mapper());
+        return (IDBMapper<T>) sqlSessionTemplate.getSqlSessionFactory().openSession().getMapper(mapper.mapper());
     }
 
     /**
@@ -190,7 +187,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
 
         if (session == null) {
             //如果sqlSessionFactory不为空则获取sqlSession，否则返回null
-            session = (sqlSessionFactory != null) ? sqlSessionFactory.openSession() : null;
+            session = (sqlSessionTemplate.getSqlSessionFactory() != null) ? sqlSessionTemplate.getSqlSessionFactory().openSession() : null;
             threadLocal.set(session);
         }
         return session;
