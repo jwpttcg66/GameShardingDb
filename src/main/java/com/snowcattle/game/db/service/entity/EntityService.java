@@ -8,7 +8,9 @@ import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.CustomerContextHolder;
 import com.snowcattle.game.db.sharding.DataSourceType;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,40 +22,44 @@ import java.util.Map;
  */
 public abstract class EntityService<T extends BaseEntity> implements IEntityService<T>{
 
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
     private static final Logger logger = Loggers.dbLogger;
     /**
      * 插入实体
-     * @param idbMapper
      * @param entity
      * @return
      */
     @Override
     @DbOperation(operation = "insert")
-    public int insertEntity(IDBMapper<T> idbMapper, T entity){
+    public int insertEntity(T entity){
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        IDBMapper<T> idbMapper = getMapper(entity);
         return idbMapper.insertEntity(entity);
     }
 
     /**
      * 查询实体
-     * @param idbMapper
      * @return
      */
     @DbOperation(operation = "query")
-    public IEntity getEntity(IDBMapper<T> idbMapper, T entity){
+    public IEntity getEntity(T entity){
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        IDBMapper<T> idbMapper = getMapper(entity);
         return idbMapper.getEntity(entity);
     }
 
     @DbOperation(operation = "queryList")
-    public List<T> getEntityList(IDBMapper<T> idbMapper, T entity){
+    public List<T> getEntityList(T entity){
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        IDBMapper<T> idbMapper = getMapper(entity);
         return idbMapper.getEntityList(entity);
     }
 
@@ -63,7 +69,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      * @param entity
      */
     @DbOperation(operation = "update")
-    public void updateEntity(IDBMapper<T> idbMapper, T entity) {
+    public void updateEntity(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
@@ -77,6 +83,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             if (entityProxyWrapper != null) {
                 hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
             }
+            IDBMapper<T> idbMapper = getMapper(entity);
             idbMapper.updateEntityByMap(hashMap);
         }else {
             logger.error("updateEntity cance " + entity.getClass().getSimpleName() + "id:" + entity.getId() + " userId:" + entity.getUserId());
@@ -89,10 +96,11 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      * @param entity
      */
     @DbOperation(operation = "delete")
-    public void deleteEntity(IDBMapper<T> idbMapper, T entity){
+    public void deleteEntity(T entity){
         long selectId = getShardingId(entity);;
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        IDBMapper<T> idbMapper = getMapper(entity);
         idbMapper.deleteEntity(entity);
     }
 
@@ -112,5 +120,10 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             shardingId = id;
         }
         return shardingId;
+    }
+
+    public IDBMapper<T> getMapper(T entity){
+        DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
+        return (IDBMapper<T>) sqlSessionFactory.openSession().getMapper(mapper.mapper());
     }
 }

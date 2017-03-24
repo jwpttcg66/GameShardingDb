@@ -42,7 +42,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
             DbOperationEnum dbOperationEnum = DbOperationEnum.valueOf(dbOperation.operation());
             if(dbOperationEnum.equals(DbOperationEnum.insert)){
                 result = methodProxy.invokeSuper(obj, args);
-                BaseEntity baseEntity = (BaseEntity) args[1];
+                BaseEntity baseEntity = (BaseEntity) args[0];
                 if(baseEntity != null){
                     if(baseEntity instanceof  RedisInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;
@@ -57,7 +57,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
 
             }else if(dbOperationEnum.equals(DbOperationEnum.update)){
                 result = methodProxy.invokeSuper(obj, args);
-                BaseEntity baseEntity = (BaseEntity) args[1];
+                BaseEntity baseEntity = (BaseEntity) args[0];
                 if(baseEntity != null){
                     if(baseEntity instanceof RedisInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;
@@ -70,7 +70,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     }
                 }
             }else if(dbOperationEnum.equals(DbOperationEnum.query)){
-                BaseEntity baseEntity = (BaseEntity) args[1];
+                BaseEntity baseEntity = (BaseEntity) args[0];
                 if(baseEntity != null){
                     if(baseEntity instanceof RedisInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;
@@ -84,7 +84,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 }
             }else if(dbOperationEnum.equals(DbOperationEnum.queryList)){
 
-                BaseEntity baseEntity = (BaseEntity) args[1];
+                BaseEntity baseEntity = (BaseEntity) args[0];
                 if(baseEntity != null){
                     if(baseEntity instanceof RedisListInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;
@@ -98,7 +98,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 }
             }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
                 result = methodProxy.invokeSuper(obj, args);
-                BaseEntity baseEntity = (BaseEntity) args[1];
+                BaseEntity baseEntity = (BaseEntity) args[0];
                 if(baseEntity != null){
                     if(baseEntity instanceof RedisInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;

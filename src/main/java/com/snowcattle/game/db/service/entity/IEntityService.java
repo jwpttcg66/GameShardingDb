@@ -10,9 +10,9 @@ import java.util.List;
  * Created by jwp on 2017/3/23.
  */
 public interface IEntityService <T extends BaseEntity>{
-    public int insertEntity(IDBMapper<T> idbMapper, T entity);
-    public IEntity getEntity(IDBMapper<T> idbMapper, T entity);
-    public List<T> getEntityList(IDBMapper<T> idbMapper, T entity);
-    public void updateEntity(IDBMapper<T> idbMapper, T entity);
-    public void deleteEntity(IDBMapper<T> idbMapper, T entity);
+    public int insertEntity(T entity);
+    public IEntity getEntity(T entity);
+    public List<T> getEntityList(T entity);
+    public void updateEntity(T entity);
+    public void deleteEntity(T entity);
 }

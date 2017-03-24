@@ -13,8 +13,8 @@ import java.util.List;
 public class JdbcTest {
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
-//        insertTest(classPathXmlApplicationContext);
-        Order order = getTest(classPathXmlApplicationContext);
+        insertTest(classPathXmlApplicationContext);
+//        Order order = getTest(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
           getListTest(classPathXmlApplicationContext);
@@ -23,8 +23,8 @@ public class JdbcTest {
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        int startSize = 2;
-        int endSize = 3;
+        int startSize = 101;
+        int endSize = 102;
         for(int i = startSize; i < endSize; i++){
             Order order = new Order();
             order.setUserId(i);

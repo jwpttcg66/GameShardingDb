@@ -24,11 +24,9 @@ import java.util.Map;
 @Service
 public class OrderService extends EntityService<Order> implements IOrderService{
 
-    @Autowired
-    private OrderMapper orderMapper;
 
     public int insertOrder(Order order) {
-        return insertEntity(orderMapper, order);
+        return insertEntity(order);
     }
 
     @Override
@@ -36,31 +34,23 @@ public class OrderService extends EntityService<Order> implements IOrderService{
         Order order = new Order();
         order.setUserId(userId);
         order.setId(id);
-        return (Order) getEntity(orderMapper, order);
+        return (Order) getEntity(order);
     }
 
     @Override
     public List<Order> getOrderList(long userId) {
         Order order = new Order();
         order.setUserId(userId);
-        return getEntityList(orderMapper, order);
+        return getEntityList(order);
     }
 
     @Override
     public void updateOrder(Order order) {
-        updateEntity(orderMapper, order);
+        updateEntity(order);
     }
 
     @Override
     public void deleteOrder(Order order) {
-        deleteEntity(orderMapper, order);
-    }
-
-    public OrderMapper getOrderMapper() {
-        return orderMapper;
-    }
-
-    public void setOrderMapper(OrderMapper orderMapper) {
-        this.orderMapper = orderMapper;
+        deleteEntity(order);
     }
 }

@@ -2,13 +2,16 @@ package com.snowcattle.game.db.service.jdbc.entity;
 
 import com.snowcattle.game.db.cache.redis.RedisInterface;
 import com.snowcattle.game.db.cache.redis.RedisKeyEnum;
+import com.snowcattle.game.db.common.annotation.DbMapper;
 import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.service.jdbc.mapper.OrderMapper;
 import com.snowcattle.game.db.util.EntityUtils;
 
 @EntitySave
+@DbMapper(mapper = OrderMapper.class)
 public class Order extends BaseEntity implements RedisInterface{
 
     @FieldSave
