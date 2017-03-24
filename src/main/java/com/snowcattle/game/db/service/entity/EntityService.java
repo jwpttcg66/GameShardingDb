@@ -47,7 +47,9 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         long result = -1;
         try {
             result = idbMapper.insertEntity(entity);
+            commitSession();
         } catch (Exception e) {
+            rollbackSession();
             logger.error(e.toString(), e);
         } finally {
             closeSession();
@@ -193,9 +195,26 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     public void closeSession() {
         SqlSession session = threadLocal.get();
         if (session != null) {
-            System.out.println("销毁");
+            logger.debug("销毁");
             session.close();
             threadLocal.set(null);
+        }
+    }
+
+    /**
+     * Function  : 关闭sqlSession
+     */
+    public void rollbackSession() {
+        SqlSession session = threadLocal.get();
+        if (session != null) {
+            session.rollback();
+        }
+    }
+
+    public void commitSession(){
+        SqlSession session = threadLocal.get();
+        if (session != null) {
+            session.commit();
         }
     }
 
