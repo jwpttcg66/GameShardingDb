@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.entity;
 
+import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.*;
 import com.snowcattle.game.db.entity.BaseEntity;
 import com.snowcattle.game.db.entity.IEntity;
@@ -7,6 +8,7 @@ import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.CustomerContextHolder;
 import com.snowcattle.game.db.sharding.DataSourceType;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Map;
  */
 public abstract class EntityService<T extends BaseEntity> implements IEntityService<T>{
 
+    private static final Logger logger = Loggers.dbLogger;
     /**
      * 插入实体
      * @param idbMapper
@@ -36,9 +39,6 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     /**
      * 查询实体
      * @param idbMapper
-     * @param id
-     * @param userId
-     * @param entityKeyShardingStrategyEnum
      * @return
      */
     @DbOperation(operation = "query")
@@ -72,10 +72,15 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         hashMap.put("userId", entity.getUserId());
         hashMap.put("id", entity.getId());
         EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
-        if(entityProxyWrapper != null){
-            hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
+        //只有数据变化的时候才会更新
+        if(entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
+            if (entityProxyWrapper != null) {
+                hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
+            }
+            idbMapper.updateEntityByMap(hashMap);
+        }else {
+            logger.error("updateEntity cance " + entity.getClass().getSimpleName() + "id:" + entity.getId() + " userId:" + entity.getUserId());
         }
-        idbMapper.updateEntityByMap(hashMap);
     }
 
     /**
