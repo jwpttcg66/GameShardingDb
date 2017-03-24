@@ -8,6 +8,7 @@ import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.CustomerContextHolder;
 import com.snowcattle.game.db.sharding.DataSourceType;
+import org.apache.commons.collections.OrderedMap;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
 
+    @Autowired
     private static ThreadLocal<SqlSession> threadLocal = new ThreadLocal<SqlSession>();
 
 
