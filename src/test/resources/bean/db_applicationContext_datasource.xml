@@ -27,6 +27,13 @@
         <constructor-arg index="0" ref="sqlSessionFactory" />
     </bean>
 
+    <bean id="sqlSessionBatchTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+        <constructor-arg>
+            <value type="org.apache.ibatis.session.ExecutorType">BATCH</value>
+        </constructor-arg>
+    </bean>
+
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dynamicDataSource" />
         <property name="typeAliasesPackage" value="com.snowcattle.game.db.service.jdbc.entity"/>

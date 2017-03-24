@@ -30,6 +30,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Autowired
+    private SqlSessionTemplate sqlSessionBatchTemplate;
+
     private static ThreadLocal<SqlSession> threadLocal = new ThreadLocal<SqlSession>();
 
 
@@ -51,12 +53,12 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         long result = -1;
         try {
             result = idbMapper.insertEntity(entity);
-            commitSession();
+//            commitSession();
         } catch (Exception e) {
-            rollbackSession();
+//            rollbackSession();
             logger.error(e.toString(), e);
         } finally {
-            closeSession();
+//            closeSession();
         }
         return result;
     }
@@ -79,7 +81,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         } catch (Exception e) {
             logger.error(e.toString(), e);
         } finally {
-            closeSession();
+//            closeSession();
         }
         return result;
     }
@@ -96,7 +98,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         } catch (Exception e) {
             logger.error(e.toString(), e);
         } finally {
-            closeSession();
+//            closeSession();
         }
         return result;
     }
@@ -127,7 +129,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             } catch (Exception e) {
                 logger.error(e.toString(), e);
             } finally {
-                closeSession();
+//                closeSession();
             }
         } else {
             logger.error("updateEntity cance " + entity.getClass().getSimpleName() + "id:" + entity.getId() + " userId:" + entity.getUserId());
@@ -151,7 +153,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         } catch (Exception e) {
             logger.error(e.toString(), e);
         } finally {
-            closeSession();
+//            closeSession();
         }
     }
 
@@ -173,54 +175,53 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         return shardingId;
     }
 
-    public IDBMapper<T> getMapper(T entity) {
-        DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
-        SqlSession sqlSession = getSession();
-        return (IDBMapper<T>) sqlSessionTemplate.getSqlSessionFactory().openSession().getMapper(mapper.mapper());
-    }
+//    public IDBMapper<T> getMapper(T entity) {
+//        DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
+//        return (IDBMapper<T>) sqlSessionTemplate.getSqlSessionFactory().openSession().getMapper(mapper.mapper());
+//    }
+//
+//    /**
+//     * Function  : 获取sqlSession
+//     */
+//    public SqlSession getSession() {
+//        SqlSession session = threadLocal.get();
+//
+//        if (session == null) {
+//            //如果sqlSessionFactory不为空则获取sqlSession，否则返回null
+//            session = (sqlSessionTemplate.getSqlSessionFactory() != null) ? sqlSessionTemplate.getSqlSessionFactory().openSession() : null;
+//            threadLocal.set(session);
+//        }
+//        return session;
+//    }
+//
+//    /**
+//     * Function  : 关闭sqlSession
+//     */
+//    public void closeSession() {
+//        SqlSession session = threadLocal.get();
+//        if (session != null) {
+//            logger.debug("销毁");
+//            session.close();
+//            threadLocal.set(null);
+//        }
+//    }
 
-    /**
-     * Function  : 获取sqlSession
-     */
-    public SqlSession getSession() {
-        SqlSession session = threadLocal.get();
-
-        if (session == null) {
-            //如果sqlSessionFactory不为空则获取sqlSession，否则返回null
-            session = (sqlSessionTemplate.getSqlSessionFactory() != null) ? sqlSessionTemplate.getSqlSessionFactory().openSession() : null;
-            threadLocal.set(session);
-        }
-        return session;
-    }
-
-    /**
-     * Function  : 关闭sqlSession
-     */
-    public void closeSession() {
-        SqlSession session = threadLocal.get();
-        if (session != null) {
-            logger.debug("销毁");
-            session.close();
-            threadLocal.set(null);
-        }
-    }
-
-    /**
-     * Function  : 关闭sqlSession
-     */
-    public void rollbackSession() {
-        SqlSession session = threadLocal.get();
-        if (session != null) {
-            session.rollback();
-        }
-    }
-
-    public void commitSession(){
-        SqlSession session = threadLocal.get();
-        if (session != null) {
-            session.commit();
-        }
-    }
+//    /**
+//     * Function  : 关闭sqlSession
+//     */
+//    public void rollbackSession() {
+//        SqlSession session = threadLocal.get();
+//        if (session != null) {
+//            session.rollback();
+//        }
+//    }
+//
+//    public void commitSession(){
+//        SqlSession session = threadLocal.get();
+//        if (session != null) {
+//            session.commit();
+//        }
+//    }
 
     public IDBMapper<T> getTemplateMapper(T entity) {
         DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
