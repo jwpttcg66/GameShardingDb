@@ -236,9 +236,9 @@ public class RedisService{
 			Map<String,String> map=new HashMap<String, String>();
 			Map<String,String> keyMap=null;
 			String[] keyNames=null;
-//			for(RedisListInterface po:list){
-//				map.put(ObjectUtils.getFieldsValueStr(po, po.getSubUniqueKey()), JsonUtils.getJsonStr(po.getAllFeildsToHash()));
-//			}
+			for(RedisListInterface po:list){
+				map.put(po.getSubUniqueKey(), JsonUtils.getJsonStr(EntityUtils.getCacheValueMap((IEntity) po)));
+			}
 			jedis=jedisPool.getResource();
 			jedis.hmset(key, map);
 			if(seconds >= 0){
@@ -276,14 +276,8 @@ public class RedisService{
 				String keyNames[]=null;
 				for(Entry<String, String> entry:map.entrySet()){
 					String fieldKey = entry.getKey();
-//					mapFields=JsonUtils.getMapFromJson(entry.getValue());
+					mapFields=JsonUtils.getMapFromJson(entry.getValue());
 					po = (RedisListInterface) clazz.newInstance();
-					mapFields.put(po.getUniqueKey(), key.split("#")[1]);
-//					keyNames=po.getSubUniqueKey();
-					String uniqueKeys[]=fieldKey.split("#");
-					for(int i=0,j=keyNames.length;i<j;i++){
-						mapFields.put(keyNames[i], uniqueKeys[i]);
-					}
 					ObjectUtils.getObjFromMap(mapFields, po);
 					rt.add((T)po);
 				}
