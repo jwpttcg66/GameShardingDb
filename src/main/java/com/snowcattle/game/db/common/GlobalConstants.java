@@ -19,11 +19,11 @@ public class GlobalConstants {
      * redis Key的基本配置
      */
     public static class RedisKeyConfig{
-        /**正常缓存有效时间*/
+        /**正常缓存有效时间 一天*/
         public static final int NORMAL_LIFECYCLE=86400;
         //mget时，key的最大值
         public static final int MGET_MAX_KEY=50;
         /**正常缓存有效时间一个月*/
-        public static final int NORMAL_MONTH_LIFECYCLE=86400 * 24;
+        public static final int NORMAL_MONTH_LIFECYCLE=86400 * 30;
     }
 }

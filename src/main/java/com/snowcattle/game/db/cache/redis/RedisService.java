@@ -254,6 +254,19 @@ public class RedisService{
 		}
 		return sucess;
 	}
+
+	/**
+	 * 从缓存里还原一个列表对象
+	 * @param key
+	 * @param clazz
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+
+	public <T> List<T> getListFromHash(String key,Class<?> clazz){
+		return getListFromHash(key, clazz, GlobalConstants.RedisKeyConfig.NORMAL_LIFECYCLE);
+	}
+
 	/**
 	 * 从缓存里还原一个列表对象
 	 * @param key

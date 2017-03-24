@@ -24,10 +24,13 @@ public class redisTest {
         MoreOrder moreOrder = new MoreOrder();
         moreOrder.setId(1);
         moreOrder.setUserId(2);
+        moreOrder.setStatus("list");
         List<RedisListInterface> list = new ArrayList<RedisListInterface>();
         list.add(moreOrder);
         redisService.setListToHash(EntityUtils.getRedisKey(moreOrder), list);
 
+        list = redisService.getListFromHash(EntityUtils.getRedisKey(moreOrder), MoreOrder.class);
+        System.out.println(list);
     }
 
     public static void testObject() throws Exception {
