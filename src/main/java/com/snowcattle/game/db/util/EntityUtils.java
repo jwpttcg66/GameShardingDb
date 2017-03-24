@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.util;
 
+import com.snowcattle.game.db.cache.redis.RedisInterface;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.entity.IEntity;
 
@@ -50,5 +51,10 @@ public class EntityUtils {
             }
         }
         return fieldList.toArray(new Field[0]);
+    }
+
+    //获取rediskey
+    public static String getRedisKey(RedisInterface redisInterface){
+        return redisInterface.getRedisKeyEnumString() + redisInterface.getUniqueKey();
     }
 }

@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface IEntityService <T extends BaseEntity>{
     public int insertEntity(IDBMapper<T> idbMapper, T entity);
-    public IEntity getEntity(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId, long id);
-    public List<T> getEntityList(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId);
+    public IEntity getEntity(IDBMapper<T> idbMapper, T entity);
+    public List<T> getEntityList(IDBMapper<T> idbMapper, T entity);
     public void updateEntity(IDBMapper<T> idbMapper, T entity);
     public void deleteEntity(IDBMapper<T> idbMapper, T entity);
 }

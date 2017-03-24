@@ -42,26 +42,19 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      * @return
      */
     @DbOperation(operation = "query")
-    public IEntity getEntity(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId, long id){
-        long selectId = getShardingId(id, userId, entityKeyShardingStrategyEnum);
+    public IEntity getEntity(IDBMapper<T> idbMapper, T entity){
+        long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-        int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
-        Map hashMap = new HashMap<>();
-        hashMap.put("sharding_table_index", sharding_table_index);
-        hashMap.put("id", id);
-        hashMap.put("userId", userId);
-        return idbMapper.getEntity(hashMap);
+        entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        return idbMapper.getEntity(entity);
     }
 
     @DbOperation(operation = "queryList")
-    public List<T> getEntityList(IDBMapper<T> idbMapper, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum, long userId){
-        long selectId = userId;
+    public List<T> getEntityList(IDBMapper<T> idbMapper, T entity){
+        long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-        int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
-        Map hashMap = new HashMap<>();
-        hashMap.put("sharding_table_index", sharding_table_index);
-        hashMap.put("userId", userId);
-        return idbMapper.getEntityList(hashMap);
+        entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        return idbMapper.getEntityList(entity);
     }
 
     /**
@@ -69,7 +62,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      * @param idbMapper
      * @param entity
      */
-    @DbOperation(operation = "upadte")
+    @DbOperation(operation = "update")
     public void updateEntity(IDBMapper<T> idbMapper, T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));

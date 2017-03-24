@@ -9,13 +9,13 @@
         VALUES (#{id},#{userId},#{status})
     </insert>
 
-    <select id="getEntity" resultType="order" parameterType="map">
+    <select id="getEntity" resultType="order" parameterType="order">
         select id, user_id, status
         from `t_order_${sharding_table_index}`
         where user_id=#{userId} and id=#{id};
     </select>
 
-    <select id="getEntityList" resultType="order" parameterType="map">
+    <select id="getEntityList" resultType="order" parameterType="order">
         select id, user_id, status
         from `t_order_${sharding_table_index}`
         where user_id=#{userId};

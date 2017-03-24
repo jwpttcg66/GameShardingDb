@@ -33,12 +33,17 @@ public class OrderService extends EntityService<Order> implements IOrderService{
 
     @Override
     public Order getOrder(long userId, long id) {
-        return (Order) getEntity(orderMapper, EntityKeyShardingStrategyEnum.USER_ID, userId, id);
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setId(id);
+        return (Order) getEntity(orderMapper, order);
     }
 
     @Override
     public List<Order> getOrderList(long userId) {
-        return getEntityList(orderMapper, EntityKeyShardingStrategyEnum.USER_ID, userId);
+        Order order = new Order();
+        order.setUserId(userId);
+        return getEntityList(orderMapper, order);
     }
 
     @Override

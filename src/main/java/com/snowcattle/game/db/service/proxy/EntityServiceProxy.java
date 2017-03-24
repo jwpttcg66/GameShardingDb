@@ -8,9 +8,11 @@ import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.BaseEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
+import com.snowcattle.game.db.util.EntityUtils;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
+import javax.swing.text.html.parser.Entity;
 import java.lang.reflect.Method;
 
 /**
@@ -40,7 +42,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 if(baseEntity != null){
                     if(baseEntity instanceof  RedisInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;
-                        redisService.setObjectToHash(redisInterface.getRedisKeyEnumString() + redisInterface.getUniqueKey(), baseEntity);
+                        redisService.setObjectToHash(EntityUtils.getRedisKey(redisInterface), baseEntity);
                     }else if(obj instanceof RedisListInterface){
 
                     }
@@ -52,7 +54,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 if(baseEntity != null){
                     if(baseEntity instanceof RedisInterface){
                         RedisInterface redisInterface = (RedisInterface) baseEntity;
-
+                        redisService.updateObjectHashMap(EntityUtils.getRedisKey(redisInterface), baseEntity.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
                     }
                 }
             }else if(dbOperationEnum.equals(DbOperationEnum.query)){
@@ -60,10 +62,18 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
             }else if(dbOperationEnum.equals(DbOperationEnum.queryList)){
 
             }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
-
+                result = methodProxy.invokeSuper(obj, args);
+                BaseEntity baseEntity = (BaseEntity) args[1];
+                if(baseEntity != null){
+                    if(baseEntity instanceof RedisInterface){
+                        RedisInterface redisInterface = (RedisInterface) baseEntity;
+                        redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
+                    }
+                }
             }
         }
         return result;
     }
+
 
 }

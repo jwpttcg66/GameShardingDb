@@ -14,7 +14,7 @@ public class JdbcTest {
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
-//        Order order = getTest(classPathXmlApplicationContext);
+        Order order = getTest(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
           getListTest(classPathXmlApplicationContext);
@@ -45,7 +45,7 @@ public class JdbcTest {
 
     public static void getListTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        long userId = 100;
+        long userId = 2;
         List<Order> orderList = orderService.getOrderList(userId);
         System.out.println(orderList);
     }

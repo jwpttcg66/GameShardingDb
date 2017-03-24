@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public interface IDBMapper<T extends IEntity> {
     public int insertEntity(T entity);
-    public IEntity getEntity(Map map);
-    public List<T> getEntityList(Map map);
+    public IEntity getEntity(T entity);
+    public List<T> getEntityList(T entity);
     public void updateEntityByMap(Map map);
     public void deleteEntity(T entity);
 }
