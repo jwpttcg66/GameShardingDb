@@ -8,6 +8,7 @@ import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.CustomerContextHolder;
 import com.snowcattle.game.db.sharding.DataSourceType;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
 
+    private static ThreadLocal<SqlSession> threadLocal = new ThreadLocal<SqlSession>();
+
+
     private static final Logger logger = Loggers.dbLogger;
     /**
      * 插入实体
@@ -33,12 +37,14 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      */
     @Override
     @DbOperation(operation = "insert")
-    public int insertEntity(T entity){
+    public long insertEntity(T entity){
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
-        return idbMapper.insertEntity(entity);
+        long result = idbMapper.insertEntity(entity);
+        closeSession();
+        return result;
     }
 
     /**
@@ -51,7 +57,9 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
-        return idbMapper.getEntity(entity);
+        IEntity result = idbMapper.getEntity(entity);
+        closeSession();
+        return result;
     }
 
     @DbOperation(operation = "queryList")
@@ -60,7 +68,9 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
-        return idbMapper.getEntityList(entity);
+        List<T> result = idbMapper.getEntityList(entity);
+        closeSession();
+        return result;
     }
 
     /**
@@ -85,6 +95,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             }
             IDBMapper<T> idbMapper = getMapper(entity);
             idbMapper.updateEntityByMap(hashMap);
+            closeSession();
         }else {
             logger.error("updateEntity cance " + entity.getClass().getSimpleName() + "id:" + entity.getId() + " userId:" + entity.getUserId());
         }
@@ -102,12 +113,13 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getMapper(entity);
         idbMapper.deleteEntity(entity);
+        closeSession();
     }
 
     //获取分库主键
     private long getShardingId(T entity){
         long shardingId = entity.getUserId();
-        if(entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)){
+        if(entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
             shardingId = entity.getId();
         }
         return shardingId;
@@ -124,6 +136,32 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
 
     public IDBMapper<T> getMapper(T entity){
         DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
+        SqlSession sqlSession = getSession();
         return (IDBMapper<T>) sqlSessionFactory.openSession().getMapper(mapper.mapper());
     }
+    /**
+     * Function  : 获取sqlSession
+     */
+    public SqlSession getSession(){
+        SqlSession session = threadLocal.get();
+
+        if(session ==null){
+            //如果sqlSessionFactory不为空则获取sqlSession，否则返回null
+            session = (sqlSessionFactory!=null) ? sqlSessionFactory.openSession(): null;
+            threadLocal.set(session);
+        }
+        return session;
+    }
+
+    /**
+     * Function  : 关闭sqlSession
+     */
+    public void closeSession(){
+        SqlSession session = threadLocal.get();
+        threadLocal.set(null);
+        if(session!=null){
+            session.close();
+        }
+    }
+
 }

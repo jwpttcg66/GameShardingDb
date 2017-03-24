@@ -25,7 +25,7 @@ import java.util.Map;
 public class OrderService extends EntityService<Order> implements IOrderService{
 
 
-    public int insertOrder(Order order) {
+    public long insertOrder(Order order) {
         return insertEntity(order);
     }
 
