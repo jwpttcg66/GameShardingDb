@@ -11,6 +11,8 @@ import com.snowcattle.game.db.sharding.DataSourceType;
 import org.apache.commons.collections.OrderedMap;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +28,9 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
 
     @Autowired
     private SqlSessionFactory sqlSessionFactory;
+
+    @Autowired
+    private SqlSessionTemplate sqlSessionTemplate;
 
     @Autowired
     private static ThreadLocal<SqlSession> threadLocal = new ThreadLocal<SqlSession>();
@@ -45,7 +50,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
-        IDBMapper<T> idbMapper = getMapper(entity);
+        IDBMapper<T> idbMapper = getTemplateMapper(entity);
         long result = -1;
         try {
             result = idbMapper.insertEntity(entity);
@@ -69,7 +74,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
-        IDBMapper<T> idbMapper = getMapper(entity);
+        IDBMapper<T> idbMapper = getTemplateMapper(entity);
         IEntity result = null;
         try {
 
@@ -87,7 +92,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
-        IDBMapper<T> idbMapper = getMapper(entity);
+        IDBMapper<T> idbMapper = getTemplateMapper(entity);
         List<T> result = null;
         try {
             idbMapper.getEntityList(entity);
@@ -119,7 +124,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             if (entityProxyWrapper != null) {
                 hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
             }
-            IDBMapper<T> idbMapper = getMapper(entity);
+            IDBMapper<T> idbMapper = getTemplateMapper(entity);
             try {
                 idbMapper.updateEntityByMap(hashMap);
             } catch (Exception e) {
@@ -143,7 +148,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         ;
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
         entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
-        IDBMapper<T> idbMapper = getMapper(entity);
+        IDBMapper<T> idbMapper = getTemplateMapper(entity);
         try {
             idbMapper.deleteEntity(entity);
         } catch (Exception e) {
@@ -154,7 +159,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     }
 
     //获取分库主键
-    private long getShardingId(T entity) {
+    protected long getShardingId(T entity) {
         long shardingId = entity.getUserId();
         if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
             shardingId = entity.getId();
@@ -163,7 +168,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     }
 
     //获取分库主键
-    private long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum) {
+    protected long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum) {
         long shardingId = userId;
         if (entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.ID)) {
             shardingId = id;
@@ -218,6 +223,11 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         if (session != null) {
             session.commit();
         }
+    }
+
+    public IDBMapper<T> getTemplateMapper(T entity) {
+        DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
+        return (IDBMapper<T>) sqlSessionTemplate.getMapper(mapper.mapper());
     }
 
 }
