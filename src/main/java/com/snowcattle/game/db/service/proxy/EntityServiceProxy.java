@@ -46,6 +46,21 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     }
                 }
 
+            }else if(dbOperationEnum.equals(DbOperationEnum.update)){
+                result = methodProxy.invokeSuper(obj, args);
+                BaseEntity baseEntity = (BaseEntity) args[1];
+                if(baseEntity != null){
+                    if(baseEntity instanceof RedisInterface){
+                        RedisInterface redisInterface = (RedisInterface) baseEntity;
+
+                    }
+                }
+            }else if(dbOperationEnum.equals(DbOperationEnum.query)){
+
+            }else if(dbOperationEnum.equals(DbOperationEnum.queryList)){
+
+            }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
+
             }
         }
         return result;
