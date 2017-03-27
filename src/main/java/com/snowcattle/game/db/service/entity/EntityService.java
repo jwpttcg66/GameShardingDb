@@ -90,7 +90,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         IDBMapper<T> idbMapper = getTemplateMapper(entity);
         List<T> result = null;
         try {
-            idbMapper.getEntityList(entity);
+            result = idbMapper.getEntityList(entity);
         } catch (Exception e) {
             logger.error(e.toString(), e);
         } finally {
