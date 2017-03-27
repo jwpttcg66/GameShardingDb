@@ -16,8 +16,9 @@ public class JdbcTest {
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
-        insertListTest(classPathXmlApplicationContext);
+//        insertListTest(classPathXmlApplicationContext);
 //        Order order = getTest(classPathXmlApplicationContext);
+          List<Order> orderList = getOrderList(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
           getListTest(classPathXmlApplicationContext);
@@ -27,7 +28,7 @@ public class JdbcTest {
 
         long userId = 99999;
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        int startSize = 20000;
+        int startSize = 200000;
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for(int i = startSize; i < endSize; i++) {
@@ -40,6 +41,15 @@ public class JdbcTest {
 
         orderService.insertOrderList(list);
     }
+
+    public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws  Exception{
+        OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
+        long userId = 99999;
+        List<Order> order = orderService.getOrderList(userId);
+        System.out.println(order);
+        return order;
+    }
+
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
