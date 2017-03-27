@@ -22,9 +22,16 @@ public class JdbcTest {
 //        Order order = getTest(classPathXmlApplicationContext);
           List<Order> orderList = getOrderList(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
-          updateBatchTest(classPathXmlApplicationContext, orderList);
+//          updateBatchTest(classPathXmlApplicationContext, orderList);
 //        deleteTest(classPathXmlApplicationContext, order);
+          deleteBatchTest(classPathXmlApplicationContext, orderList);
           getListTest(classPathXmlApplicationContext);
+    }
+
+
+    public static  void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, List<Order> orderList) throws  Exception{
+        OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
+        orderService.deleteEntityBatch(orderList);
     }
 
     public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, List<Order> orderList) throws  Exception{
