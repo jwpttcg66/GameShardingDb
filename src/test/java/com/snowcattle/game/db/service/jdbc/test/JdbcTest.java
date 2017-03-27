@@ -25,13 +25,14 @@ public class JdbcTest {
 
     public static void insertListTest( ClassPathXmlApplicationContext classPathXmlApplicationContext) throws  Exception{
 
+        long userId = 99999;
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         int startSize = 20000;
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for(int i = startSize; i < endSize; i++) {
             MoreOrder order = new MoreOrder();
-            order.setUserId(i);
+            order.setUserId(userId);
             order.setId(i);
             order.setStatus("测试列表插入" + i);
             list.add(order);

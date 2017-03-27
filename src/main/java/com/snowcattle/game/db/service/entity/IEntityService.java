@@ -60,6 +60,6 @@ public interface IEntityService <T extends BaseEntity>{
      * 批量删除实体列表
      * @param entityList
      */
-    public void delteEntityBatch(List<T> entityList);
+    public void deleteEntityBatch(List<T> entityList);
 
 }

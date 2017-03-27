@@ -21,8 +21,8 @@ public class JdbcCacheTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
         insertListTest(classPathXmlApplicationContext);
-        Order order = getTest(classPathXmlApplicationContext);
-        updateTest(classPathXmlApplicationContext, order);
+//        Order order = getTest(classPathXmlApplicationContext);
+//        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
 //        getListTest(classPathXmlApplicationContext);
     }
@@ -43,14 +43,13 @@ public class JdbcCacheTest {
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
-
         orderService = entityServiceProxyService.createProxyService(orderService);
-
+        long playerId = 99999;
         int startSize = 20000;
         int endSize = startSize + 10;
         for(int i = startSize; i < endSize; i++) {
             MoreOrder order = new MoreOrder();
-            order.setUserId(userId);
+            order.setUserId(playerId);
             order.setId(id);
             order.setStatus("测试列表插入" + id);
             orderService.insertOrder(order);

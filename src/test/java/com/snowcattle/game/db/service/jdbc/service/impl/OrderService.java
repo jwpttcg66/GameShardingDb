@@ -50,12 +50,12 @@ public class OrderService extends EntityService<Order> implements IOrderService{
 
     @Override
     public void updateOrderList(List<Order> order) {
-
+        updateEntityBatch(order);
     }
 
     @Override
     public void deleteOrderList(List<Order> order) {
-
+        deleteEntityBatch(order);
     }
 
 }

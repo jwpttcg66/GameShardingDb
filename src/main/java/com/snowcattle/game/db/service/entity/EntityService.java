@@ -235,7 +235,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             }
             commitBatchSession();
         }catch (Exception e){
-            logger.error(e.toString(), e);
+            logger.error("insertBatch error " + e.toString(), e);
             rollbackBatchSession();
         }finally {
             closeBatchSession();
@@ -245,12 +245,42 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
 
     @Override
     public void updateEntityBatch(List<T> entityList) {
-
+        SqlSession sqlSession = getBatchSession();
+        try {
+            for (T iEntity : entityList) {
+                long selectId = getShardingId(iEntity);
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
+                iEntity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, iEntity);
+                mapper.updateEntityByMap(iEntity.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+            }
+            commitBatchSession();
+        }catch (Exception e){
+            logger.error("updateBatchError" + e.toString(), e);
+            rollbackBatchSession();
+        }finally {
+            closeBatchSession();
+        }
     }
 
     @Override
-    public void delteEntityBatch(List<T> entityList) {
-
+    public void deleteEntityBatch(List<T> entityList) {
+        SqlSession sqlSession = getBatchSession();
+        try {
+            for (T iEntity : entityList) {
+                long selectId = getShardingId(iEntity);
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
+                iEntity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, iEntity);
+                mapper.deleteEntity(iEntity);
+            }
+            commitBatchSession();
+        }catch (Exception e){
+            logger.error("deleteBatchError" + e.toString(), e);
+            rollbackBatchSession();
+        }finally {
+            closeBatchSession();
+        }
     }
 
 }
