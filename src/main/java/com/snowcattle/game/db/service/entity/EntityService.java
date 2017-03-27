@@ -119,7 +119,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             if (entityProxyWrapper != null) {
                 hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
             }
-            IDBMapper<T> idbMapper = getTemplateMapper((T) entity.getEntityProxyWrapper().getEntityProxy().getEntity());
+            IDBMapper<T> idbMapper = getTemplateMapper((T) entity);
             try {
                 idbMapper.updateEntityByMap(hashMap);
             } catch (Exception e) {
@@ -255,7 +255,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
                 CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
                 int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
                 entity.setSharding_table_index(sharding_table_index);
-                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, (T) entity.getEntityProxyWrapper().getEntityProxy().getEntity());
+                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, (T) entity);
                 Map hashMap = new HashMap<>();
                 hashMap.put("sharding_table_index", sharding_table_index);
                 hashMap.put("userId", entity.getUserId());
