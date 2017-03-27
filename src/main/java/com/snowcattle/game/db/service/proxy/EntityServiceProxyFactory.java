@@ -1,8 +1,6 @@
 package com.snowcattle.game.db.service.proxy;
 
 import com.snowcattle.game.db.cache.redis.RedisService;
-import com.snowcattle.game.db.entity.BaseEntity;
-import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +12,16 @@ import org.springframework.stereotype.Service;
  * 实体存储服务代理服务
  */
 @Service
-public class EntityServiceProxyService {
+public class EntityServiceProxyFactory {
 
     @Autowired
     private RedisService redisService;
 
+    @Autowired(required = false)
+    private boolean useRedisFlag = true;
+
     private EntityServiceProxy createProxy(EntityService EntityService){
-        return new EntityServiceProxy<>(redisService);
+        return new EntityServiceProxy<>(redisService, useRedisFlag);
     }
 
     private <T extends  EntityService> T  createProxyService(T entityService, EntityServiceProxy entityServiceProxy){

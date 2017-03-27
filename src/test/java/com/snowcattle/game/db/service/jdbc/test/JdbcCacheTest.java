@@ -4,7 +4,7 @@ import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
 import com.snowcattle.game.db.service.proxy.EnityProxyService;
-import com.snowcattle.game.db.service.proxy.EntityServiceProxyService;
+import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class JdbcCacheTest {
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        getListTest(classPathXmlApplicationContext, orderService);
+        getListTest(classPathXmlApplicationContext, orderService);
     }
 
 
@@ -116,8 +116,8 @@ public class JdbcCacheTest {
 
     public static OrderService getOrderProxyService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
-        orderService = entityServiceProxyService.createProxyService(orderService);
+        EntityServiceProxyFactory entityServiceProxyFactory = (EntityServiceProxyFactory) classPathXmlApplicationContext.getBean("entityServiceProxyFactory");
+        orderService = entityServiceProxyFactory.createProxyService(orderService);
         return orderService;
     }
 }

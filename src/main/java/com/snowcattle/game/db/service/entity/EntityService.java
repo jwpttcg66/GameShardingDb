@@ -28,6 +28,8 @@ import java.util.Map;
  */
 public abstract class EntityService<T extends BaseEntity> implements IEntityService<T> {
 
+    private static final Logger logger = Loggers.dbLogger;
+
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
@@ -36,8 +38,6 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
 
     private static ThreadLocal<SqlSession> threadLocal = new ThreadLocal<SqlSession>();
 
-
-    private static final Logger logger = Loggers.dbLogger;
 
     /**
      * 插入实体

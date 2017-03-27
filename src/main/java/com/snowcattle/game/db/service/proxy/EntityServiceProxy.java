@@ -24,17 +24,21 @@ import java.util.List;
 public class EntityServiceProxy<T extends EntityService>  implements MethodInterceptor {
 
     private static final Logger proxyLogger = Loggers.dbServiceProxy;
+
     private RedisService redisService;
 
-    public EntityServiceProxy(RedisService redisService) {
+    private boolean useRedisFlag;
+
+    public EntityServiceProxy(RedisService redisService, boolean useRedisFlag) {
         this.redisService = redisService;
+        this.useRedisFlag = useRedisFlag;
     }
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         Object result = null;
         DbOperation dbOperation = method.getAnnotation(DbOperation.class);
-        if(dbOperation == null) {
+        if(dbOperation == null || !useRedisFlag) { //如果没有进行注解或者不使用redis，直接进行返回
             result = methodProxy.invokeSuper(obj, args);
         }else {
             //进行数据库操作,第一个参数默认都是mapper
@@ -105,6 +109,9 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                         if (baseEntity instanceof RedisInterface) {
                             RedisInterface redisInterface = (RedisInterface) baseEntity;
                             redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
+                        }else if(baseEntity instanceof RedisListInterface){
+                            RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                            redisService.hdel(EntityUtils.getRedisKey(redisListInterface), redisListInterface.getSubUniqueKey());
                         }
                     }
                     break;
