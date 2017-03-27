@@ -20,7 +20,7 @@ public class JdbcCacheTest {
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
-//        insertListTest(classPathXmlApplicationContext);
+        insertListTest(classPathXmlApplicationContext);
         Order order = getTest(classPathXmlApplicationContext);
         updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
@@ -31,7 +31,6 @@ public class JdbcCacheTest {
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
-
         orderService = entityServiceProxyService.createProxyService(orderService);
         Order order = new Order();
         order.setUserId(userId);
@@ -46,11 +45,16 @@ public class JdbcCacheTest {
         EntityServiceProxyService entityServiceProxyService = (EntityServiceProxyService) classPathXmlApplicationContext.getBean("entityServiceProxyService");
 
         orderService = entityServiceProxyService.createProxyService(orderService);
-        MoreOrder order = new MoreOrder();
-        order.setUserId(userId);
-        order.setId(id);
-        order.setStatus("测试列表插入" + id);
-        orderService.insertOrder(order);
+
+        int startSize = 20000;
+        int endSize = startSize + 10;
+        for(int i = startSize; i < endSize; i++) {
+            MoreOrder order = new MoreOrder();
+            order.setUserId(userId);
+            order.setId(id);
+            order.setStatus("测试列表插入" + id);
+            orderService.insertOrder(order);
+        }
     }
 
     public static Order getTest( ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {

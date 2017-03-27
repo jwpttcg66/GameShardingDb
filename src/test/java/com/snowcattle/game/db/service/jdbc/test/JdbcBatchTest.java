@@ -12,6 +12,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class JdbcBatchTest {
     public static void main(String[] args) {
+       commonTest();
+    }
+
+    public static void commonTest(){
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
         SqlSessionTemplate sqlSessionTemplate = (SqlSessionTemplate) classPathXmlApplicationContext.getBean("sqlSessionTemplate");
         SqlSessionTemplate batchSqlSessionTemplate = new  SqlSessionTemplate(sqlSessionTemplate.getSqlSessionFactory(), ExecutorType.BATCH);
@@ -35,6 +39,6 @@ public class JdbcBatchTest {
         }finally {
             sqlSession.close();
         }
-
     }
+
 }

@@ -1,10 +1,12 @@
 package com.snowcattle.game.db.service.jdbc.test;
 
+import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
 import com.snowcattle.game.db.service.proxy.EnityProxyService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,13 +15,30 @@ import java.util.List;
 public class JdbcTest {
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
-        insertTest(classPathXmlApplicationContext);
+//        insertTest(classPathXmlApplicationContext);
+        insertListTest(classPathXmlApplicationContext);
 //        Order order = getTest(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
 //        deleteTest(classPathXmlApplicationContext, order);
           getListTest(classPathXmlApplicationContext);
     }
 
+    public static void insertListTest( ClassPathXmlApplicationContext classPathXmlApplicationContext) throws  Exception{
+
+        OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
+        int startSize = 20000;
+        int endSize = startSize + 10;
+        List<Order> list = new ArrayList<>();
+        for(int i = startSize; i < endSize; i++) {
+            MoreOrder order = new MoreOrder();
+            order.setUserId(i);
+            order.setId(i);
+            order.setStatus("测试列表插入" + i);
+            list.add(order);
+        }
+
+        orderService.insertOrderList(list);
+    }
     public static void insertTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
 
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");

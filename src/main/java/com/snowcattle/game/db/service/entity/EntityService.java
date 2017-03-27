@@ -9,11 +9,13 @@ import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.CustomerContextHolder;
 import com.snowcattle.game.db.sharding.DataSourceType;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.Map;
 /**
  * Created by jiangwenping on 17/3/21.
  * 模版实体数据提服务
+ * 批量应该保证它们在同一个数据库中
  */
 public abstract class EntityService<T extends BaseEntity> implements IEntityService<T> {
 
@@ -173,7 +176,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
 
         if (session == null) {
             //如果sqlSessionFactory不为空则获取sqlSession，否则返回null
-            session = (sqlSessionTemplate.getSqlSessionFactory() != null) ? sqlSessionTemplate.getSqlSessionFactory().openSession() : null;
+            session = (sqlSessionBatchTemplate.getSqlSessionFactory() != null) ? sqlSessionBatchTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, true) : null;
             threadLocal.set(session);
         }
         return session;
@@ -211,6 +214,43 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     public IDBMapper<T> getTemplateMapper(T entity) {
         DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
         return (IDBMapper<T>) sqlSessionTemplate.getMapper(mapper.mapper());
+    }
+
+    public IDBMapper<T> getBatchTemplateMapper(SqlSession sqlSession, T entity) {
+        DbMapper mapper = entity.getClass().getAnnotation(DbMapper.class);
+        return (IDBMapper<T>) sqlSession.getMapper(mapper.mapper());
+    }
+
+    @Override
+    public List<Long> insertEntityBatch(List<T> entityList) {
+        List<Long> result = new ArrayList<>();
+        SqlSession sqlSession = getBatchSession();
+        try {
+            for (T iEntity : entityList) {
+                long selectId = getShardingId(iEntity);
+                CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
+                iEntity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, iEntity);
+                mapper.insertEntity(iEntity);
+            }
+            commitBatchSession();
+        }catch (Exception e){
+            logger.error(e.toString(), e);
+            rollbackBatchSession();
+        }finally {
+            closeBatchSession();
+        }
+        return result;
+    }
+
+    @Override
+    public void updateEntityBatch(List<T> entityList) {
+
+    }
+
+    @Override
+    public void delteEntityBatch(List<T> entityList) {
+
     }
 
 }
