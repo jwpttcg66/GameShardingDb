@@ -118,7 +118,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
             if (entityProxyWrapper != null) {
                 hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
             }
-            IDBMapper<T> idbMapper = getTemplateMapper(entity);
+            IDBMapper<T> idbMapper = getTemplateMapper((T) entity.getEntityProxyWrapper().getEntityProxy().getEntity());
             try {
                 idbMapper.updateEntityByMap(hashMap);
             } catch (Exception e) {
@@ -226,12 +226,12 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         List<Long> result = new ArrayList<>();
         SqlSession sqlSession = getBatchSession();
         try {
-            for (T iEntity : entityList) {
-                long selectId = getShardingId(iEntity);
+            for (T entity : entityList) {
+                long selectId = getShardingId(entity);
                 CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-                iEntity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
-                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, iEntity);
-                mapper.insertEntity(iEntity);
+                entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, entity);
+                mapper.insertEntity(entity);
             }
             commitBatchSession();
         }catch (Exception e){
@@ -247,12 +247,31 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     public void updateEntityBatch(List<T> entityList) {
         SqlSession sqlSession = getBatchSession();
         try {
-            for (T iEntity : entityList) {
-                long selectId = getShardingId(iEntity);
+            for (T entity : entityList) {
+                long selectId = getShardingId(entity);
                 CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-                iEntity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
-                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, iEntity);
-                mapper.updateEntityByMap(iEntity.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+                int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
+                entity.setSharding_table_index(sharding_table_index);
+                IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, (T) entity.getEntityProxyWrapper().getEntityProxy().getEntity());
+                Map hashMap = new HashMap<>();
+                hashMap.put("sharding_table_index", sharding_table_index);
+                hashMap.put("userId", entity.getUserId());
+                hashMap.put("id", entity.getId());
+                EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
+                //只有数据变化的时候才会更新
+                if (entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
+                    if (entityProxyWrapper != null) {
+                        hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
+                    }
+                    try {
+                        mapper.updateEntityByMap(hashMap);
+                    } catch (Exception e) {
+                        logger.error(e.toString(), e);
+                    } finally {
+                    }
+                } else {
+                    logger.error("updateEntityBatch cancer " + entity.getClass().getSimpleName() + "id:" + entity.getId() + " userId:" + entity.getUserId());
+                }
             }
             commitBatchSession();
         }catch (Exception e){

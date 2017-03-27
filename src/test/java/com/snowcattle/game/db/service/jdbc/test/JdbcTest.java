@@ -13,20 +13,36 @@ import java.util.List;
  * Created by jiangwenping on 17/3/20.
  */
 public class JdbcTest {
+    public static long userId = 99999;
+
     public static void main(String[] args) throws  Exception{
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
 //        insertTest(classPathXmlApplicationContext);
-//        insertListTest(classPathXmlApplicationContext);
+//        insertBatchTest(classPathXmlApplicationContext);
 //        Order order = getTest(classPathXmlApplicationContext);
           List<Order> orderList = getOrderList(classPathXmlApplicationContext);
 //        updateTest(classPathXmlApplicationContext, order);
+          updateBatchTest(classPathXmlApplicationContext, orderList);
 //        deleteTest(classPathXmlApplicationContext, order);
           getListTest(classPathXmlApplicationContext);
     }
 
-    public static void insertListTest( ClassPathXmlApplicationContext classPathXmlApplicationContext) throws  Exception{
+    public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, List<Order> orderList) throws  Exception{
+        OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
+        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
+        List<Order> updateList = new ArrayList<>();
+        for (Order order: orderList){
+            Order proxyOrder = enityProxyService.createProxyEntity(order);
+            proxyOrder.setStatus("dddd");
+            proxyOrder.setUserId(userId);
+            proxyOrder.setId(order.getId());
+            updateList.add(proxyOrder);
+        }
+        orderService.updateOrderList(updateList);
+    }
 
-        long userId = 99999;
+    public static void insertBatchTest( ClassPathXmlApplicationContext classPathXmlApplicationContext) throws  Exception{
+
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         int startSize = 200000;
         int endSize = startSize + 10;
@@ -66,7 +82,6 @@ public class JdbcTest {
 
     public static Order getTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        long userId = 2;
         long id = 2;
         Order order = orderService.getOrder(userId, id);
         System.out.println(order);
@@ -75,7 +90,6 @@ public class JdbcTest {
 
     public static void getListTest( ClassPathXmlApplicationContext classPathXmlApplicationContext){
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        long userId = 2;
         List<Order> orderList = orderService.getOrderList(userId);
         System.out.println(orderList);
     }
@@ -83,12 +97,11 @@ public class JdbcTest {
 
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, Order order) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("dbProxyService");
+        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
         Order proxyOrder = enityProxyService.createProxyEntity(order);
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 
-        long userId = 2;
         long id = 2;
         Order queryOrder = orderService.getOrder(userId, id);
         System.out.println(queryOrder.getStatus());
@@ -97,7 +110,6 @@ public class JdbcTest {
     public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, Order order) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
         orderService.deleteOrder(order);
-        long userId = 2;
         long id = 2;
         Order queryOrder = orderService.getOrder(userId, id);
         System.out.println(queryOrder);
