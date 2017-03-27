@@ -93,15 +93,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 case delete:
                     result = methodProxy.invokeSuper(obj, args);
                     baseEntity = (BaseEntity) args[0];
-                    if (baseEntity != null) {
-                        if (baseEntity instanceof RedisInterface) {
-                            RedisInterface redisInterface = (RedisInterface) baseEntity;
-                            redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
-                        }else if(baseEntity instanceof RedisListInterface){
-                            RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
-                            redisService.hdel(EntityUtils.getRedisKey(redisListInterface), redisListInterface.getSubUniqueKey());
-                        }
-                    }
+                    deleteEntity(baseEntity);
                     break;
                 case insertBatch:
                     List<BaseEntity> entityList = (List<BaseEntity>) args[0];
@@ -112,12 +104,18 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     updateChangedFieldEntityList(entityList);
                     break;
                 case deleteBatch:
+                    entityList = (List<BaseEntity>) args[0];
+                    deleteEntityList(entityList);
                     break;
             }
         }
         return result;
     }
 
+    /**
+     * 更新变化字段
+     * @param entity
+     */
     private void updateChangedFieldEntity(BaseEntity entity){
         if (entity != null) {
             if (entity instanceof RedisInterface) {
@@ -132,6 +130,10 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
         }
     }
 
+    /**
+     * 更新所有字段
+     * @param entity
+     */
     private void updateAllFieldEntity(BaseEntity entity){
         if (entity != null) {
             if (entity instanceof RedisInterface) {
@@ -146,6 +148,26 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
         }
     }
 
+    /**
+     * 删除实体
+     * @param baseEntity
+     */
+    private void deleteEntity(BaseEntity baseEntity){
+        if (baseEntity != null) {
+            if (baseEntity instanceof RedisInterface) {
+                RedisInterface redisInterface = (RedisInterface) baseEntity;
+                redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
+            }else if(baseEntity instanceof RedisListInterface){
+                RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                redisService.hdel(EntityUtils.getRedisKey(redisListInterface), redisListInterface.getSubUniqueKey());
+            }
+        }
+    }
+
+    /**
+     * 更新所有字段实体列表
+     * @param entityList
+     */
     public void updateAllFieldEntityList(List<BaseEntity> entityList){
         //拿到第一个，看一下类型
         if(entityList.size() > 0){
@@ -155,16 +177,19 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     updateAllFieldEntity(entity);
                 }
             }else if(entity instanceof RedisListInterface){
-                RedisListInterface redisListInterface = (RedisListInterface) entity;
                 List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
                 for(BaseEntity baseEntity: entityList){
                     redisListInterfaceList.add((RedisListInterface) baseEntity);
                 }
-                redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+                redisService.setListToHash(EntityUtils.getRedisKey((RedisInterface) entity), redisListInterfaceList);
             }
         }
     }
 
+    /**
+     * 更新变化字段实体列表
+     * @param entityList
+     */
     private void updateChangedFieldEntityList(List<BaseEntity> entityList){
         if(entityList.size() > 0) {
             BaseEntity entity = entityList.get(0);
@@ -174,13 +199,36 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                         updateChangedFieldEntity(entity);
                     }
                 } else if (entity instanceof RedisListInterface) {
-                    RedisListInterface redisListInterface = (RedisListInterface) entity;
+
                     List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
-                    redisListInterfaceList.add(redisListInterface);
-                    redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+                    for(BaseEntity baseEntity: entityList) {
+                        RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                        redisListInterfaceList.add(redisListInterface);
+                    }
+                    redisService.setListToHash(EntityUtils.getRedisKey((RedisListInterface) entity), redisListInterfaceList);
                 }
             }
         }
     }
 
+    //删除实体列表
+    private void deleteEntityList(List<BaseEntity> entityList){
+        if(entityList.size() > 0) {
+            BaseEntity entity = entityList.get(0);
+            if (entity != null) {
+                if (entity instanceof RedisInterface) {
+                    for(BaseEntity baseEntity: entityList){
+                        deleteEntity(baseEntity);
+                    }
+                } else if (entity instanceof RedisListInterface) {
+                    List<String> redisListInterfaceList = new ArrayList<>();
+                    for(BaseEntity baseEntity: entityList) {
+                        RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                        redisListInterfaceList.add(redisListInterface.getSubUniqueKey());
+                    }
+                    redisService.hdel(EntityUtils.getRedisKey((RedisInterface) entity), redisListInterfaceList.toArray(new String[0]));
+                }
+            }
+        }
+    }
 }
