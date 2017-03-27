@@ -7,7 +7,6 @@ import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.BaseEntity;
-import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.EntityUtils;
 import org.slf4j.Logger;
@@ -85,6 +84,10 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     }
                     if (result == null) {
                         result = methodProxy.invokeSuper(obj, args);
+                        if(result != null){
+                            List<BaseEntity> entityList = (List<BaseEntity>) result;
+                            updateAllFieldEntityList(entityList);
+                        }
                     }
                     break;
                 case delete:
@@ -101,9 +104,12 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     }
                     break;
                 case insertBatch:
-                    List<IEntity> list = (List<IEntity>) args[0];
+                    List<BaseEntity> entityList = (List<BaseEntity>) args[0];
+                    updateAllFieldEntityList(entityList);
                     break;
                 case updateBatch:
+                    entityList = (List<BaseEntity>) args[0];
+                    updateChangedFieldEntityList(entityList);
                     break;
                 case deleteBatch:
                     break;
@@ -140,9 +146,41 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
         }
     }
 
-    public void updateEntityList(){
-
+    public void updateAllFieldEntityList(List<BaseEntity> entityList){
+        //拿到第一个，看一下类型
+        if(entityList.size() > 0){
+            BaseEntity entity = entityList.get(0);
+            if(entity instanceof  RedisInterface){
+                for(BaseEntity baseEntity: entityList){
+                    updateAllFieldEntity(entity);
+                }
+            }else if(entity instanceof RedisListInterface){
+                RedisListInterface redisListInterface = (RedisListInterface) entity;
+                List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                for(BaseEntity baseEntity: entityList){
+                    redisListInterfaceList.add((RedisListInterface) baseEntity);
+                }
+                redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+            }
+        }
     }
 
+    private void updateChangedFieldEntityList(List<BaseEntity> entityList){
+        if(entityList.size() > 0) {
+            BaseEntity entity = entityList.get(0);
+            if (entity != null) {
+                if (entity instanceof RedisInterface) {
+                    for(BaseEntity baseEntity: entityList){
+                        updateChangedFieldEntity(entity);
+                    }
+                } else if (entity instanceof RedisListInterface) {
+                    RedisListInterface redisListInterface = (RedisListInterface) entity;
+                    List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                    redisListInterfaceList.add(redisListInterface);
+                    redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+                }
+            }
+        }
+    }
 
 }
