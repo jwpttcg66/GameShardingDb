@@ -38,7 +38,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
             result = methodProxy.invokeSuper(obj, args);
         }else{
             //进行数据库操作,第一个参数默认都是mapper
-            DbOperationEnum dbOperationEnum = DbOperationEnum.valueOf(dbOperation.operation());
+            DbOperationEnum dbOperationEnum =  dbOperation.operation();
             if(dbOperationEnum.equals(DbOperationEnum.insert)){
                 result = methodProxy.invokeSuper(obj, args);
                 BaseEntity baseEntity = (BaseEntity) args[0];

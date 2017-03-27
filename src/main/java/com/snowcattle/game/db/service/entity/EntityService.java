@@ -3,6 +3,7 @@ package com.snowcattle.game.db.service.entity;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbMapper;
 import com.snowcattle.game.db.common.annotation.DbOperation;
+import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.BaseEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
@@ -45,7 +46,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      * @return
      */
     @Override
-    @DbOperation(operation = "insert")
+    @DbOperation(operation = DbOperationEnum.insert)
     public long insertEntity(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -66,7 +67,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      *
      * @return
      */
-    @DbOperation(operation = "query")
+    @DbOperation(operation = DbOperationEnum.query)
     public IEntity getEntity(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -82,7 +83,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         return result;
     }
 
-    @DbOperation(operation = "queryList")
+    @DbOperation(operation = DbOperationEnum.queryList)
     public List<T> getEntityList(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -103,7 +104,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      *
      * @param entity
      */
-    @DbOperation(operation = "update")
+    @DbOperation(operation = DbOperationEnum.update)
     public void updateEntity(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
@@ -135,7 +136,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
      *
      * @param entity
      */
-    @DbOperation(operation = "delete")
+    @DbOperation(operation = DbOperationEnum.delete)
     public void deleteEntity(T entity) {
         long selectId = getShardingId(entity);
         ;
@@ -222,6 +223,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     }
 
     @Override
+    @DbOperation(operation = DbOperationEnum.insertBatch)
     public List<Long> insertEntityBatch(List<T> entityList) {
         List<Long> result = new ArrayList<>();
         SqlSession sqlSession = getBatchSession();
@@ -244,6 +246,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     }
 
     @Override
+    @DbOperation(operation = DbOperationEnum.updateBatch)
     public void updateEntityBatch(List<T> entityList) {
         SqlSession sqlSession = getBatchSession();
         try {
@@ -283,6 +286,7 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     }
 
     @Override
+    @DbOperation(operation = DbOperationEnum.deleteBatch)
     public void deleteEntityBatch(List<T> entityList) {
         SqlSession sqlSession = getBatchSession();
         try {

@@ -1,5 +1,7 @@
 package com.snowcattle.game.db.common.annotation;
 
+import com.snowcattle.game.db.common.enums.DbOperationEnum;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,6 +16,6 @@ public @interface DbOperation {
     /**
      * @return
      */
-    String operation();
+    DbOperationEnum operation();
 }
 

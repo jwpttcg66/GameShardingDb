@@ -8,5 +8,9 @@ public enum DbOperationEnum {
     update,
     query,
     queryList,
-    delete;
+    delete,
+    insertBatch,
+    updateBatch,
+    deleteBatch,
+    ;
 }
