@@ -1,13 +1,10 @@
 package com.snowcattle.game.db.service.jdbc.test;
 
-import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
-import com.snowcattle.game.db.service.proxy.EnityProxyService;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,91 +24,45 @@ public class JdbcCacheTest {
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-        getListTest(classPathXmlApplicationContext, orderService);
+//        getListTest(classPathXmlApplicationContext, orderService);
     }
 
 
     public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-        orderService.deleteEntityBatch(orderList);
+        JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
     public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
-        List<Order> updateList = new ArrayList<>();
-        for (Order order : orderList) {
-            Order proxyOrder = enityProxyService.createProxyEntity(order);
-            proxyOrder.setStatus("dddd");
-            proxyOrder.setUserId(userId);
-            proxyOrder.setId(order.getId());
-            updateList.add(proxyOrder);
-        }
-        orderService.updateOrderList(updateList);
+       JdbcTest.updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        int startSize = 200000;
-        int endSize = startSize + 10;
-        List<Order> list = new ArrayList<>();
-        for (int i = startSize; i < endSize; i++) {
-            MoreOrder order = new MoreOrder();
-            order.setUserId(userId);
-            order.setId(i);
-            order.setStatus("测试列表插入" + i);
-            list.add(order);
-        }
-
-        orderService.insertOrderList(list);
+      JdbcTest.insertBatchTest(classPathXmlApplicationContext, orderService);
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        long userId = 99999;
-        List<Order> order = orderService.getOrderList(userId);
-        System.out.println(order);
-        return order;
+      return JdbcTest.getOrderList(classPathXmlApplicationContext, orderService);
     }
 
     public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-
-        int startSize = 2600;
-        int endSize = 2700;
-        for (int i = startSize; i < endSize; i++) {
-            Order order = new Order();
-            order.setUserId(i);
-            order.setId((long) i);
-            order.setStatus("测试插入" + i);
-            orderService.insertOrder(order);
-        }
+        JdbcTest.insertTest(classPathXmlApplicationContext, orderService);
     }
 
     public static Order getTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        long id = 2;
-        Order order = orderService.getOrder(userId, id);
-        System.out.println(order);
-        return order;
+       return JdbcTest.getTest(classPathXmlApplicationContext, orderService);
     }
 
     public static void getListTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        List<Order> orderList = orderService.getOrderList(userId);
-        System.out.println(orderList);
+        JdbcTest.getListTest(classPathXmlApplicationContext, orderService);
     }
 
 
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
-        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
-        Order proxyOrder = enityProxyService.createProxyEntity(order);
-        proxyOrder.setStatus("修改了3");
-        orderService.updateOrder(proxyOrder);
-
-        long id = 2;
-        Order queryOrder = orderService.getOrder(userId, id);
-        System.out.println(queryOrder.getStatus());
+       JdbcTest.updateTest(classPathXmlApplicationContext, orderService, order);
     }
 
     public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
-        orderService.deleteOrder(order);
-        long id = 2;
-        Order queryOrder = orderService.getOrder(userId, id);
-        System.out.println(queryOrder);
+      JdbcTest.deleteTest(classPathXmlApplicationContext, orderService, order);
     }
 
     public static OrderService getOrderProxyService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {

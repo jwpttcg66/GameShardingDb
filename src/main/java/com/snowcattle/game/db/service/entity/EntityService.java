@@ -306,4 +306,19 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         }
     }
 
+    public SqlSessionTemplate getSqlSessionTemplate() {
+        return sqlSessionTemplate;
+    }
+
+    public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+        this.sqlSessionTemplate = sqlSessionTemplate;
+    }
+
+    public SqlSessionTemplate getSqlSessionBatchTemplate() {
+        return sqlSessionBatchTemplate;
+    }
+
+    public void setSqlSessionBatchTemplate(SqlSessionTemplate sqlSessionBatchTemplate) {
+        this.sqlSessionBatchTemplate = sqlSessionBatchTemplate;
+    }
 }
