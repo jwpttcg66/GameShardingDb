@@ -7,7 +7,6 @@ import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.BaseEntity;
-import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.EntityUtils;
 import org.slf4j.Logger;
@@ -34,7 +33,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         Object result = null;
-        DbOperation dbOperation = method.getDeclaredAnnotation(DbOperation.class);
+        DbOperation dbOperation = method.getAnnotation(DbOperation.class);
         if(dbOperation == null) {
             result = methodProxy.invokeSuper(obj, args);
         }else{
