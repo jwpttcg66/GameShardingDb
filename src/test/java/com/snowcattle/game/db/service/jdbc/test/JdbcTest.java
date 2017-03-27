@@ -31,6 +31,7 @@ public class JdbcTest {
 
 
     public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
+       //test
         orderService.deleteEntityBatch(orderList);
     }
 
