@@ -36,78 +36,81 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
         DbOperation dbOperation = method.getAnnotation(DbOperation.class);
         if(dbOperation == null) {
             result = methodProxy.invokeSuper(obj, args);
-        }else{
+        }else {
             //进行数据库操作,第一个参数默认都是mapper
-            DbOperationEnum dbOperationEnum =  dbOperation.operation();
-            if(dbOperationEnum.equals(DbOperationEnum.insert)){
-                result = methodProxy.invokeSuper(obj, args);
-                BaseEntity baseEntity = (BaseEntity) args[0];
-                if(baseEntity != null){
-                    if(baseEntity instanceof  RedisInterface){
-                        RedisInterface redisInterface = (RedisInterface) baseEntity;
-                        redisService.setObjectToHash(EntityUtils.getRedisKey(redisInterface), baseEntity);
-                    }else if(obj instanceof RedisListInterface){
-                        RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
-                        List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
-                        redisListInterfaceList.add(redisListInterface);
-                        redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
-                    }
-                }
-
-            }else if(dbOperationEnum.equals(DbOperationEnum.update)){
-                result = methodProxy.invokeSuper(obj, args);
-                BaseEntity baseEntity = (BaseEntity) args[0];
-                if(baseEntity != null){
-                    if(baseEntity instanceof RedisInterface){
-                        RedisInterface redisInterface = (RedisInterface) baseEntity;
-                        redisService.updateObjectHashMap(EntityUtils.getRedisKey(redisInterface), baseEntity.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
-                    }else if(baseEntity instanceof RedisListInterface){
-                        RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
-                        List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
-                        redisListInterfaceList.add(redisListInterface);
-                        redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
-                    }
-                }
-            }else if(dbOperationEnum.equals(DbOperationEnum.query)){
-                BaseEntity baseEntity = (BaseEntity) args[0];
-                if(baseEntity != null){
-                    if(baseEntity instanceof RedisInterface){
-                        RedisInterface redisInterface = (RedisInterface) baseEntity;
-                        result = redisService.getObjectFromHash(EntityUtils.getRedisKey(redisInterface), baseEntity.getClass());
-                    }else{
-                        proxyLogger.error("query interface RedisListInterface " + baseEntity.getClass().getSimpleName() + " use RedisInterface " + baseEntity.toString());
-                    }
-                }
-                if(result == null) {
+            DbOperationEnum dbOperationEnum = dbOperation.operation();
+            switch (dbOperationEnum) {
+                case insert:
                     result = methodProxy.invokeSuper(obj, args);
-                }
-            }else if(dbOperationEnum.equals(DbOperationEnum.queryList)){
-
-                BaseEntity baseEntity = (BaseEntity) args[0];
-                if(baseEntity != null){
-                    if(baseEntity instanceof RedisListInterface){
-                        RedisInterface redisInterface = (RedisInterface) baseEntity;
-                        result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), baseEntity.getClass());
-                    }else{
-                        proxyLogger.error("query interface RedisInterface " + baseEntity.getClass().getSimpleName() + " use RedisListInterface " + baseEntity.toString());
+                    BaseEntity baseEntity = (BaseEntity) args[0];
+                    if (baseEntity != null) {
+                        if (baseEntity instanceof RedisInterface) {
+                            RedisInterface redisInterface = (RedisInterface) baseEntity;
+                            redisService.setObjectToHash(EntityUtils.getRedisKey(redisInterface), baseEntity);
+                        } else if (obj instanceof RedisListInterface) {
+                            RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                            List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                            redisListInterfaceList.add(redisListInterface);
+                            redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+                        }
                     }
-                }
-                if(result == null) {
+                    break;
+                case update:
                     result = methodProxy.invokeSuper(obj, args);
-                }
-            }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
-                result = methodProxy.invokeSuper(obj, args);
-                BaseEntity baseEntity = (BaseEntity) args[0];
-                if(baseEntity != null){
-                    if(baseEntity instanceof RedisInterface){
-                        RedisInterface redisInterface = (RedisInterface) baseEntity;
-                        redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
+                    baseEntity = (BaseEntity) args[0];
+                    if (baseEntity != null) {
+                        if (baseEntity instanceof RedisInterface) {
+                            RedisInterface redisInterface = (RedisInterface) baseEntity;
+                            redisService.updateObjectHashMap(EntityUtils.getRedisKey(redisInterface), baseEntity.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+                        } else if (baseEntity instanceof RedisListInterface) {
+                            RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                            List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                            redisListInterfaceList.add(redisListInterface);
+                            redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+                        }
                     }
-                }
+                    break;
+                case query:
+                    baseEntity = (BaseEntity) args[0];
+                    if (baseEntity != null) {
+                        if (baseEntity instanceof RedisInterface) {
+                            RedisInterface redisInterface = (RedisInterface) baseEntity;
+                            result = redisService.getObjectFromHash(EntityUtils.getRedisKey(redisInterface), baseEntity.getClass());
+                        } else {
+                            proxyLogger.error("query interface RedisListInterface " + baseEntity.getClass().getSimpleName() + " use RedisInterface " + baseEntity.toString());
+                        }
+                    }
+                    if (result == null) {
+                        result = methodProxy.invokeSuper(obj, args);
+                    }
+                    break;
+                case queryList:
+                    baseEntity = (BaseEntity) args[0];
+                    if (baseEntity != null) {
+                        if (baseEntity instanceof RedisListInterface) {
+                            RedisInterface redisInterface = (RedisInterface) baseEntity;
+                            result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), baseEntity.getClass());
+                        } else {
+                            proxyLogger.error("query interface RedisInterface " + baseEntity.getClass().getSimpleName() + " use RedisListInterface " + baseEntity.toString());
+                        }
+                    }
+                    if (result == null) {
+                        result = methodProxy.invokeSuper(obj, args);
+                    }
+                    break;
+                case delete:
+                    result = methodProxy.invokeSuper(obj, args);
+                    baseEntity = (BaseEntity) args[0];
+                    if (baseEntity != null) {
+                        if (baseEntity instanceof RedisInterface) {
+                            RedisInterface redisInterface = (RedisInterface) baseEntity;
+                            redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
+                        }
+                    }
+                    break;
             }
         }
         return result;
     }
-
 
 }
