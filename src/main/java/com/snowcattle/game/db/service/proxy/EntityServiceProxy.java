@@ -20,6 +20,9 @@ import java.util.List;
 /**
  * Created by jwp on 2017/3/23.
  * 实体存储服务代理
+ *
+ * 存储策略为 insert的时候插入db,然后更新缓存。query的时候优先缓存，找不到的时候查询db,更新缓存。delete的时候删除db，删除缓存，
+ * useRedisFlag 为是否使用缓存redis标志
  */
 public class EntityServiceProxy<T extends EntityService>  implements MethodInterceptor {
 
