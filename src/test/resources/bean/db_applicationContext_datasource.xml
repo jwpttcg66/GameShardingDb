@@ -110,4 +110,9 @@
         <property name="password" value="${jdbc-password-2}" />
     </bean>
 
+    <bean id="customerContextHolder" class="com.snowcattle.game.db.sharding.CustomerContextHolder">
+        <property name="db_count" value="3"/>
+        <property name="table_count" value="2"/>
+    </bean>
+
 </beans>
