@@ -3,6 +3,7 @@ package com.snowcattle.game.db.service.jdbc.service.impl;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.IOrderService;
+import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,4 +59,8 @@ public class OrderService extends EntityService<Order> implements IOrderService{
         deleteEntityBatch(order);
     }
 
+    @Override
+    public EntityServiceShardingStrategy getEntityServiceShardingStrategy() {
+        return getDefaultEntityServiceShardingStrategy();
+    }
 }

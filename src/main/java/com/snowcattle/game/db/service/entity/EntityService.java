@@ -10,6 +10,7 @@ import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.CustomerContextHolder;
 import com.snowcattle.game.db.sharding.DataSourceType;
+import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -36,6 +37,9 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     @Autowired
     private SqlSessionTemplate sqlSessionBatchTemplate;
 
+    @Autowired
+    private EntityServiceShardingStrategy defaultEntityServiceShardingStrategy;
+
     private static ThreadLocal<SqlSession> threadLocal = new ThreadLocal<SqlSession>();
 
 
@@ -49,8 +53,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     @DbOperation(operation = DbOperationEnum.insert)
     public long insertEntity(T entity) {
         long selectId = getShardingId(entity);
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-        entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+        entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getTemplateMapper(entity);
         long result = -1;
         try {
@@ -70,8 +74,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     @DbOperation(operation = DbOperationEnum.query)
     public IEntity getEntity(T entity) {
         long selectId = getShardingId(entity);
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-        entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+        entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getTemplateMapper(entity);
         IEntity result = null;
         try {
@@ -86,8 +90,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     @DbOperation(operation = DbOperationEnum.queryList)
     public List<T> getEntityList(T entity) {
         long selectId = getShardingId(entity);
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-        entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+        entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getTemplateMapper(entity);
         List<T> result = null;
         try {
@@ -107,8 +111,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     @DbOperation(operation = DbOperationEnum.update)
     public void updateEntity(T entity) {
         long selectId = getShardingId(entity);
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-        int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
+        CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+        int sharding_table_index = getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId);
         Map hashMap = new HashMap<>();
         hashMap.put("sharding_table_index", sharding_table_index);
         hashMap.put("userId", entity.getUserId());
@@ -140,8 +144,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     public void deleteEntity(T entity) {
         long selectId = getShardingId(entity);
         ;
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-        entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+        CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+        entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getTemplateMapper(entity);
         try {
             idbMapper.deleteEntity(entity);
@@ -230,8 +234,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         try {
             for (T entity : entityList) {
                 long selectId = getShardingId(entity);
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-                entity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+                CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+                entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
                 IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, entity);
                 mapper.insertEntity(entity);
             }
@@ -252,8 +256,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         try {
             for (T entity : entityList) {
                 long selectId = getShardingId(entity);
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-                int sharding_table_index = CustomerContextHolder.getShardingDBTableIndexByUserId(selectId);
+                CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+                int sharding_table_index = getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId);
                 entity.setSharding_table_index(sharding_table_index);
                 IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, (T) entity);
                 Map hashMap = new HashMap<>();
@@ -292,8 +296,8 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
         try {
             for (T iEntity : entityList) {
                 long selectId = getShardingId(iEntity);
-                CustomerContextHolder.setCustomerType(CustomerContextHolder.getShardingDBKeyByUserId(DataSourceType.jdbc_player_db, selectId));
-                iEntity.setSharding_table_index(CustomerContextHolder.getShardingDBTableIndexByUserId(selectId));
+                CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+                iEntity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
                 IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, iEntity);
                 mapper.deleteEntity(iEntity);
             }
@@ -321,4 +325,14 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     public void setSqlSessionBatchTemplate(SqlSessionTemplate sqlSessionBatchTemplate) {
         this.sqlSessionBatchTemplate = sqlSessionBatchTemplate;
     }
+
+    public EntityServiceShardingStrategy getDefaultEntityServiceShardingStrategy() {
+        return defaultEntityServiceShardingStrategy;
+    }
+
+    public void setDefaultEntityServiceShardingStrategy(EntityServiceShardingStrategy defaultEntityServiceShardingStrategy) {
+        this.defaultEntityServiceShardingStrategy = defaultEntityServiceShardingStrategy;
+    }
+
+    abstract  public EntityServiceShardingStrategy getEntityServiceShardingStrategy();
 }
