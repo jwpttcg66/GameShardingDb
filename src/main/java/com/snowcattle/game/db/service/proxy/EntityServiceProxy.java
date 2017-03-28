@@ -96,14 +96,17 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     deleteEntity(baseEntity);
                     break;
                 case insertBatch:
+                    result = methodProxy.invokeSuper(obj, args);
                     List<BaseEntity> entityList = (List<BaseEntity>) args[0];
                     updateAllFieldEntityList(entityList);
                     break;
                 case updateBatch:
+                    result = methodProxy.invokeSuper(obj, args);
                     entityList = (List<BaseEntity>) args[0];
                     updateChangedFieldEntityList(entityList);
                     break;
                 case deleteBatch:
+                    result = methodProxy.invokeSuper(obj, args);
                     entityList = (List<BaseEntity>) args[0];
                     deleteEntityList(entityList);
                     break;

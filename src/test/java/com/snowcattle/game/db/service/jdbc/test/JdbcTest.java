@@ -14,11 +14,11 @@ import java.util.List;
  */
 public class JdbcTest {
     public static long userId = 99999;
-
+    public static long id = 3603;
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
         OrderService orderService = getOrderService(classPathXmlApplicationContext);
-        insertTest(classPathXmlApplicationContext, orderService);
+//        insertTest(classPathXmlApplicationContext, orderService);
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
@@ -49,7 +49,7 @@ public class JdbcTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        int startSize = 200000;
+        int startSize = 300000;
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
@@ -64,7 +64,6 @@ public class JdbcTest {
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        long userId = 99999;
         List<Order> order = orderService.getOrderList(userId);
         System.out.println(order);
         return order;
@@ -72,11 +71,11 @@ public class JdbcTest {
 
     public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
 
-        int startSize = 2600;
-        int endSize = 2700;
+        int startSize = 3600;
+        int endSize = 3605;
         for (int i = startSize; i < endSize; i++) {
             Order order = new Order();
-            order.setUserId(i);
+            order.setUserId(userId);
             order.setId((long) i);
             order.setStatus("测试插入" + i);
             orderService.insertOrder(order);
@@ -84,7 +83,6 @@ public class JdbcTest {
     }
 
     public static Order getTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        long id = 2;
         Order order = orderService.getOrder(userId, id);
         System.out.println(order);
         return order;
@@ -102,14 +100,12 @@ public class JdbcTest {
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 
-        long id = 2;
         Order queryOrder = orderService.getOrder(userId, id);
         System.out.println(queryOrder.getStatus());
     }
 
     public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
         orderService.deleteOrder(order);
-        long id = 2;
         Order queryOrder = orderService.getOrder(userId, id);
         System.out.println(queryOrder);
     }

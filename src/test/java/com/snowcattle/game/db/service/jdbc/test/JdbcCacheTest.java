@@ -25,6 +25,7 @@ public class JdbcCacheTest {
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        getListTest(classPathXmlApplicationContext, orderService);
+
     }
 
 
