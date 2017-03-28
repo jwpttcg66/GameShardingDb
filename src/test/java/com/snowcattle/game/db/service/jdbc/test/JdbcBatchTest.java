@@ -19,12 +19,13 @@ public class JdbcBatchTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
         SqlSessionTemplate sqlSessionTemplate = (SqlSessionTemplate) classPathXmlApplicationContext.getBean("sqlSessionTemplate");
         SqlSessionTemplate batchSqlSessionTemplate = new  SqlSessionTemplate(sqlSessionTemplate.getSqlSessionFactory(), ExecutorType.BATCH);
-        SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, true);
+        SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
         try {
             OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
             Order order = new Order();
-            int startSize = 5000;
-            int endSize = startSize + 10;
+            int startSize = 30000;
+            int endSize = startSize + 200;
+            long startTime = System.currentTimeMillis();
             for(int i= startSize; i< endSize; i++) {
                 long id = i;
                 order.setUserId(id);
@@ -34,6 +35,8 @@ public class JdbcBatchTest {
                 mapper.insertEntity(order);
             }
             sqlSession.commit();
+            long endTime = System.currentTimeMillis();
+            System.out.println(endTime - startTime);
         }catch (Exception e){
 
         }finally {
