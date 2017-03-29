@@ -44,7 +44,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
         if(dbOperation == null || !useRedisFlag) { //如果没有进行注解或者不使用redis，直接进行返回
             result = methodProxy.invokeSuper(obj, args);
         }else {
-            //进行数据库操作,第一个参数默认都是mapper
+            //进行数据库操作
             DbOperationEnum dbOperationEnum = dbOperation.operation();
             switch (dbOperationEnum) {
                 case insert:
@@ -122,7 +122,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 更新变化字段
      * @param entity
      */
-    private void updateChangedFieldEntity(BaseEntity entity){
+    protected void updateChangedFieldEntity(BaseEntity entity){
         if (entity != null) {
             if (entity instanceof RedisInterface) {
                 RedisInterface redisInterface = (RedisInterface) entity;
@@ -140,7 +140,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 更新所有字段
      * @param entity
      */
-    private void updateAllFieldEntity(BaseEntity entity){
+    protected void updateAllFieldEntity(BaseEntity entity){
         if (entity != null) {
             if (entity instanceof RedisInterface) {
                 RedisInterface redisInterface = (RedisInterface) entity;
@@ -158,7 +158,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 删除实体
      * @param baseEntity
      */
-    private void deleteEntity(BaseEntity baseEntity){
+    protected void deleteEntity(BaseEntity baseEntity){
         if (baseEntity != null) {
             if (baseEntity instanceof RedisInterface) {
                 RedisInterface redisInterface = (RedisInterface) baseEntity;
@@ -196,7 +196,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 更新变化字段实体列表
      * @param entityList
      */
-    private void updateChangedFieldEntityList(List<BaseEntity> entityList){
+    protected void updateChangedFieldEntityList(List<BaseEntity> entityList){
         if(entityList.size() > 0) {
             BaseEntity entity = entityList.get(0);
             if (entity != null) {
@@ -218,7 +218,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
     }
 
     //删除实体列表
-    private void deleteEntityList(List<BaseEntity> entityList){
+    protected void deleteEntityList(List<BaseEntity> entityList){
         if(entityList.size() > 0) {
             BaseEntity entity = entityList.get(0);
             if (entity != null) {
