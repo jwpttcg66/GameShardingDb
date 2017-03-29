@@ -131,7 +131,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 RedisListInterface redisListInterface = (RedisListInterface) entity;
                 List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
                 redisListInterfaceList.add(redisListInterface);
-                redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+                redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface(redisListInterface), redisListInterfaceList);
             }
         }
     }
@@ -149,7 +149,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 RedisListInterface redisListInterface = (RedisListInterface) entity;
                 List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
                 redisListInterfaceList.add(redisListInterface);
-                redisService.setListToHash(EntityUtils.getRedisKey(redisListInterface), redisListInterfaceList);
+                redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface(redisListInterface), redisListInterfaceList);
             }
         }
     }
@@ -165,7 +165,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
             }else if(baseEntity instanceof RedisListInterface){
                 RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
-                redisService.hdel(EntityUtils.getRedisKey(redisListInterface), redisListInterface.getSubUniqueKey());
+                redisService.hdel(EntityUtils.getRedisKeyByRedisListInterface(redisListInterface), redisListInterface.getSubUniqueKey());
             }
         }
     }
@@ -211,7 +211,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                         RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
                         redisListInterfaceList.add(redisListInterface);
                     }
-                    redisService.setListToHash(EntityUtils.getRedisKey((RedisListInterface) entity), redisListInterfaceList);
+                    redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface((RedisListInterface) entity), redisListInterfaceList);
                 }
             }
         }

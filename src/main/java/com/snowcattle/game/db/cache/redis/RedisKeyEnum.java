@@ -7,7 +7,8 @@ package com.snowcattle.game.db.cache.redis;
  */
 public enum RedisKeyEnum {
 	
-	PLAYER("wp#"),
+	PLAYER("pr#"),
+	ASYNC_PLAYER("ay_pr"),
 	;
 	
 	private String key;

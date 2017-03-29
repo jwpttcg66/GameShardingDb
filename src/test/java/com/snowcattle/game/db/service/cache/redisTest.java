@@ -1,9 +1,7 @@
 package com.snowcattle.game.db.service.cache;
 
-import com.snowcattle.game.db.cache.redis.RedisInterface;
 import com.snowcattle.game.db.cache.redis.RedisListInterface;
 import com.snowcattle.game.db.cache.redis.RedisService;
-import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.proxy.EnityProxyService;
@@ -11,7 +9,6 @@ import com.snowcattle.game.db.util.EntityUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,9 +24,9 @@ public class redisTest {
         moreOrder.setStatus("list");
         List<RedisListInterface> list = new ArrayList<RedisListInterface>();
         list.add(moreOrder);
-        redisService.setListToHash(EntityUtils.getRedisKey(moreOrder), list);
+        redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface(moreOrder), list);
 
-        list = redisService.getListFromHash(EntityUtils.getRedisKey(moreOrder), MoreOrder.class);
+        list = redisService.getListFromHash(EntityUtils.getRedisKeyByRedisListInterface(moreOrder), MoreOrder.class);
         System.out.println(list);
     }
 
