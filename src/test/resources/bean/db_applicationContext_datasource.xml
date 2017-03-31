@@ -23,11 +23,11 @@
         <property name="dataSource" ref="dynamicDataSource" />
     </bean>
 
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
         <constructor-arg index="0" ref="sqlSessionFactory" />
     </bean>
 
-    <bean id="sqlSessionBatchTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+    <bean id="sqlSessionBatchTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
         <constructor-arg index="0" ref="sqlSessionFactory" />
         <constructor-arg>
             <value type="org.apache.ibatis.session.ExecutorType">BATCH</value>
@@ -122,8 +122,6 @@
         <property name="url" value="jdbc:mysql://localhost:3306/mydb" />
         <property name="username" value="root" />
         <property name="password" value="123456" />
-
-
         初始化连接大小
         <property name="initialSize" value="0" />
         连接池最大使用连接数量

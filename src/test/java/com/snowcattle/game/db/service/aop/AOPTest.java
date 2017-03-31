@@ -3,7 +3,6 @@ package com.snowcattle.game.db.service.aop;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -14,7 +13,7 @@ public class AOPTest {
     static PersonService personService;
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         personService = (PersonService) classPathXmlApplicationContext.getBean("personService");
     }
     @Test

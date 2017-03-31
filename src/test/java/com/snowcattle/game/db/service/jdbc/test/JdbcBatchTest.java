@@ -16,7 +16,7 @@ public class JdbcBatchTest {
     }
 
     public static void commonTest(){
-        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         SqlSessionTemplate sqlSessionTemplate = (SqlSessionTemplate) classPathXmlApplicationContext.getBean("sqlSessionTemplate");
         SqlSessionTemplate batchSqlSessionTemplate = new  SqlSessionTemplate(sqlSessionTemplate.getSqlSessionFactory(), ExecutorType.BATCH);
         SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH, false);

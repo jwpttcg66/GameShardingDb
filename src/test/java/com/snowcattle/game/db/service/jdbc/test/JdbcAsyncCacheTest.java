@@ -14,10 +14,10 @@ public class JdbcAsyncCacheTest {
     public static long userId = 99999;
 
     public static void main(String[] args) throws Exception {
-        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);
-//        insertBatchTest(classPathXmlApplicationContext, orderService);
+        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);

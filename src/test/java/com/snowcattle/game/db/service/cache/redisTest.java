@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class redisTest {
     public static void main(String[] args) throws Exception {
-        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         RedisService redisService = (RedisService) classPathXmlApplicationContext.getBean("redisService");
         MoreOrder moreOrder = new MoreOrder();
         moreOrder.setId(1);
@@ -31,7 +31,7 @@ public class redisTest {
     }
 
     public static void testObject() throws Exception {
-        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/db_applicationContext.xml"});
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         RedisService redisService = (RedisService) classPathXmlApplicationContext.getBean("redisService");
 //        redisService.setString("test", "2");
 //        System.out.println(redisService.getString("test"));
