@@ -192,6 +192,12 @@
             <version>${mysql.version}</version>
             <scope>runtime</scope>
         </dependency>
+        
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>druid</artifactId>
+		    <version>1.0.29</version>
+		</dependency>
 
     </dependencies>
 
