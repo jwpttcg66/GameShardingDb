@@ -22,4 +22,9 @@ public class MoreOrderService extends EntityService<MoreOrder> implements IMoreO
     public List<MoreOrder> getOrderList(MoreOrder moreOrder) {
         return getEntityList(moreOrder);
     }
+
+    @Override
+    public void insertOrderList(List<MoreOrder> orderList) {
+         insertEntityBatch(orderList);
+    }
 }

@@ -92,8 +92,8 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                     abstractEntity = (AbstractEntity) args[0];
                     if (abstractEntity != null) {
                         if (abstractEntity instanceof RedisListInterface) {
-                            RedisInterface redisInterface = (RedisInterface) abstractEntity;
-                            result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), abstractEntity.getClass());
+                            RedisListInterface redisInterface = (RedisListInterface) abstractEntity;
+                            result = redisService.getListFromHash(EntityUtils.getRedisKeyByRedisListInterface(redisInterface), abstractEntity.getClass());
                             if(result != null){
                                 result = filterEntity((List<IEntity>) result, abstractEntity);
                             }

@@ -82,8 +82,8 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                     abstractEntity = (AbstractEntity) args[0];
                     if (abstractEntity != null) {
                         if (abstractEntity instanceof RedisListInterface) {
-                            RedisInterface redisInterface = (RedisInterface) abstractEntity;
-                            result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), abstractEntity.getClass());
+                            RedisListInterface redisInterface = (RedisListInterface) abstractEntity;
+                            result = redisService.getListFromHash(EntityUtils.getRedisKeyByRedisListInterface(redisInterface), abstractEntity.getClass());
                             if(result != null){
                                 result = filterEntity((List<IEntity>) result, abstractEntity);
                             }
@@ -193,7 +193,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 for(AbstractEntity abstractEntity : entityList){
                     redisListInterfaceList.add((RedisListInterface) abstractEntity);
                 }
-                redisService.setListToHash(EntityUtils.getRedisKey((RedisInterface) entity), redisListInterfaceList);
+                redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface((RedisListInterface) entity), redisListInterfaceList);
             }
         }
     }
@@ -238,7 +238,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                         RedisListInterface redisListInterface = (RedisListInterface) abstractEntity;
                         redisListInterfaceList.add(redisListInterface.getSubUniqueKey());
                     }
-                    redisService.hdel(EntityUtils.getRedisKey((RedisInterface) entity), redisListInterfaceList.toArray(new String[0]));
+                    redisService.hdel(EntityUtils.getRedisKeyByRedisListInterface((RedisListInterface) entity), redisListInterfaceList.toArray(new String[0]));
                 }
             }
         }

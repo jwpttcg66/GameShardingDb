@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface IMoreOrderService {
     public List<MoreOrder> getOrderList(MoreOrder moreOrder);
+    public void insertOrderList(List<MoreOrder> orderList);
 }

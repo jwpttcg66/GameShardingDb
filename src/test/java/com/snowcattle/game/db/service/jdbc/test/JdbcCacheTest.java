@@ -8,6 +8,7 @@ import com.snowcattle.game.db.service.proxy.EnityProxyService;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class JdbcCacheTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);
-//        insertBatchTest(classPathXmlApplicationContext, orderService);
+        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
@@ -39,6 +40,7 @@ public class JdbcCacheTest {
         EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
         MoreOrder moreOrder = new MoreOrder();
         MoreOrder proxyOrder = enityProxyService.createProxyEntity(moreOrder);
+        proxyOrder.setUserId(userId);
         proxyOrder.setStatus("修改了" + JdbcTest.batchStart);
         MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
         List<MoreOrder> orderList = moreOrderService.getEntityList(proxyOrder);
@@ -51,7 +53,19 @@ public class JdbcCacheTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-      JdbcTest.insertBatchTest(classPathXmlApplicationContext, orderService);
+        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
+        int startSize = JdbcTest.batchStart;
+        int endSize = startSize + 10;
+        List<MoreOrder> list = new ArrayList<>();
+        for (int i = startSize; i < endSize; i++) {
+            MoreOrder order = new MoreOrder();
+            order.setUserId(userId);
+            order.setId((long)i);
+            order.setStatus("测试列表插入" + i);
+            list.add(order);
+        }
+
+        moreOrderService.insertOrderList(list);
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {

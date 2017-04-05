@@ -1,6 +1,5 @@
 package com.snowcattle.game.db.service.jdbc.test;
 
-import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.entity.Tocken;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
@@ -17,7 +16,7 @@ import java.util.List;
 public class JdbcTest {
     public static long userId = 99999;
     public static long id = 3603;
-    public static int batchStart = 54000000;
+    public static int batchStart = 60000000;
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderService(classPathXmlApplicationContext);
@@ -57,7 +56,7 @@ public class JdbcTest {
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
-            MoreOrder order = new MoreOrder();
+            Order order = new Order();
             order.setUserId(userId);
             order.setId((long)i);
             order.setStatus("测试列表插入" + i);
