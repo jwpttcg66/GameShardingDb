@@ -11,6 +11,7 @@ public interface IOrderService {
     public long insertOrder(Order order);
     public Order getOrder(long userId, long id);
     public List<Order> getOrderList(long userId);
+    public List<Order> getOrderList(long userId, String status);
     void updateOrder(Order order);
     void deleteOrder(Order order);
 

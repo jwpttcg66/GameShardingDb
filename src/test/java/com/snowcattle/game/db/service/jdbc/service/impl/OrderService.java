@@ -35,6 +35,14 @@ public class OrderService extends EntityService<Order> implements IOrderService{
     }
 
     @Override
+    public List<Order> getOrderList(long userId, String status) {
+        Order order = new Order();
+        order.setUserId(userId);
+        order.setStatus(status);
+        return getEntityList(order);
+    }
+
+    @Override
     public void updateOrder(Order order) {
         updateEntity(order);
     }
