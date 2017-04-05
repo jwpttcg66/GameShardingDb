@@ -17,12 +17,21 @@ DROP TABLE IF EXISTS `db_2`.`t_order_1`;
 CREATE TABLE IF NOT EXISTS `db_0`.`t_order_0` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
 CREATE TABLE IF NOT EXISTS `db_0`.`t_order_1` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
 CREATE TABLE IF NOT EXISTS `db_0`.`t_order` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
+CREATE TABLE IF NOT EXISTS `db_0`.`t_tocken` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
+CREATE TABLE IF NOT EXISTS `db_0`.`t_tocken_0` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
+CREATE TABLE IF NOT EXISTS `db_0`.`t_tocken_1` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
+
 
 CREATE TABLE IF NOT EXISTS `db_1`.`t_order_0` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
 CREATE TABLE IF NOT EXISTS `db_1`.`t_order_1` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
 CREATE TABLE IF NOT EXISTS `db_1`.`t_order` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
+CREATE TABLE IF NOT EXISTS `db_1`.`t_tocken` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
+CREATE TABLE IF NOT EXISTS `db_1`.`t_tocken_0` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
+CREATE TABLE IF NOT EXISTS `db_1`.`t_tocken_1` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
 
 CREATE TABLE IF NOT EXISTS `db_2`.`t_order_0` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
 CREATE TABLE IF NOT EXISTS `db_2`.`t_order_1` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
 CREATE TABLE IF NOT EXISTS `db_2`.`t_order` (`id` BIGINT NOT NULL, `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`id`));
-
+CREATE TABLE IF NOT EXISTS `db_2`.`t_tocken` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
+CREATE TABLE IF NOT EXISTS `db_2`.`t_tocken_0` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
+CREATE TABLE IF NOT EXISTS `db_2`.`t_tocken_1` (`tocken` VARCHAR(50), `user_id` INT NOT NULL, `status` VARCHAR(50), PRIMARY KEY (`tocken`));
