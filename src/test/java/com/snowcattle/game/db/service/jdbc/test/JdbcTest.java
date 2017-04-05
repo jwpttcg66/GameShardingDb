@@ -22,14 +22,15 @@ public class JdbcTest {
         OrderService orderService = getOrderService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
-        Order order = getTest(classPathXmlApplicationContext, orderService);
+//        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        getListTest(classPathXmlApplicationContext, orderService);
+//        getOrderList(classPathXmlApplicationContext, orderService);
     }
+
 
 
     public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
@@ -51,7 +52,7 @@ public class JdbcTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        int startSize = 3000000;
+        int startSize = 54000000;
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
@@ -96,11 +97,6 @@ public class JdbcTest {
         Order order = orderService.getOrder(userId, id);
         System.out.println(order);
         return order;
-    }
-
-    public static void getListTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        List<Order> orderList = orderService.getOrderList(userId);
-        System.out.println(orderList);
     }
 
 

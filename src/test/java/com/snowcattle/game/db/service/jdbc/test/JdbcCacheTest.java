@@ -1,7 +1,9 @@
 package com.snowcattle.game.db.service.jdbc.test;
 
+import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
+import com.snowcattle.game.db.service.proxy.EnityProxyService;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,24 +19,33 @@ public class JdbcCacheTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);
-//        insertBatchTest(classPathXmlApplicationContext, orderService);
+        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        getListTest(classPathXmlApplicationContext, orderService);
+        getBatchOrderList(classPathXmlApplicationContext, orderService);
 
     }
-
 
     public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
         JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
+    public static List<Order> getBatchOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
+        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
+        MoreOrder moreOrder = new MoreOrder();
+        MoreOrder proxyOrder = enityProxyService.createProxyEntity(moreOrder);
+        proxyOrder.setStatus("修改了540000001");
+        List<Order> orderList = orderService.getEntityList(proxyOrder);
+        System.out.println(orderList);
+        return orderList;
+    }
+
     public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-       JdbcTest.updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
+        JdbcTest.updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
@@ -42,7 +53,7 @@ public class JdbcCacheTest {
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-      return JdbcTest.getOrderList(classPathXmlApplicationContext, orderService);
+        return JdbcTest.getOrderList(classPathXmlApplicationContext, orderService);
     }
 
     public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
@@ -52,11 +63,6 @@ public class JdbcCacheTest {
     public static Order getTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
        return JdbcTest.getTest(classPathXmlApplicationContext, orderService);
     }
-
-    public static void getListTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        JdbcTest.getListTest(classPathXmlApplicationContext, orderService);
-    }
-
 
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
        JdbcTest.updateTest(classPathXmlApplicationContext, orderService, order);

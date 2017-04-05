@@ -24,7 +24,6 @@ public class JdbcAsyncCacheTest {
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        getListTest(classPathXmlApplicationContext, orderService);
 
     }
 
@@ -51,10 +50,6 @@ public class JdbcAsyncCacheTest {
 
     public static Order getTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
         return JdbcTest.getTest(classPathXmlApplicationContext, orderService);
-    }
-
-    public static void getListTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        JdbcTest.getListTest(classPathXmlApplicationContext, orderService);
     }
 
 
