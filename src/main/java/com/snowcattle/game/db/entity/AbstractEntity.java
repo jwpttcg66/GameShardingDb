@@ -22,8 +22,8 @@ public abstract  class AbstractEntity<ID extends Serializable> extends ShardingT
     @FieldSave
     private Date deleteTime;
 
-    @FieldSave
-    private ID id;
+//    @FieldSave
+//    private ID id;
 
     @FieldSave
     private long userId;
@@ -50,15 +50,15 @@ public abstract  class AbstractEntity<ID extends Serializable> extends ShardingT
         this.deleteTime = deleteTime;
     }
 
-    @Override
-    public ID getId() {
-        return id;
-    }
-
-    @MethodSaveProxy(proxy="id")
-    public void setId(ID id) {
-        this.id = id;
-    }
+//    @Override
+//    public ID getId() {
+//        return id;
+//    }
+//
+//    @MethodSaveProxy(proxy="id")
+//    public void setId(ID id) {
+//        this.id = id;
+//    }
 
 
     public long getUserId() {

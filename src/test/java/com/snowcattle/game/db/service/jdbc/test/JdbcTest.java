@@ -18,9 +18,9 @@ public class JdbcTest {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderService(classPathXmlApplicationContext);
-        insertTest(classPathXmlApplicationContext, orderService);
+//        insertTest(classPathXmlApplicationContext, orderService);
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
-//        Order order = getTest(classPathXmlApplicationContext, orderService);
+        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
