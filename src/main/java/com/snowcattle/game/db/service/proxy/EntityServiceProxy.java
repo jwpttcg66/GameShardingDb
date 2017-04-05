@@ -6,7 +6,7 @@ import com.snowcattle.game.db.cache.redis.RedisService;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
-import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.EntityUtils;
 import org.slf4j.Logger;
@@ -49,68 +49,68 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
             switch (dbOperationEnum) {
                 case insert:
                     result = methodProxy.invokeSuper(obj, args);
-                    BaseEntity baseEntity = (BaseEntity) args[0];
-                    updateAllFieldEntity(baseEntity);
+                    AbstractEntity abstractEntity = (AbstractEntity) args[0];
+                    updateAllFieldEntity(abstractEntity);
                     break;
                 case update:
                     result = methodProxy.invokeSuper(obj, args);
-                    baseEntity = (BaseEntity) args[0];
-                    updateChangedFieldEntity(baseEntity);
+                    abstractEntity = (AbstractEntity) args[0];
+                    updateChangedFieldEntity(abstractEntity);
                     break;
                 case query:
-                    baseEntity = (BaseEntity) args[0];
-                    if (baseEntity != null) {
-                        if (baseEntity instanceof RedisInterface) {
-                            RedisInterface redisInterface = (RedisInterface) baseEntity;
-                            result = redisService.getObjectFromHash(EntityUtils.getRedisKey(redisInterface), baseEntity.getClass());
+                    abstractEntity = (AbstractEntity) args[0];
+                    if (abstractEntity != null) {
+                        if (abstractEntity instanceof RedisInterface) {
+                            RedisInterface redisInterface = (RedisInterface) abstractEntity;
+                            result = redisService.getObjectFromHash(EntityUtils.getRedisKey(redisInterface), abstractEntity.getClass());
                         } else {
-                            proxyLogger.error("query interface RedisListInterface " + baseEntity.getClass().getSimpleName() + " use RedisInterface " + baseEntity.toString());
+                            proxyLogger.error("query interface RedisListInterface " + abstractEntity.getClass().getSimpleName() + " use RedisInterface " + abstractEntity.toString());
                         }
                     }
                     if (result == null) {
                         result = methodProxy.invokeSuper(obj, args);
                         if(result != null){
-                            baseEntity = (BaseEntity) result;
-                            updateAllFieldEntity(baseEntity);
+                            abstractEntity = (AbstractEntity) result;
+                            updateAllFieldEntity(abstractEntity);
                         }
                     }
                     break;
                 case queryList:
-                    baseEntity = (BaseEntity) args[0];
-                    if (baseEntity != null) {
-                        if (baseEntity instanceof RedisListInterface) {
-                            RedisInterface redisInterface = (RedisInterface) baseEntity;
-                            result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), baseEntity.getClass());
+                    abstractEntity = (AbstractEntity) args[0];
+                    if (abstractEntity != null) {
+                        if (abstractEntity instanceof RedisListInterface) {
+                            RedisInterface redisInterface = (RedisInterface) abstractEntity;
+                            result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), abstractEntity.getClass());
                         } else {
-                            proxyLogger.error("query interface RedisInterface " + baseEntity.getClass().getSimpleName() + " use RedisListInterface " + baseEntity.toString());
+                            proxyLogger.error("query interface RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
                         }
                     }
                     if (result == null) {
                         result = methodProxy.invokeSuper(obj, args);
                         if(result != null){
-                            List<BaseEntity> entityList = (List<BaseEntity>) result;
+                            List<AbstractEntity> entityList = (List<AbstractEntity>) result;
                             updateAllFieldEntityList(entityList);
                         }
                     }
                     break;
                 case delete:
                     result = methodProxy.invokeSuper(obj, args);
-                    baseEntity = (BaseEntity) args[0];
-                    deleteEntity(baseEntity);
+                    abstractEntity = (AbstractEntity) args[0];
+                    deleteEntity(abstractEntity);
                     break;
                 case insertBatch:
                     result = methodProxy.invokeSuper(obj, args);
-                    List<BaseEntity> entityList = (List<BaseEntity>) args[0];
+                    List<AbstractEntity> entityList = (List<AbstractEntity>) args[0];
                     updateAllFieldEntityList(entityList);
                     break;
                 case updateBatch:
                     result = methodProxy.invokeSuper(obj, args);
-                    entityList = (List<BaseEntity>) args[0];
+                    entityList = (List<AbstractEntity>) args[0];
                     updateChangedFieldEntityList(entityList);
                     break;
                 case deleteBatch:
                     result = methodProxy.invokeSuper(obj, args);
-                    entityList = (List<BaseEntity>) args[0];
+                    entityList = (List<AbstractEntity>) args[0];
                     deleteEntityList(entityList);
                     break;
             }
@@ -122,7 +122,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 更新变化字段
      * @param entity
      */
-    protected void updateChangedFieldEntity(BaseEntity entity){
+    protected void updateChangedFieldEntity(AbstractEntity entity){
         if (entity != null) {
             if (entity instanceof RedisInterface) {
                 RedisInterface redisInterface = (RedisInterface) entity;
@@ -140,7 +140,7 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 更新所有字段
      * @param entity
      */
-    protected void updateAllFieldEntity(BaseEntity entity){
+    protected void updateAllFieldEntity(AbstractEntity entity){
         if (entity != null) {
             if (entity instanceof RedisInterface) {
                 RedisInterface redisInterface = (RedisInterface) entity;
@@ -156,15 +156,15 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
 
     /**
      * 删除实体
-     * @param baseEntity
+     * @param abstractEntity
      */
-    protected void deleteEntity(BaseEntity baseEntity){
-        if (baseEntity != null) {
-            if (baseEntity instanceof RedisInterface) {
-                RedisInterface redisInterface = (RedisInterface) baseEntity;
+    protected void deleteEntity(AbstractEntity abstractEntity){
+        if (abstractEntity != null) {
+            if (abstractEntity instanceof RedisInterface) {
+                RedisInterface redisInterface = (RedisInterface) abstractEntity;
                 redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
-            }else if(baseEntity instanceof RedisListInterface){
-                RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+            }else if(abstractEntity instanceof RedisListInterface){
+                RedisListInterface redisListInterface = (RedisListInterface) abstractEntity;
                 redisService.hdel(EntityUtils.getRedisKeyByRedisListInterface(redisListInterface), redisListInterface.getSubUniqueKey());
             }
         }
@@ -174,18 +174,18 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 更新所有字段实体列表
      * @param entityList
      */
-    public void updateAllFieldEntityList(List<BaseEntity> entityList){
+    public void updateAllFieldEntityList(List<AbstractEntity> entityList){
         //拿到第一个，看一下类型
         if(entityList.size() > 0){
-            BaseEntity entity = entityList.get(0);
+            AbstractEntity entity = entityList.get(0);
             if(entity instanceof  RedisInterface){
-                for(BaseEntity baseEntity: entityList){
+                for(AbstractEntity abstractEntity : entityList){
                     updateAllFieldEntity(entity);
                 }
             }else if(entity instanceof RedisListInterface){
                 List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
-                for(BaseEntity baseEntity: entityList){
-                    redisListInterfaceList.add((RedisListInterface) baseEntity);
+                for(AbstractEntity abstractEntity : entityList){
+                    redisListInterfaceList.add((RedisListInterface) abstractEntity);
                 }
                 redisService.setListToHash(EntityUtils.getRedisKey((RedisInterface) entity), redisListInterfaceList);
             }
@@ -196,19 +196,19 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
      * 更新变化字段实体列表
      * @param entityList
      */
-    protected void updateChangedFieldEntityList(List<BaseEntity> entityList){
+    protected void updateChangedFieldEntityList(List<AbstractEntity> entityList){
         if(entityList.size() > 0) {
-            BaseEntity entity = entityList.get(0);
+            AbstractEntity entity = entityList.get(0);
             if (entity != null) {
                 if (entity instanceof RedisInterface) {
-                    for(BaseEntity baseEntity: entityList){
+                    for(AbstractEntity abstractEntity : entityList){
                         updateChangedFieldEntity(entity);
                     }
                 } else if (entity instanceof RedisListInterface) {
 
                     List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
-                    for(BaseEntity baseEntity: entityList) {
-                        RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                    for(AbstractEntity abstractEntity : entityList) {
+                        RedisListInterface redisListInterface = (RedisListInterface) abstractEntity;
                         redisListInterfaceList.add(redisListInterface);
                     }
                     redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface((RedisListInterface) entity), redisListInterfaceList);
@@ -218,18 +218,18 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
     }
 
     //删除实体列表
-    protected void deleteEntityList(List<BaseEntity> entityList){
+    protected void deleteEntityList(List<AbstractEntity> entityList){
         if(entityList.size() > 0) {
-            BaseEntity entity = entityList.get(0);
+            AbstractEntity entity = entityList.get(0);
             if (entity != null) {
                 if (entity instanceof RedisInterface) {
-                    for(BaseEntity baseEntity: entityList){
-                        deleteEntity(baseEntity);
+                    for(AbstractEntity abstractEntity : entityList){
+                        deleteEntity(abstractEntity);
                     }
                 } else if (entity instanceof RedisListInterface) {
                     List<String> redisListInterfaceList = new ArrayList<>();
-                    for(BaseEntity baseEntity: entityList) {
-                        RedisListInterface redisListInterface = (RedisListInterface) baseEntity;
+                    for(AbstractEntity abstractEntity : entityList) {
+                        RedisListInterface redisListInterface = (RedisListInterface) abstractEntity;
                         redisListInterfaceList.add(redisListInterface.getSubUniqueKey());
                     }
                     redisService.hdel(EntityUtils.getRedisKey((RedisInterface) entity), redisListInterfaceList.toArray(new String[0]));

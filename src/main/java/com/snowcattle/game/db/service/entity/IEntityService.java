@@ -1,6 +1,6 @@
 package com.snowcattle.game.db.service.entity;
 
-import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.entity.IEntity;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * Created by jwp on 2017/3/23.
  * 基础服务
  */
-public interface IEntityService <T extends BaseEntity>{
+public interface IEntityService <T extends AbstractEntity>{
     /**
      * 插入实体
      * @param entity

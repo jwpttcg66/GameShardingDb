@@ -4,7 +4,7 @@ import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbMapper;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
-import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.entity.BaseLongIDEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
@@ -27,7 +27,7 @@ import java.util.Map;
  * 模版实体数据提服务
  * 批量应该保证它们在同一个数据库中
  */
-public abstract class EntityService<T extends BaseEntity> implements IEntityService<T> {
+public abstract class EntityService<T extends AbstractEntity> implements IEntityService<T> {
 
     private static final Logger logger = Loggers.dbLogger;
 

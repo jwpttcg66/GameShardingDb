@@ -1,12 +1,12 @@
 package com.snowcattle.game.db.service.proxy;
 
-import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.entity.AbstractEntity;
 
 /**
  * Created by jwp on 2017/3/16.
  * 代理封装
  */
-public class EntityProxyWrapper<T extends BaseEntity> {
+public class EntityProxyWrapper<T extends AbstractEntity> {
 
     private EntityProxy entityProxy;
 

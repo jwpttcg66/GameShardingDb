@@ -1,9 +1,8 @@
 package com.snowcattle.game.db.service.proxy;
 
-import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.cglib.proxy.Callback;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class EnityProxyService {
     public <T extends  IEntity> T createProxyEntity(T entity) throws Exception {
         EntityProxy entityProxy = createProxy(entity);
         EntityProxyWrapper entityProxyWrapper = new EntityProxyWrapper(entityProxy);
-        BaseEntity proxyEntity = createProxyEntity(entityProxy);
+        AbstractEntity proxyEntity = createProxyEntity(entityProxy);
         //注入对象 数值
         BeanUtils.copyProperties(proxyEntity,entity);
         entityProxy.setCollectFlag(true);

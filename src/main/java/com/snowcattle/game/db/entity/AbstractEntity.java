@@ -14,7 +14,7 @@ import java.util.Date;
  * Created by jiangwenping on 17/3/16.
  */
 @EntitySave
-public abstract  class BaseEntity<ID extends Serializable> extends ShardingTable implements ISoftDeleteEntity<ID>{
+public abstract  class AbstractEntity<ID extends Serializable> extends ShardingTable implements ISoftDeleteEntity<ID>{
 
     @FieldSave
     private boolean deleted;
