@@ -38,7 +38,7 @@ public class JdbcCacheTest {
         EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
         MoreOrder moreOrder = new MoreOrder();
         MoreOrder proxyOrder = enityProxyService.createProxyEntity(moreOrder);
-        proxyOrder.setStatus("修改了540000001");
+        proxyOrder.setStatus("修改了" + JdbcTest.batchStart);
         List<Order> orderList = orderService.getEntityList(proxyOrder);
         System.out.println(orderList);
         return orderList;

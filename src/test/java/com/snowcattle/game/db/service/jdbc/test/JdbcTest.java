@@ -17,6 +17,7 @@ import java.util.List;
 public class JdbcTest {
     public static long userId = 99999;
     public static long id = 3603;
+    public static int batchStart = 54000000;
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderService(classPathXmlApplicationContext);
@@ -52,7 +53,7 @@ public class JdbcTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        int startSize = 54000000;
+        int startSize = batchStart;
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
