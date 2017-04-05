@@ -12,7 +12,7 @@ import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 public class BaseLongIDEntity extends AbstractEntity<Long> {
 
     @FieldSave
-    private long id;
+    private Long id;
 
     @Override
     public Long getId() {
@@ -20,7 +20,6 @@ public class BaseLongIDEntity extends AbstractEntity<Long> {
     }
 
 
-    @Override
     @MethodSaveProxy(proxy="id")
     public void setId(Long id) {
         this.id = id;
