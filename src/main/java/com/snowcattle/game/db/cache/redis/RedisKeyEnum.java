@@ -8,6 +8,7 @@ package com.snowcattle.game.db.cache.redis;
 public enum RedisKeyEnum {
 	
 	PLAYER("pr#"),
+	TOCKEN("tk#"),
 	ASYNC_PLAYER("ay_pr"),
 	;
 	

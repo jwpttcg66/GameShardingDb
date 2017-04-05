@@ -22,6 +22,7 @@
 
     <typeAliases>
         <typeAlias alias="order" type="com.snowcattle.game.db.service.jdbc.entity.Order"/>
+        <typeAlias alias="tocken" type="com.snowcattle.game.db.service.jdbc.entity.Tocken"/>
     </typeAliases>
 
     <mappers>
