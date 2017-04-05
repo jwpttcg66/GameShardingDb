@@ -27,6 +27,7 @@
 
     <mappers>
         <mapper resource="mybatis3/mappers/orderMapper.xml"/>
+        <mapper resource="mybatis3/mappers/tockenMapper.xml"/>
     </mappers>
 
 </configuration>

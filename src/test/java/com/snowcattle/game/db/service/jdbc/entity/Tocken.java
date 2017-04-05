@@ -1,6 +1,5 @@
 package com.snowcattle.game.db.service.jdbc.entity;
 
-import com.snowcattle.game.db.cache.redis.AsyncCacheKey;
 import com.snowcattle.game.db.cache.redis.RedisInterface;
 import com.snowcattle.game.db.cache.redis.RedisKeyEnum;
 import com.snowcattle.game.db.common.annotation.DbMapper;
@@ -8,13 +7,14 @@ import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.common.annotation.MethodSaveProxy;
 import com.snowcattle.game.db.entity.BaseStringIDEntity;
-import com.snowcattle.game.db.service.jdbc.mapper.OrderMapper;
+import com.snowcattle.game.db.service.entity.EntityKeyShardingStrategyEnum;
+import com.snowcattle.game.db.service.jdbc.mapper.TockenMapper;
 
 /**
  * Created by sunmosh on 2017/4/5.
  */
 @EntitySave
-@DbMapper(mapper = OrderMapper.class)
+@DbMapper(mapper = TockenMapper.class)
 public class Tocken extends BaseStringIDEntity implements RedisInterface{
 
     @Override
@@ -52,5 +52,9 @@ public class Tocken extends BaseStringIDEntity implements RedisInterface{
                 ", userId=" + getUserId() +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public EntityKeyShardingStrategyEnum getEntityKeyShardingStrategyEnum(){
+        return EntityKeyShardingStrategyEnum.ID;
     }
 }

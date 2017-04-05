@@ -6,6 +6,7 @@ import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.entity.BaseLongIDEntity;
+import com.snowcattle.game.db.entity.BaseStringIDEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
@@ -158,23 +159,26 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
     //获取分库主键
     protected long getShardingId(T entity) {
         long shardingId = entity.getUserId();
-        if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.LONG_ID)) {
+        if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
             if(entity instanceof BaseLongIDEntity) {
                 BaseLongIDEntity baseLongIDEntity = (BaseLongIDEntity) entity;
                 shardingId = baseLongIDEntity.getId();
+            }else if(entity instanceof BaseStringIDEntity){
+                BaseStringIDEntity baseStringIDEntity = (BaseStringIDEntity)entity;
+                shardingId = baseStringIDEntity.getId().hashCode();
             }
         }
         return shardingId;
     }
 
-    //获取分库主键
-    protected long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum) {
-        long shardingId = userId;
-        if (entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.LONG_ID)) {
-            shardingId = id;
-        }
-        return shardingId;
-    }
+//    //获取分库主键
+//    protected long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum) {
+//        long shardingId = userId;
+//        if (entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.ID)) {
+//            shardingId = id;
+//        }
+//        return shardingId;
+//    }
 
     /**
      * Function  : 获取sqlSession

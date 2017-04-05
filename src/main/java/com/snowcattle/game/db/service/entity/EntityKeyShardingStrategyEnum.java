@@ -5,7 +5,7 @@ package com.snowcattle.game.db.service.entity;
  * 分配策略
  */
 public enum  EntityKeyShardingStrategyEnum {
-    LONG_ID,
+    ID,
     USER_ID,
     ;
 }
