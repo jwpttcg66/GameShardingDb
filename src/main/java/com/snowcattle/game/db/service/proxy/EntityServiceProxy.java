@@ -7,8 +7,10 @@ import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.AbstractEntity;
+import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.EntityUtils;
+import com.snowcattle.game.db.util.ObjectUtils;
 import org.slf4j.Logger;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
@@ -16,6 +18,7 @@ import org.springframework.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jwp on 2017/3/23.
@@ -81,6 +84,9 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                         if (abstractEntity instanceof RedisListInterface) {
                             RedisInterface redisInterface = (RedisInterface) abstractEntity;
                             result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), abstractEntity.getClass());
+                            if(result != null){
+                                result = filterEntity((List<IEntity>) result, abstractEntity);
+                            }
                         } else {
                             proxyLogger.error("query interface RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
                         }
@@ -236,5 +242,42 @@ public class EntityServiceProxy<T extends EntityService>  implements MethodInter
                 }
             }
         }
+    }
+
+    /**
+     * 根据封装的条件判断查找出相同的对象
+     * @param list
+     * @param abstractEntity
+     * @return
+     */
+    public List<IEntity> filterEntity(List<IEntity> list, AbstractEntity abstractEntity){
+        List<IEntity> result = new ArrayList<>();
+        //开始进行filter
+        EntityProxyWrapper entityProxyWrapper = abstractEntity.getEntityProxyWrapper();
+        if(entityProxyWrapper != null){
+            Map<String, Object>  changeParamSet = entityProxyWrapper.getEntityProxy().getChangeParamSet();
+            if(changeParamSet != null){
+                for(IEntity iEntity: list) {
+                    boolean equalFlag = false;
+                    for (String fieldName : changeParamSet.keySet()) {
+                        String value = ObjectUtils.getFieldsValueStr(iEntity, fieldName);
+
+                        Object object = changeParamSet.get(fieldName);
+                        if(value.equals(object.toString())){
+                            equalFlag = true;
+                        }else{
+                            equalFlag = false;
+                            break;
+                        }
+                    }
+
+                    if(equalFlag){
+                        result.add(iEntity);
+                    }
+
+                }
+            }
+        }
+        return result;
     }
 }
