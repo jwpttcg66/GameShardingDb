@@ -8,6 +8,7 @@ import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.AbstractEntity;
+import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.EntityUtils;
 import org.slf4j.Logger;
@@ -93,6 +94,9 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                         if (abstractEntity instanceof RedisListInterface) {
                             RedisInterface redisInterface = (RedisInterface) abstractEntity;
                             result = redisService.getListFromHash(EntityUtils.getRedisKey(redisInterface), abstractEntity.getClass());
+                            if(result != null){
+                                result = filterEntity((List<IEntity>) result, abstractEntity);
+                            }
                         } else {
                             proxyLogger.error("query interface RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
                         }
