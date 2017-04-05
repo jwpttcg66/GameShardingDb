@@ -158,7 +158,7 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
     //获取分库主键
     protected long getShardingId(T entity) {
         long shardingId = entity.getUserId();
-        if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
+        if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.LONG_ID)) {
             if(entity instanceof BaseLongIDEntity) {
                 BaseLongIDEntity baseLongIDEntity = (BaseLongIDEntity) entity;
                 shardingId = baseLongIDEntity.getId();
@@ -170,7 +170,7 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
     //获取分库主键
     protected long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum) {
         long shardingId = userId;
-        if (entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.ID)) {
+        if (entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.LONG_ID)) {
             shardingId = id;
         }
         return shardingId;
