@@ -19,7 +19,7 @@ public class redisTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         RedisService redisService = (RedisService) classPathXmlApplicationContext.getBean("redisService");
         MoreOrder moreOrder = new MoreOrder();
-        moreOrder.setId(1);
+        moreOrder.setId((long)1);
         moreOrder.setUserId(2);
         moreOrder.setStatus("list");
         List<RedisListInterface> list = new ArrayList<RedisListInterface>();

@@ -5,11 +5,11 @@ import com.snowcattle.game.db.common.annotation.DbMapper;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.BaseEntity;
+import com.snowcattle.game.db.entity.BaseLongIDEntity;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.jdbc.mapper.IDBMapper;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.CustomerContextHolder;
-import com.snowcattle.game.db.sharding.DataSourceType;
 import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -159,7 +159,10 @@ public abstract class EntityService<T extends BaseEntity> implements IEntityServ
     protected long getShardingId(T entity) {
         long shardingId = entity.getUserId();
         if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
-            shardingId = entity.getId();
+            if(entity instanceof BaseLongIDEntity) {
+                BaseLongIDEntity baseLongIDEntity = (BaseLongIDEntity) entity;
+                shardingId = baseLongIDEntity.getId();
+            }
         }
         return shardingId;
     }

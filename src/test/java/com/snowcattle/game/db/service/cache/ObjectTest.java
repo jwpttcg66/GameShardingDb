@@ -13,7 +13,7 @@ public class ObjectTest {
         BaseEntity[] baseEntity = new BaseEntity[maxSize];
         for(int i = 0; i < 1000000; i++){
             Order order = new Order();
-            order.setId(i);
+            order.setId((long)i);
             order.setUserId(10);
             order.setStatus(String.valueOf(i));
             baseEntity[i] = order;

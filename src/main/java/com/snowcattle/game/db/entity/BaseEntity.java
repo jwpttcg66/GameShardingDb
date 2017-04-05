@@ -7,13 +7,14 @@ import com.snowcattle.game.db.service.entity.EntityKeyShardingStrategyEnum;
 import com.snowcattle.game.db.service.proxy.EntityProxyWrapper;
 import com.snowcattle.game.db.sharding.ShardingTable;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by jiangwenping on 17/3/16.
  */
 @EntitySave
-public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEntity{
+public abstract  class BaseEntity<ID extends Serializable> extends ShardingTable implements ISoftDeleteEntity<ID>{
 
     @FieldSave
     private boolean deleted;
@@ -22,7 +23,7 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
     private Date deleteTime;
 
     @FieldSave
-    private long id;
+    private ID id;
 
     @FieldSave
     private long userId;
@@ -50,18 +51,20 @@ public abstract  class BaseEntity extends ShardingTable implements ISoftDeleteEn
     }
 
     @Override
-    public long getId() {
+    public ID getId() {
         return id;
     }
 
     @MethodSaveProxy(proxy="id")
-    public void setId(long id) {
+    public void setId(ID id) {
         this.id = id;
     }
+
 
     public long getUserId() {
         return userId;
     }
+
     @MethodSaveProxy(proxy="userId")
     public void setUserId(long userId) {
         this.userId = userId;

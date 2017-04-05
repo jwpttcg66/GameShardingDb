@@ -55,7 +55,7 @@ public class JdbcTest {
         for (int i = startSize; i < endSize; i++) {
             MoreOrder order = new MoreOrder();
             order.setUserId(userId);
-            order.setId(i);
+            order.setId((long)i);
             order.setStatus("测试列表插入" + i);
             list.add(order);
         }
