@@ -26,13 +26,14 @@ public class SnowflakeTest {
             System.out.println(id);
         }
 
-        long maxs = 1 << 38;
-        long years = 1000L * 60 * 60 * 24 * 365; //毫秒
+        System.out.println("－－－－－");
+        long maxs = 1L << 38;
+        long time = 1000L * 60 * 60 * 24 * 365; //毫秒
         System.out.println(maxs);
-        System.out.println(years);
-        System.out.println(maxs/years);
+        System.out.println(time);
+        System.out.println(maxs/time);
 
         System.out.println((1L << 38) / (1000L * 60 * 60 * 24 * 365));
-        System.out.println((1L << 16));
+        System.out.println((1L << 15));
     }
 }

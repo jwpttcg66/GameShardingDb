@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Created by jiangwenping on 17/3/16.
- * 低16为为同一时间序列号65536, 中间9位位服务器节点最大为512， 高38位位当前时间跟开始时间的差值，(1L << 38) / (1000L * 60 * 60 * 24 * 365) 可以用8年
+ * 低15为为同一时间序列号32768, 中间10位位服务器节点最大为1024， 高38位位当前时间跟开始时间的差值，(1L << 38) / (1000L * 60 * 60 * 24 * 365) 可以用8年
  */
 @Service
 public class SnowFlakeUUIDService implements IUUIDService{
@@ -14,31 +14,28 @@ public class SnowFlakeUUIDService implements IUUIDService{
 
 
     /** node id所占的位数 */
-    private final long nodeIdBits = 9L;
+    private final long nodeIdBits = 10L;
 
-    /** 支持的最大机器nodeid，结果是512 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数) */
+    /** 支持的最大机器nodeid，结果是1024 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数) */
     private final long maxNodeId = -1L ^ (-1L << nodeIdBits);
 
     /** 序列在id中占的位数 */
-    private final long sequenceBits = 16L;
+    private final long sequenceBits = 15L;
 
-    /** 机器ID向左移12位 */
-    private final long nodeIdShift = sequenceBits;
-
-
-    /** 时间截向左移25位(9+16) */
+    /** 时间截向左移25位(10+15) */
     private final long timestampLeftShift = sequenceBits + nodeIdBits;
 
-    /** 生成序列的掩码，这里为4095*16 **/
+    /** 生成序列的掩码，这里为4095*8 **/
     private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
 
     //序列号
     private  long sequence;
-    //产生的事件
+
+    //产生的事件(毫秒)
     private long referenceTime;
 
-    //节点号（0-512）
+    //节点号（0-1024）
     private int nodeId;
 
     //用于spring构造
