@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.aop;
+package com.snowcattle.game.db.service.test.aop;
 
 /**
  * Created by jwp on 2017/3/22.

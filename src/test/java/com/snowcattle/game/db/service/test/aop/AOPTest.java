@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.aop;
+package com.snowcattle.game.db.service.test.aop;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

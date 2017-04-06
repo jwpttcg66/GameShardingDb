@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.cache;
+package com.snowcattle.game.db.service.test.cache;
 
 import com.snowcattle.game.db.cache.redis.RedisListInterface;
 import com.snowcattle.game.db.cache.redis.RedisService;

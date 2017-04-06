@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.cglib;
+package com.snowcattle.game.db.service.test.cglib;
 
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;

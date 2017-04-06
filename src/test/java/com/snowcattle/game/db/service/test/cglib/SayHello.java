@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.cglib;
+package com.snowcattle.game.db.service.test.cglib;
 
 /**
  * Created by jwp on 2017/3/3.
