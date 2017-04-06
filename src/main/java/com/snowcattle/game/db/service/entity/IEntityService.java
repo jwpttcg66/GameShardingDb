@@ -62,4 +62,10 @@ public interface IEntityService <T extends AbstractEntity>{
      */
     public void deleteEntityBatch(List<T> entityList);
 
+    /**
+     * 获取sharding后的结果
+     * @param entity
+     * @return
+     */
+    public long getShardingId(T entity);
 }

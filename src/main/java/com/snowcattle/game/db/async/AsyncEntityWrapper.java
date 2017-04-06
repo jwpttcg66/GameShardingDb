@@ -32,8 +32,11 @@ public class AsyncEntityWrapper {
         this.wrapperTime = wrapperTime;
     }
 
-    public AsyncEntityWrapper(long wrapperTime, IEntity entity) {
-        this.wrapperTime = wrapperTime;
+    public IEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(IEntity entity) {
         this.entity = entity;
     }
 }

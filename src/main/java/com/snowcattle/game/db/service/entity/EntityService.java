@@ -156,8 +156,13 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         }
     }
 
-    //获取分库主键
-    protected long getShardingId(T entity) {
+    /**
+     * 获取分库主键
+     * @param entity
+     * @return
+     */
+    @Override
+    public long getShardingId(T entity) {
         long shardingId = entity.getUserId();
         if (entity.getEntityKeyShardingStrategyEnum().equals(EntityKeyShardingStrategyEnum.ID)) {
             if(entity instanceof BaseLongIDEntity) {
