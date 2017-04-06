@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 /**
  * Created by jiangwenping on 17/4/6.
- * db异步注册数据中心
+ * db异步注册数据通知中心
  */
 @Service
-public class AsyncDbCenter {
+public class AsyncDbNotifyCenter {
 
     @Autowired
     private RedisService redisService;
@@ -23,6 +23,6 @@ public class AsyncDbCenter {
         AbstractEntity entity = (AbstractEntity) iEntity;
         long selectId = entityService.getShardingId(entity);
         int dbSelectId = entityService.getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId);
-        //放入选中的db队列里面
+//        redisService.lpushString()
     }
 }

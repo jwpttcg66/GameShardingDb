@@ -26,4 +26,11 @@ public class GlobalConstants {
         /**正常缓存有效时间一个月*/
         public static final int NORMAL_MONTH_LIFECYCLE=86400 * 30;
     }
+
+    /**
+     * Thread的名字前缀
+     */
+    public static class RedisKeyString{
+        public static final String GAME_DB_EXCUTE="async_db";
+    }
 }

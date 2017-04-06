@@ -7,7 +7,7 @@ import com.snowcattle.game.db.entity.IEntity;
  * 异步实体封装箱, 里面包含了实体的快照
  *  所有需要异步存储的实体，都会包装在这里，然后传递到异步队列里面
  */
-public class AsyncEntityWrapper {
+public class AsyncEntityWrapper{
 
     /**
      * 包装时间

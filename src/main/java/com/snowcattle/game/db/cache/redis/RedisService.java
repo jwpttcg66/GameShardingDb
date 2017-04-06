@@ -5,7 +5,6 @@ import com.snowcattle.game.db.common.GlobalConstants;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.util.*;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
@@ -310,48 +309,43 @@ public class RedisService{
 		return null;
 	}
 	
-	/**
-	 * 从缓存里还原一个列表对象
-	 * @param key
-	 * @param clazz
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	
-	public <T> T getObjectFromList(String key,String subUnionkey, Class<?> clazz,int seconds){
-		Jedis jedis = null;
-		boolean sucess = true;
-		Map<String,String> map=null;
-		try {
-			jedis=jedisPool.getResource();
-			String value = jedis.hget(key, subUnionkey);
-			if(StringUtils.isEmpty(value)){
-				return null;
-			}
-//			Map<String,String> mapFields = JsonUtils.getMapFromJson(value);
-//			RedisListInterface po = (RedisListInterface) clazz.newInstance();
-//			mapFields.put(po.getUniqueKey(), key.split("#")[1]);
-//			String[] keyNames=po.getSubUniqueKey();
-//			String uniqueKeys[]= subUnionkey.split("#");
-//			for(int i=0,j=keyNames.length;i<j;i++){
-//				mapFields.put(keyNames[i], uniqueKeys[i]);
+//	/**
+//	 * 从缓存里还原一个列表对象
+//	 * @param key
+//	 * @param clazz
+//	 * @return
+//	 */
+//	@SuppressWarnings("unchecked")
+//
+//	public <T> T getObjectFromList(String key,String subUnionkey, Class<?> clazz,int seconds){
+//		Jedis jedis = null;
+//		boolean sucess = true;
+//		Map<String,String> map=null;
+//		try {
+//			jedis=jedisPool.getResource();
+//			String value = jedis.hget(key, subUnionkey);
+//			if(StringUtils.isEmpty(value)){
+//				return null;
 //			}
+//			RedisListInterface po=null;
+//			Map<String,String> mapFields=null;
+//			mapFields=JsonUtils.getMapFromJson(value);
+//			po = (RedisListInterface) clazz.newInstance();
 //			ObjectUtils.getObjFromMap(mapFields, po);
 //			if(seconds >= 0){
 //				jedis.expire(key, seconds);
 //			}
 //			return (T) po;
-			return null;
-		} catch (Exception e) {
-			sucess = false;
-			returnBrokenResource(jedis, "getListFromHash:"+key, e);
-		} finally {
-			if (sucess && jedis != null) {
-				returnResource(jedis);
-			}
-		}
-		return null;
-	}
+//		} catch (Exception e) {
+//			sucess = false;
+//			returnBrokenResource(jedis, "getListFromHash:"+key, e);
+//		} finally {
+//			if (sucess && jedis != null) {
+//				returnResource(jedis);
+//			}
+//		}
+//		return null;
+//	}
 	
 	/**
 	 * 批量删除对象
