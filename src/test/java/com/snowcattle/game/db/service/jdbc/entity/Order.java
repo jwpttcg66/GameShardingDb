@@ -1,6 +1,6 @@
 package com.snowcattle.game.db.service.jdbc.entity;
 
-import com.snowcattle.game.db.cache.redis.AsyncCacheKey;
+import com.snowcattle.game.db.cache.redis.AsyncSave;
 import com.snowcattle.game.db.cache.redis.RedisInterface;
 import com.snowcattle.game.db.cache.redis.RedisKeyEnum;
 import com.snowcattle.game.db.common.annotation.DbMapper;
@@ -13,7 +13,7 @@ import com.snowcattle.game.db.util.EntityUtils;
 
 @EntitySave
 @DbMapper(mapper = OrderMapper.class)
-public class Order extends BaseLongIDEntity implements RedisInterface, AsyncCacheKey{
+public class Order extends BaseLongIDEntity implements RedisInterface, AsyncSave {
 
     @FieldSave
     private String status;
@@ -52,8 +52,4 @@ public class Order extends BaseLongIDEntity implements RedisInterface, AsyncCach
         return RedisKeyEnum.PLAYER.getKey();
     }
 
-    @Override
-    public String getAsyncCacheKey() {
-        return RedisKeyEnum.ASYNC_PLAYER.getKey();
-    }
 }

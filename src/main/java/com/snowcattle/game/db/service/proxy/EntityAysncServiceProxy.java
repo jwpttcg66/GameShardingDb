@@ -1,6 +1,6 @@
 package com.snowcattle.game.db.service.proxy;
 
-import com.snowcattle.game.db.cache.redis.AsyncCacheKey;
+import com.snowcattle.game.db.cache.redis.AsyncSave;
 import com.snowcattle.game.db.cache.redis.RedisInterface;
 import com.snowcattle.game.db.cache.redis.RedisListInterface;
 import com.snowcattle.game.db.cache.redis.RedisService;
@@ -46,10 +46,10 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                     AbstractEntity abstractEntity = (AbstractEntity) args[0];
                     updateAllFieldEntity(abstractEntity);
                     //放入异步存储的key
-                    if(abstractEntity instanceof AsyncCacheKey) {
-                        AsyncCacheKey asyncCacheKeyEntity = (AsyncCacheKey) abstractEntity;
+                    if(abstractEntity instanceof AsyncSave) {
+//                        AsyncSave asyncCacheKeyEntity = (AsyncSave) abstractEntity;
                         if(abstractEntity instanceof  RedisInterface) {
-                            redisService.lpushString(asyncCacheKeyEntity.getAsyncCacheKey(), EntityUtils.getRedisKey((RedisInterface) abstractEntity));
+//                            redisService.lpushString(asyncCacheKeyEntity.getAsyncCacheKey(), EntityUtils.getRedisKey((RedisInterface) abstractEntity));
                         }else{
                             proxyLogger.error("async save interface not RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
                         }
