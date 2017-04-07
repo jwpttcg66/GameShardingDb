@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.entity;
 
+import com.github.pagehelper.PageRowBounds;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbMapper;
 import com.snowcattle.game.db.common.annotation.DbOperation;
@@ -95,10 +96,26 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getTemplateMapper(entity);
         List<T> result = null;
+
+        EntityServiceShardingStrategy entityServiceShardingStrategy = getDefaultEntityServiceShardingStrategy();
         try {
-            result = idbMapper.getEntityList(entity);
-//            PageRowBounds pageRowBounds = new PageRowBounds(0, 100);
-//            result = idbMapper.getEntityList(entity, pageRowBounds);
+            if(!entityServiceShardingStrategy.isPageFlag()){
+                result = idbMapper.getEntityList(entity);
+            }else{
+                int pageLimit = entityServiceShardingStrategy.getPageLimit();
+                PageRowBounds pageRowBounds = new PageRowBounds(0, pageLimit);
+                result = idbMapper.getEntityList(entity, pageRowBounds);
+                long count = pageRowBounds.getTotal().longValue();
+                if(count > pageLimit) {
+                    int offset = pageLimit;
+                    while (offset < count){
+                        pageRowBounds = new PageRowBounds(offset, pageLimit);
+                        result.addAll(idbMapper.getEntityList(entity, pageRowBounds));
+                        offset+=pageLimit;
+                    }
+                }
+            }
+
         } catch (Exception e) {
             logger.error(e.toString(), e);
         } finally {

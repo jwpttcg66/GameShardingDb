@@ -1,17 +1,32 @@
 package com.snowcattle.game.db.sharding;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 /**
  * Created by jwp on 2017/3/28.
+ * 默认的分批策略
  */
 public class EntityServiceShardingStrategy {
 
+    /**
+     * 数据库数量
+     */
     private int dbCount;
+    /**
+     * 数据表数量
+     */
     private int tableCount;
+    /**
+     * 数据源名称
+     */
     private String dataSource;
+    /**
+     * 是否分批读取
+     */
+    private boolean pageFlag = true;
 
+    /**
+     * 单次db限制数量
+     */
+    private int pageLimit = 50;
 
     public String getShardingDBKeyByUserId(long userId) {
         long dbIndex = userId % dbCount;
@@ -44,5 +59,21 @@ public class EntityServiceShardingStrategy {
 
     public void setDataSource(String dataSource) {
         this.dataSource = dataSource;
+    }
+
+    public int getPageLimit() {
+        return pageLimit;
+    }
+
+    public void setPageLimit(int pageLimit) {
+        this.pageLimit = pageLimit;
+    }
+
+    public boolean isPageFlag() {
+        return pageFlag;
+    }
+
+    public void setPageFlag(boolean pageFlag) {
+        this.pageFlag = pageFlag;
     }
 }

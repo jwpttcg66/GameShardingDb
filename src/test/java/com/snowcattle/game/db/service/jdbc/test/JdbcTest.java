@@ -23,7 +23,7 @@ public class JdbcTest {
 //        insertTest(classPathXmlApplicationContext, orderService);
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
-//        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
+        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
@@ -75,7 +75,7 @@ public class JdbcTest {
     public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
 
         int startSize = 38000;
-        int endSize = 38001;
+        int endSize = 38200;
 
         TockenService tockenService = (TockenService) classPathXmlApplicationContext.getBean("tockenService");
         for (int i = startSize; i < endSize; i++) {
