@@ -97,6 +97,8 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         List<T> result = null;
         try {
             result = idbMapper.getEntityList(entity);
+//            PageRowBounds pageRowBounds = new PageRowBounds(0, 100);
+//            result = idbMapper.getEntityList(entity, pageRowBounds);
         } catch (Exception e) {
             logger.error(e.toString(), e);
         } finally {

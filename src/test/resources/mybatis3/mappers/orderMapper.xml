@@ -18,7 +18,7 @@
     <select id="getEntityList" resultType="order" parameterType="order">
         select id, user_id, status
         from `t_order_${sharding_table_index}`
-        where user_id=#{userId};
+        where user_id=#{userId} order by id
     </select>
 
     <update id="updateEntityByMap" parameterType="map">
