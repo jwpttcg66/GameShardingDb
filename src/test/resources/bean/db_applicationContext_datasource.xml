@@ -136,6 +136,15 @@
         <property name="tableCount" value="2"/>
         <property name="dataSource" value="jdbc_player_db"/>
     </bean>
+
+    <bean id="defaultPageEntityServiceShardingStrategy" class="com.snowcattle.game.db.sharding.EntityServiceShardingStrategy">
+        <property name="dbCount" value="3"/>
+        <property name="tableCount" value="2"/>
+        <property name="dataSource" value="jdbc_player_db"/>
+        <property name="pageFlag" value="true"/>
+        <property name="pageLimit" value="50"/>
+    </bean>
+
 <!-- druid -->
 	<!--  <bean id="dataSource_druid" class="com.alibaba.druid.pool.DruidDataSource">
     

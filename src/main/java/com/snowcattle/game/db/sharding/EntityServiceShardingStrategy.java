@@ -21,7 +21,7 @@ public class EntityServiceShardingStrategy {
     /**
      * 是否分批读取
      */
-    private boolean pageFlag = true;
+    private boolean pageFlag = false;
 
     /**
      * 单次db限制数量

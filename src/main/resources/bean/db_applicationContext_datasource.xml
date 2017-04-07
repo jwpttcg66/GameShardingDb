@@ -39,6 +39,27 @@
         <property name="typeAliasesPackage" value="com.snowcattle.game.db.service.jdbc.entity"/>
         <property name="typeHandlersPackage" value="com.snowcattle.game.db.service.jdbc.handler"/>
         <property name="configLocation"  value="classpath:mybatis3/sqlMapConfig.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <!-- 这里的几个配置主要演示如何使用，如果不理解，一定要去掉下面的配置 -->
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            supportMethodsArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                            rowBoundsWithCount=true
+                            <!--&lt;!&ndash; 支持通过Mapper接口参数来传递分页参数 &ndash;&gt;-->
+                            <!--<property name="helperDialect" value="mysql"/>-->
+                            <!--<property name="supportMethodsArguments" value="true"/>-->
+                            <!--<property name="rowBoundsWithCount" value="true"/>-->
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
@@ -116,5 +137,11 @@
         <property name="dataSource" value="jdbc_player_db"/>
     </bean>
 
-
+    <bean id="defaultPageEntityServiceShardingStrategy" class="com.snowcattle.game.db.sharding.EntityServiceShardingStrategy">
+        <property name="dbCount" value="3"/>
+        <property name="tableCount" value="2"/>
+        <property name="dataSource" value="jdbc_player_db"/>
+        <property name="pageFlag" value="true"/>
+        <property name="pageLimit" value="50"/>
+    </bean>
 </beans>
