@@ -20,16 +20,16 @@ public class RedisPush extends Thread{
     @Override
     public void run() {
         int i = 1100;
-        while(i<1200){
+        while(i<1500){
             redisService.rPushString(listKey, String.valueOf(i));
             System.out.println("放入"  + listKey  + "值" + String.valueOf(i));
             redisService.rPushString(listKey, String.valueOf(i + 2000));
             System.out.println("放入" + listKey  + "值" + String.valueOf(i + 2000));
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(10);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             redisService.saddString(setKey, listKey);
             i++;
 
