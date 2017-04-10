@@ -1,6 +1,6 @@
 package com.snowcattle.game.db.service.proxy;
 
-import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.service.entity.EntityService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

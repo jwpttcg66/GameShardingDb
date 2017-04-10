@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.cache.redis;
+package com.snowcattle.game.db.service.redis;
 
 
 import com.snowcattle.game.db.common.GlobalConstants;

@@ -1,6 +1,6 @@
-package com.snowcattle.game.db.async.thread;
+package com.snowcattle.game.db.service.async.thread;
 
-import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.service.entity.EntityService;
 
 import java.util.TimerTask;

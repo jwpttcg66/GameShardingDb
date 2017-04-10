@@ -1,6 +1,6 @@
 package com.snowcattle.game.db.service.jdbc.entity;
 
-import com.snowcattle.game.db.cache.redis.RedisListInterface;
+import com.snowcattle.game.db.service.redis.RedisListInterface;
 import com.snowcattle.game.db.common.annotation.DbMapper;
 import com.snowcattle.game.db.common.annotation.EntitySave;
 import com.snowcattle.game.db.common.annotation.FieldSave;

@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.cache.redis;
+package com.snowcattle.game.db.service.redis;
 
 /**
  * Created by jiangwenping on 17/4/6.

@@ -1,8 +1,8 @@
 package com.snowcattle.game.db.service.proxy;
 
-import com.snowcattle.game.db.cache.redis.RedisInterface;
-import com.snowcattle.game.db.cache.redis.RedisListInterface;
-import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.service.redis.RedisInterface;
+import com.snowcattle.game.db.service.redis.RedisListInterface;
+import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.DbOperation;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;

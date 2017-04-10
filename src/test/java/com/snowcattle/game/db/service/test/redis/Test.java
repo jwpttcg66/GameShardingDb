@@ -1,6 +1,6 @@
 package com.snowcattle.game.db.service.test.redis;
 
-import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.service.redis.RedisService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**

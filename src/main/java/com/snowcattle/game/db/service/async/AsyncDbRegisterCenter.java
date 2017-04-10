@@ -1,9 +1,9 @@
-package com.snowcattle.game.db.async;
+package com.snowcattle.game.db.service.async;
 
-import com.snowcattle.game.db.cache.redis.AsyncRedisKeyEnum;
-import com.snowcattle.game.db.cache.redis.RedisInterface;
-import com.snowcattle.game.db.cache.redis.RedisListInterface;
-import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
+import com.snowcattle.game.db.service.redis.RedisInterface;
+import com.snowcattle.game.db.service.redis.RedisListInterface;
+import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;

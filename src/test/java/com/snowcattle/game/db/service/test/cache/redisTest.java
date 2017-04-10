@@ -1,7 +1,7 @@
 package com.snowcattle.game.db.service.test.cache;
 
-import com.snowcattle.game.db.cache.redis.RedisListInterface;
-import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.service.redis.RedisListInterface;
+import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.proxy.EnityProxyFactory;

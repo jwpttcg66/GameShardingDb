@@ -1,6 +1,6 @@
-package com.snowcattle.game.db.async;
+package com.snowcattle.game.db.service.async;
 
-import com.snowcattle.game.db.cache.redis.RedisService;
+import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.ExecutorUtil;

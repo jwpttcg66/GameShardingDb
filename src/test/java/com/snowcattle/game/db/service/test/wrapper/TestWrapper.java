@@ -1,6 +1,6 @@
 package com.snowcattle.game.db.service.test.wrapper;
 
-import com.snowcattle.game.db.async.AsyncEntityWrapper;
+import com.snowcattle.game.db.service.async.AsyncEntityWrapper;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.service.jdbc.entity.Tocken;
 import com.snowcattle.game.db.service.proxy.EnityProxyFactory;

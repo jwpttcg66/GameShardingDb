@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.async;
+package com.snowcattle.game.db.service.async;
 
 import com.alibaba.fastjson.JSON;
 import com.snowcattle.game.db.common.JsonSerializer;
