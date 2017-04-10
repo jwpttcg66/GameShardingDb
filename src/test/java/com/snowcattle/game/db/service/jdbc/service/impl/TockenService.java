@@ -1,9 +1,8 @@
 package com.snowcattle.game.db.service.jdbc.service.impl;
 
+import com.snowcattle.game.db.common.annotation.AsyncEntityServiceSave;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.jdbc.entity.Tocken;
-import com.snowcattle.game.db.service.jdbc.entity.Tocken;
-import com.snowcattle.game.db.service.jdbc.service.ITockenService;
 import com.snowcattle.game.db.service.jdbc.service.ITockenService;
 import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import java.util.List;
  * Created by sunmosh on 2017/4/5.
  */
 @Service
+@AsyncEntityServiceSave
 public class TockenService extends EntityService<Tocken> implements ITockenService {
     public long insertTocken(Tocken tocken) {
         return insertEntity(tocken);
