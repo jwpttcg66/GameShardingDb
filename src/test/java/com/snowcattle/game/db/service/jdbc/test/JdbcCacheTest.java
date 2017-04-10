@@ -4,7 +4,7 @@ import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.impl.MoreOrderService;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
-import com.snowcattle.game.db.service.proxy.EnityProxyService;
+import com.snowcattle.game.db.service.proxy.EnityProxyFactory;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -37,9 +37,9 @@ public class JdbcCacheTest {
     }
 
     public static List<MoreOrder> getBatchOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
+        EnityProxyFactory enityProxyFactory = (EnityProxyFactory) classPathXmlApplicationContext.getBean("enityProxyFactory");
         MoreOrder moreOrder = new MoreOrder();
-        MoreOrder proxyOrder = enityProxyService.createProxyEntity(moreOrder);
+        MoreOrder proxyOrder = enityProxyFactory.createProxyEntity(moreOrder);
 //        MoreOrder proxyOrder = moreOrder;
         proxyOrder.setUserId(userId);
         proxyOrder.setStatus("测试列表插入" + JdbcTest.batchStart);

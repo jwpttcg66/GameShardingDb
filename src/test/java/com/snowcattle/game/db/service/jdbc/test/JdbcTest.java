@@ -4,7 +4,7 @@ import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.entity.Tocken;
 import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
 import com.snowcattle.game.db.service.jdbc.service.impl.TockenService;
-import com.snowcattle.game.db.service.proxy.EnityProxyService;
+import com.snowcattle.game.db.service.proxy.EnityProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
@@ -39,10 +39,10 @@ public class JdbcTest {
     }
 
     public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
+        EnityProxyFactory enityProxyFactory = (EnityProxyFactory) classPathXmlApplicationContext.getBean("enityProxyFactory");
         List<Order> updateList = new ArrayList<>();
         for (Order order : orderList) {
-            Order proxyOrder = enityProxyService.createProxyEntity(order);
+            Order proxyOrder = enityProxyFactory.createProxyEntity(order);
             proxyOrder.setStatus("dddd");
             proxyOrder.setUserId(userId);
             proxyOrder.setId(order.getId());
@@ -101,8 +101,8 @@ public class JdbcTest {
 
 
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
-        EnityProxyService enityProxyService = (EnityProxyService) classPathXmlApplicationContext.getBean("enityProxyService");
-        Order proxyOrder = enityProxyService.createProxyEntity(order);
+        EnityProxyFactory enityProxyFactory = (EnityProxyFactory) classPathXmlApplicationContext.getBean("enityProxyFactory");
+        Order proxyOrder = enityProxyFactory.createProxyEntity(order);
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 

@@ -15,9 +15,13 @@ public class DbConfig {
     private int dbId;
 
     /**
-     * 异步执行存储的线程大小
+     * 异步执行线程存储的线程大小
      */
-    private int asyncDbOperationWorkerSize = 16;
+    private int asyncDbOperationSaveWorkerSize = 1;
+    /**
+     * 异步执行线程存储选择的线程大小
+     */
+    private int asyncDbOperationSelectWorkerSize = 1;
 
     public int getDbId() {
         return dbId;
@@ -27,11 +31,19 @@ public class DbConfig {
         this.dbId = dbId;
     }
 
-    public int getAsyncDbOperationWorkerSize() {
-        return asyncDbOperationWorkerSize;
+    public int getAsyncDbOperationSaveWorkerSize() {
+        return asyncDbOperationSaveWorkerSize;
     }
 
-    public void setAsyncDbOperationWorkerSize(int asyncDbOperationWorkerSize) {
-        this.asyncDbOperationWorkerSize = asyncDbOperationWorkerSize;
+    public void setAsyncDbOperationSaveWorkerSize(int asyncDbOperationSaveWorkerSize) {
+        this.asyncDbOperationSaveWorkerSize = asyncDbOperationSaveWorkerSize;
+    }
+
+    public int getAsyncDbOperationSelectWorkerSize() {
+        return asyncDbOperationSelectWorkerSize;
+    }
+
+    public void setAsyncDbOperationSelectWorkerSize(int asyncDbOperationSelectWorkerSize) {
+        this.asyncDbOperationSelectWorkerSize = asyncDbOperationSelectWorkerSize;
     }
 }

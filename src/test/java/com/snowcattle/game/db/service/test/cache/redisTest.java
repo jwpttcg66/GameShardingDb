@@ -4,7 +4,7 @@ import com.snowcattle.game.db.cache.redis.RedisListInterface;
 import com.snowcattle.game.db.cache.redis.RedisService;
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
-import com.snowcattle.game.db.service.proxy.EnityProxyService;
+import com.snowcattle.game.db.service.proxy.EnityProxyFactory;
 import com.snowcattle.game.db.util.EntityUtils;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -48,8 +48,8 @@ public class redisTest {
         Order queryOrder= redisService.getObjectFromHash(key, Order.class);
         System.out.println(queryOrder);
 
-        EnityProxyService enityProxyService = new EnityProxyService();
-        Order proxyOrder = enityProxyService.createProxyEntity(queryOrder);
+        EnityProxyFactory enityProxyFactory = new EnityProxyFactory();
+        Order proxyOrder = enityProxyFactory.createProxyEntity(queryOrder);
         proxyOrder.setStatus("test");
         redisService.updateObjectHashMap(key, proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
         key = "od#202";

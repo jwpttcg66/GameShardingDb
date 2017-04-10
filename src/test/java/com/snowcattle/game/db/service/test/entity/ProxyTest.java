@@ -2,7 +2,7 @@ package com.snowcattle.game.db.service.test.entity;
 
 import com.snowcattle.game.db.entity.IEntity;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
-import com.snowcattle.game.db.service.proxy.EnityProxyService;
+import com.snowcattle.game.db.service.proxy.EnityProxyFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,14 +17,14 @@ public class ProxyTest {
         testEntity.setId(1L);
         testEntity.setDeleted(false);
         testEntity.setDeleteTime(new Date());
-        EnityProxyService enityProxyService = new EnityProxyService();
+        EnityProxyFactory enityProxyFactory = new EnityProxyFactory();
 //        EntityProxyWrapper<TestEntity> entityEntityProxyWrapper = dbProxyService.createEntityProxyWrapper(testEntity);
 //        TestEntity proxyEntity = entityEntityProxyWrapper.getProxyEntity();
 //        proxyEntity.setId(2L);
 //        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
 //        proxyEntity.setId(2L);
 //        System.out.println(entityEntityProxyWrapper.getEntityProxy().isDirtyFlag());
-        TestEntity proxyEntity = enityProxyService.createProxyEntity(testEntity);
+        TestEntity proxyEntity = enityProxyFactory.createProxyEntity(testEntity);
         proxyEntity.setId(2L);
         System.out.println(proxyEntity.getEntityProxyWrapper().getEntityProxy().isDirtyFlag());
         proxyEntity.setId(2L);

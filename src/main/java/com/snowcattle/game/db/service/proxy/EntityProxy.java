@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by jiangwenping on 17/3/16.
- * db存储的代理对象
+ * db存储的实体代理对象
  */
 public class EntityProxy< T extends IEntity> implements MethodInterceptor {
 
