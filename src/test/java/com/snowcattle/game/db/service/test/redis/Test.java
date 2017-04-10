@@ -17,7 +17,9 @@ public class Test {
         redisService.deleteKey(playerKey);
         RedisPop redisPop = new RedisPop(redisService, setKey, playerKey);
         RedisPush redisPush = new RedisPush(redisService, setKey, playerKey);
+        RedisPop redisPop2 = new RedisPop(redisService, setKey, playerKey);
         redisPop.start();
         redisPush.start();
+        redisPop2.start();
     }
 }
