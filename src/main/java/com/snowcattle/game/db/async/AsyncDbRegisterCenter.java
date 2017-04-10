@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  *  然后把玩家变动通知，放入到玩家身上。
  */
 @Service
-public class AsyncDbNotifyCenter {
+public class AsyncDbRegisterCenter {
 
     @Autowired
     private RedisService redisService;
