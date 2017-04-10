@@ -15,24 +15,6 @@ public class JsonUtils {
     /** 日志 */
     public static final Logger logger = Loggers.dbLogger;
 
-    /** 默认字符串 */
-    public final static String DEFAULT_STRING = "";
-
-    /** 默认Long */
-    private final static long DEFAULT_LONG = 0l;
-
-    /** 默认Int {@value} */
-    public final static int DEFAULT_INT = 0;
-
-    /** 默认Float */
-    public final static float DEFAULT_FLOAT = 0f;
-
-    /** 默认Double */
-    public final static double DEFAULT_DOUBLE = 0d;
-
-    /** 默认Boolean */
-    public final static boolean DEFAULT_BOOLEAN = false;
-
     /**
      * 获取json字符串
      * @param map
