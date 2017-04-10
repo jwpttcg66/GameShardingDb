@@ -5,7 +5,7 @@ package com.snowcattle.game.db.cache.redis;
  * 异步处处的redis key
  */
 public enum  AsyncRedisKeyEnum {
-    ASYNC_PLAYER("ay_pr"),
+    ASYNC_DB("ay_db"),
     ;
 
     private String key;

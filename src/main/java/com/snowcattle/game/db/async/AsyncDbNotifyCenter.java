@@ -1,5 +1,8 @@
 package com.snowcattle.game.db.async;
 
+import com.snowcattle.game.db.cache.redis.AsyncRedisKeyEnum;
+import com.snowcattle.game.db.cache.redis.RedisInterface;
+import com.snowcattle.game.db.cache.redis.RedisListInterface;
 import com.snowcattle.game.db.cache.redis.RedisService;
 import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
@@ -23,5 +26,17 @@ public class AsyncDbNotifyCenter {
         //计算处于那个db
         long selectId = entityService.getShardingId(entity);
         int dbSelectId = entityService.getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId);
+
+        //加入到异步更新队列
+        String unionKey = null;
+        if(entity instanceof RedisInterface){
+            unionKey = ((RedisInterface) entity).getUnionKey();
+        }else if(entity instanceof RedisListInterface){
+            unionKey = ((RedisListInterface) entity).getShardingKey();
+        }
+
+        //必须先push再sadd
+        redisService.rPushString(unionKey, asyncEntityWrapper.serialize());
+        redisService.saddString(AsyncRedisKeyEnum.ASYNC_DB.getKey() + dbSelectId, unionKey);
     }
 }

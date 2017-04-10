@@ -7,7 +7,7 @@ package com.snowcattle.game.db.cache.redis;
  * 
  */
 public interface RedisListInterface{
-	public String getUniqueKey();
+	public String getShardingKey();
 	public String getRedisKeyEnumString();
 
 	/**

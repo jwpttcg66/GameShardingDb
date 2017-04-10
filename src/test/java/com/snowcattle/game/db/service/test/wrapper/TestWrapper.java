@@ -27,5 +27,8 @@ public class TestWrapper {
         AsyncEntityWrapper newAsyncEntityWrapper = new AsyncEntityWrapper();
         newAsyncEntityWrapper.deserialize(string);
         System.out.println(newAsyncEntityWrapper.serialize());
+
+//        Class classes = Class.forName(tocken.getClass().getName());
+//        System.out.println(classes);
     }
 }

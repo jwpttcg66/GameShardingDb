@@ -58,11 +58,11 @@ public class EntityUtils {
 
     //获取rediskey
     public static String getRedisKey(RedisInterface redisInterface){
-        return redisInterface.getRedisKeyEnumString() + redisInterface.getUniqueKey();
+        return redisInterface.getRedisKeyEnumString() + redisInterface.getUnionKey();
     }
 
     //获取rediskey
     public static String getRedisKeyByRedisListInterface(RedisListInterface redisInterface){
-        return redisInterface.getRedisKeyEnumString() + redisInterface.getUniqueKey();
+        return redisInterface.getRedisKeyEnumString() + redisInterface.getShardingKey();
     }
 }

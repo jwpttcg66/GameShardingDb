@@ -43,7 +43,7 @@ public class Order extends BaseLongIDEntity implements RedisInterface, AsyncSave
     }
 
     @Override
-    public String getUniqueKey() {
+    public String getUnionKey() {
         return String.valueOf(getUserId()+ EntityUtils.ENTITY_SPLIT_STRING + getId());
     }
 

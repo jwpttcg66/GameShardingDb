@@ -35,7 +35,7 @@ public class MoreOrder  extends BaseLongIDEntity implements RedisListInterface{
     }
 
     @Override
-    public String getUniqueKey() {
+    public String getShardingKey() {
         return String.valueOf(getUserId());
     }
 
