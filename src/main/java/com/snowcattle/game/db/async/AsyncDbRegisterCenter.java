@@ -36,7 +36,9 @@ public class AsyncDbRegisterCenter {
         }
 
         //必须先push再sadd
-        redisService.rPushString(unionKey, asyncEntityWrapper.serialize());
-        redisService.saddString(AsyncRedisKeyEnum.ASYNC_DB.getKey() + dbSelectId, unionKey);
+        String simapleClassName = entity.getClass().getSimpleName();
+        String aysncUnionKey = simapleClassName + "#" + unionKey;
+        redisService.rPushString(aysncUnionKey, asyncEntityWrapper.serialize());
+        redisService.saddString(AsyncRedisKeyEnum.ASYNC_DB.getKey() + dbSelectId + "#" + entity.getClass().getSimpleName(), aysncUnionKey);
     }
 }
