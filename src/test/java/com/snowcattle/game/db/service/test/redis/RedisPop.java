@@ -30,6 +30,11 @@ public class RedisPop extends Thread{
                     }
                 }
             }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

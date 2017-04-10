@@ -31,6 +31,16 @@ public class RedisPush extends Thread{
 //                e.printStackTrace();
 //            }
             redisService.saddString(setKey, listKey);
+
+
+            redisService.rPushString(listKey, String.valueOf(i + 4000));
+            System.out.println("更新" + listKey  + "值" + String.valueOf(i + 4000));
+//            try {
+//                Thread.sleep(10);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            redisService.saddString(setKey, listKey);
             i++;
 
         }
