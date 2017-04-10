@@ -21,7 +21,7 @@ public class TestWrapper {
         proxyOrder.setStatus("修改了3");
 
 
-        AsyncEntityWrapper asyncEntityWrapper = new AsyncEntityWrapper(DbOperationEnum.insert, proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+        AsyncEntityWrapper asyncEntityWrapper = new AsyncEntityWrapper(DbOperationEnum.insert, tocken.getClass().getSimpleName(),proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
         String string = asyncEntityWrapper.serialize();
         System.out.println(string);
         AsyncEntityWrapper newAsyncEntityWrapper = new AsyncEntityWrapper();

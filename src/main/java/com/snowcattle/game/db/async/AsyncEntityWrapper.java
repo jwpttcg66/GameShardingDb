@@ -19,7 +19,15 @@ public class AsyncEntityWrapper implements JsonSerializer{
      */
     private long wrapperTime;
 
+    /**
+     *
+     */
     private DbOperationEnum dbOperationEnum;
+
+    /**
+     *  名字的简写，用于反射生成对象
+     */
+    private String simpleClassName;
 
     private Map<String ,String> prarms = new HashMap<>();
 
@@ -27,9 +35,10 @@ public class AsyncEntityWrapper implements JsonSerializer{
 
     }
 
-    public AsyncEntityWrapper(DbOperationEnum dbOperationEnum, Map<String ,String> prarms)  {
+    public AsyncEntityWrapper(DbOperationEnum dbOperationEnum, String simpleClassName, Map<String ,String> prarms)  {
         this.dbOperationEnum = dbOperationEnum;
         this.wrapperTime = System.currentTimeMillis();
+        this.simpleClassName = simpleClassName;
         this.prarms = prarms;
     }
 
@@ -74,5 +83,13 @@ public class AsyncEntityWrapper implements JsonSerializer{
 
     public void setPrarms(Map<String, String> prarms) {
         this.prarms = prarms;
+    }
+
+    public String getSimpleClassName() {
+        return simpleClassName;
+    }
+
+    public void setSimpleClassName(String simpleClassName) {
+        this.simpleClassName = simpleClassName;
     }
 }
