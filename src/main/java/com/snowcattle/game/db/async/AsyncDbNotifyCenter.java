@@ -19,7 +19,7 @@ public class AsyncDbNotifyCenter {
     @Autowired
     private RedisService redisService;
 
-    public void asyncEnity(EntityService entityService, AsyncEntityWrapper asyncEntityWrapper, AbstractEntity entity){
+    public void asyncEntity(EntityService entityService, AsyncEntityWrapper asyncEntityWrapper, AbstractEntity entity){
         //计算处于那个db
         long selectId = entityService.getShardingId(entity);
         int dbSelectId = entityService.getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId);

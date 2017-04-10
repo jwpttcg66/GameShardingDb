@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.snowcattle.game.db.common.JsonSerializer;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by jiangwenping on 17/4/6.
  * 异步实体封装箱, 里面包含了实体的快照
@@ -18,14 +21,16 @@ public class AsyncEntityWrapper implements JsonSerializer{
 
     private DbOperationEnum dbOperationEnum;
 
+    private Map<String ,String> prarms = new HashMap<>();
 
     public AsyncEntityWrapper() {
 
     }
 
-    public AsyncEntityWrapper(DbOperationEnum dbOperationEnum) {
+    public AsyncEntityWrapper(DbOperationEnum dbOperationEnum, Map<String ,String> prarms)  {
         this.dbOperationEnum = dbOperationEnum;
         this.wrapperTime = System.currentTimeMillis();
+        this.prarms = prarms;
     }
 
     public long getWrapperTime() {
@@ -51,9 +56,23 @@ public class AsyncEntityWrapper implements JsonSerializer{
 
     @Override
     public void deserialize(String pack) {
-//        AsyncEntityWrapper<T> tempWrapper = JSON.parseObject(pack, this.getClass());
-//        this.setEntity(tempWrapper.getEntity());
-//        this.setWrapperTime(tempWrapper.getWrapperTime());
-//        this.setDbOperationEnum(tempWrapper.getDbOperationEnum());
+        AsyncEntityWrapper asyncEntityWrapper= JSON.parseObject(pack, this.getClass());
+        this.setWrapperTime(asyncEntityWrapper.getWrapperTime());
+        this.setDbOperationEnum(asyncEntityWrapper.getDbOperationEnum());
+        this.setPrarms(asyncEntityWrapper.getPrarms());
+    }
+
+    public AsyncEntityWrapper(long wrapperTime, DbOperationEnum dbOperationEnum, Map<String, String> prarms) {
+        this.wrapperTime = wrapperTime;
+        this.dbOperationEnum = dbOperationEnum;
+        this.prarms = prarms;
+    }
+
+    public Map<String, String> getPrarms() {
+        return prarms;
+    }
+
+    public void setPrarms(Map<String, String> prarms) {
+        this.prarms = prarms;
     }
 }
