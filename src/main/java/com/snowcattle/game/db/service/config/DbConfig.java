@@ -17,7 +17,7 @@ public class DbConfig {
     /**
      * 异步执行存储的线程大小
      */
-    private int asyncDbOperationWorkerSize;
+    private int asyncDbOperationWorkerSize = 16;
 
     public int getDbId() {
         return dbId;
