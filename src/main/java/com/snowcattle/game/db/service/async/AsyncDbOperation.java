@@ -8,6 +8,7 @@ import com.snowcattle.game.thread.executor.NonOrderedQueuePoolExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  *  这个类采用模版编程
  */
 @Service
-public class AsyncDbOperationCenter<T extends EntityService> {
+public class AsyncDbOperation<T extends EntityService> {
 
     @Autowired
     private RedisService redisService;
@@ -34,20 +35,13 @@ public class AsyncDbOperationCenter<T extends EntityService> {
     private ScheduledExecutorService scheduledExecutorService;
 
 
-    public RedisService getRedisService() {
-        return redisService;
-    }
-
-    public void setRedisService(RedisService redisService) {
-        this.redisService = redisService;
-    }
-
     public void start(){
         int coreSize =  dbConfig.getAsyncDbOperationSaveWorkerSize();
         operationExecutor = new NonOrderedQueuePoolExecutor(coreSize);
         int selectSize = dbConfig.getAsyncDbOperationSaveWorkerSize();
         scheduledExecutorService = Executors.newScheduledThreadPool(selectSize);
 
+        //开始调度线程
     }
 
     public void stop(){
@@ -73,5 +67,22 @@ public class AsyncDbOperationCenter<T extends EntityService> {
 
     public void setOperationExecutor(NonOrderedQueuePoolExecutor operationExecutor) {
         this.operationExecutor = operationExecutor;
+    }
+
+
+    public RedisService getRedisService() {
+        return redisService;
+    }
+
+    public void setRedisService(RedisService redisService) {
+        this.redisService = redisService;
+    }
+
+    //获取模版参数类
+    public Class<T> getEntityTClass(){
+        Class classes = getClass();
+        Class result = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0];
+        return result;
     }
 }

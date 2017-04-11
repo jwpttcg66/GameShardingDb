@@ -19,6 +19,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -195,15 +196,6 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         return shardingId;
     }
 
-//    //获取分库主键
-//    protected long getShardingId(long id, long userId, EntityKeyShardingStrategyEnum entityKeyShardingStrategyEnum) {
-//        long shardingId = userId;
-//        if (entityKeyShardingStrategyEnum.equals(EntityKeyShardingStrategyEnum.ID)) {
-//            shardingId = id;
-//        }
-//        return shardingId;
-//    }
-
     /**
      * Function  : 获取sqlSession
      */
@@ -366,4 +358,12 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
     }
 
     abstract  public EntityServiceShardingStrategy getEntityServiceShardingStrategy();
+
+    //获取模版参数类
+    public Class<T> getEntityTClass(){
+        Class classes = getClass();
+        Class result = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0];
+        return result;
+    }
 }

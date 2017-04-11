@@ -18,6 +18,8 @@ public class JdbcAsyncCacheTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         EntityServiceRegistry entityServiceRegistry = (EntityServiceRegistry) classPathXmlApplicationContext.getBean("entityServiceRegistry");
         entityServiceRegistry.startup();
+
+
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);
         insertBatchTest(classPathXmlApplicationContext, orderService);
@@ -30,6 +32,10 @@ public class JdbcAsyncCacheTest {
 
     }
 
+    public void testTemplate(ClassPathXmlApplicationContext classPathXmlApplicationContext){
+        OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
+        System.out.println(orderService.getEntityTClass().toString());
+    }
 
     public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
         JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
