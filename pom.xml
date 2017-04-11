@@ -212,6 +212,23 @@
             <artifactId>GameThreadPool</artifactId>
             <version>${GameThreadPool.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.aggregate</groupId>  
+            <artifactId>jetty-all</artifactId>  
+            <version>8.0.4.v20111024</version>  
+            <type>jar</type>  
+            <scope>provided</scope>  
+        </dependency>
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>druid</artifactId>
+		    <version>1.0.29</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot</artifactId>
+		    <version>1.5.2.RELEASE</version>
+		</dependency>
 
     </dependencies>
 
