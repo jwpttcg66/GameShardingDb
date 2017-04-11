@@ -21,4 +21,11 @@
     <context:component-scan base-package="com.snowcattle.game.db" />
 
     <context:property-placeholder location="classpath:db_jdbc.properties" />
+
+    <bean id="dbConfig" class="com.snowcattle.game.db.service.config.DbConfig">
+        <property name="dbId" value="1"/>
+        <property name="asyncDbOperationSaveWorkerSize" value="1"/>
+        <property name="asyncDbOperationSelectWorkerSize" value="1"/>
+        <property name="entiyServicePackageName" value="com.snowcattle.game.db"/>
+    </bean>
 </beans>

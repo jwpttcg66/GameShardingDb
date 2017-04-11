@@ -33,4 +33,11 @@ public class GlobalConstants {
     public static class RedisKeyString{
         public static final String GAME_DB_EXCUTE="async_db";
     }
+
+    /**
+     * class常量
+     */
+    public static class ClassConstants{
+        public static final String Ext = ".class";
+    };
 }

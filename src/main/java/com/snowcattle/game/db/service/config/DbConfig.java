@@ -23,6 +23,11 @@ public class DbConfig {
      */
     private int asyncDbOperationSelectWorkerSize = 1;
 
+    /**
+     * 实体服务的包名
+     */
+    private String entiyServicePackageName;
+
     public int getDbId() {
         return dbId;
     }
@@ -45,5 +50,13 @@ public class DbConfig {
 
     public void setAsyncDbOperationSelectWorkerSize(int asyncDbOperationSelectWorkerSize) {
         this.asyncDbOperationSelectWorkerSize = asyncDbOperationSelectWorkerSize;
+    }
+
+    public String getEntiyServicePackageName() {
+        return entiyServicePackageName;
+    }
+
+    public void setEntiyServicePackageName(String entiyServicePackageName) {
+        this.entiyServicePackageName = entiyServicePackageName;
     }
 }
