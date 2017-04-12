@@ -1,5 +1,7 @@
 package com.snowcattle.game.db.service.async.thread;
 
+import com.redis.transaction.service.RGTRedisService;
+import com.redis.transaction.service.TransactionService;
 import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
 import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.service.config.DbConfig;
@@ -22,8 +24,12 @@ import java.util.concurrent.TimeUnit;
  * 异步执行更新中心
  *  这个类采用模版编程
  */
+@Service
 public abstract class AsyncDbOperation<T extends EntityService> extends TimerTask {
 
+    /**
+     * db里面的redis服务
+     */
     @Autowired
     private RedisService redisService;
 
@@ -48,7 +54,6 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
         for(int i = 0; i < size; i++){
             saveDb(i, entityService);
         }
-        System.out.println("down");
     }
 
     /**
@@ -65,8 +70,9 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
             if(StringUtils.isEmpty(playerKey)){
                 break;
             }
-            //查找玩家数据进行存储
-//            String popKey = redisService.lpop(playerKey);
+            //查找玩家数据进行存储 进行redis-game-transaction 加锁
+
+
         }
     }
 
@@ -79,4 +85,12 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
     }
 
     public abstract EntityService getWrapperEntityService();
+
+    public RedisService getRedisService() {
+        return redisService;
+    }
+
+    public void setRedisService(RedisService redisService) {
+        this.redisService = redisService;
+    }
 }

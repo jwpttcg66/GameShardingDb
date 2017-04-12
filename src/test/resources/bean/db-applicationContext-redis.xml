@@ -39,7 +39,7 @@
     <bean id="redisService" class="com.snowcattle.game.db.service.redis.RedisService">
         <property name="jedisPool" ref="jedisPool" />
     </bean>
-    <bean id="RGTRedisService" class="com.redis.transaction.service.RGTRedisService">
+    <bean id="rgtRedisService" class="com.redis.transaction.service.RGTRedisService">
         <property name="jedisPool" ref="jedisPool" />
     </bean>
 </beans>

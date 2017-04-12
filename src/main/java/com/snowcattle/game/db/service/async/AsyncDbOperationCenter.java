@@ -1,5 +1,7 @@
 package com.snowcattle.game.db.service.async;
 
+import com.redis.transaction.service.RGTRedisService;
+import com.redis.transaction.service.TransactionService;
 import com.snowcattle.game.db.service.async.thread.AsyncDbOperation;
 import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
@@ -33,6 +35,18 @@ public class AsyncDbOperationCenter {
     @Autowired
     private AsyncOperationRegistry asyncOperationRegistry;
 
+    /**
+     * 事务redis服务
+     */
+    @Autowired
+    private RGTRedisService rgtRedisService;
+
+    /**
+     * 事务服务
+     */
+    @Autowired
+    private TransactionService transactionService;
+
     public void start() throws Exception {
         int coreSize =  dbConfig.getAsyncDbOperationSaveWorkerSize();
         operationExecutor = new NonOrderedQueuePoolExecutor(coreSize);
@@ -59,4 +73,19 @@ public class AsyncDbOperationCenter {
         }
     }
 
+    public RGTRedisService getRgtRedisService() {
+        return rgtRedisService;
+    }
+
+    public void setRgtRedisService(RGTRedisService rgtRedisService) {
+        this.rgtRedisService = rgtRedisService;
+    }
+
+    public TransactionService getTransactionService() {
+        return transactionService;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 }
