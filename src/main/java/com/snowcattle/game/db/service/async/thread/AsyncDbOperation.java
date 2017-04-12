@@ -46,19 +46,28 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
         EntityServiceShardingStrategy entityServiceShardingStrategy = entityService.getEntityServiceShardingStrategy();
         int size = entityServiceShardingStrategy.getDbCount();
         for(int i = 0; i < size; i++){
-            String dbRedisKey = AsyncRedisKeyEnum.ASYNC_DB.getKey() + i + "#" + entityService.getEntityTClass().getSimpleName();
-            long saveSize = redisService.scardString(dbRedisKey);
-            for(long k = 0; k < saveSize; k++){
-                String playerKey = redisService.spopString(dbRedisKey);
-                if(StringUtils.isEmpty(playerKey)){
-                    break;
-                }
-                //查找玩家数据进行存储
-
-            }
-
+            saveDb(i, entityService);
         }
         System.out.println("down");
+    }
+
+    /**
+     * 存储db
+     * @param dbId
+     * @param entityService
+     */
+    public void saveDb(int dbId, EntityService entityService){
+        String simpleClassName = entityService.getEntityTClass().getSimpleName();
+        String dbRedisKey = AsyncRedisKeyEnum.ASYNC_DB.getKey() + dbId + "#" + entityService.getEntityTClass().getSimpleName();
+        long saveSize = redisService.scardString(dbRedisKey);
+        for(long k = 0; k < saveSize; k++){
+            String playerKey = redisService.spopString(dbRedisKey);
+            if(StringUtils.isEmpty(playerKey)){
+                break;
+            }
+            //查找玩家数据进行存储
+//            String popKey = redisService.lpop(playerKey);
+        }
     }
 
     //获取模版参数类
