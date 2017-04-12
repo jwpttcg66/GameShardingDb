@@ -1,13 +1,11 @@
 package com.snowcattle.game.db.service.async.thread;
 
-import com.redis.transaction.service.RGTRedisService;
-import com.redis.transaction.service.TransactionService;
+import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionEntityFactory;
+import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionEntityCauseFactory;
 import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
 import com.snowcattle.game.db.service.redis.RedisService;
-import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
-import com.snowcattle.game.db.util.ExecutorUtil;
 import com.snowcattle.game.thread.executor.NonOrderedQueuePoolExecutor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by jiangwenping on 17/4/10.
@@ -32,6 +27,12 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
      */
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private DbGameTransactionEntityFactory dbGameTransactionEntityFactory;
+
+    @Autowired
+    private DbGameTransactionEntityCauseFactory dbGameTransactionEntityCauseFactory;
 
     /**
      * 执行db落得第线程数量
@@ -92,5 +93,21 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     public void setRedisService(RedisService redisService) {
         this.redisService = redisService;
+    }
+
+    public DbGameTransactionEntityFactory getDbGameTransactionEntityFactory() {
+        return dbGameTransactionEntityFactory;
+    }
+
+    public void setDbGameTransactionEntityFactory(DbGameTransactionEntityFactory dbGameTransactionEntityFactory) {
+        this.dbGameTransactionEntityFactory = dbGameTransactionEntityFactory;
+    }
+
+    public DbGameTransactionEntityCauseFactory getDbGameTransactionEntityCauseFactory() {
+        return dbGameTransactionEntityCauseFactory;
+    }
+
+    public void setDbGameTransactionEntityCauseFactory(DbGameTransactionEntityCauseFactory dbGameTransactionEntityCauseFactory) {
+        this.dbGameTransactionEntityCauseFactory = dbGameTransactionEntityCauseFactory;
     }
 }
