@@ -1,10 +1,13 @@
 package com.snowcattle.game.db.service.async.thread;
 
+import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
 import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.service.entity.EntityService;
+import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
 import com.snowcattle.game.db.util.ExecutorUtil;
 import com.snowcattle.game.thread.executor.NonOrderedQueuePoolExecutor;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +32,6 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
      */
     private NonOrderedQueuePoolExecutor operationExecutor;
 
-
     public NonOrderedQueuePoolExecutor getOperationExecutor() {
         return operationExecutor;
     }
@@ -40,6 +42,22 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     @Override
     public void run() {
+        EntityService entityService = getWrapperEntityService();
+        EntityServiceShardingStrategy entityServiceShardingStrategy = entityService.getEntityServiceShardingStrategy();
+        int size = entityServiceShardingStrategy.getDbCount();
+        for(int i = 0; i < size; i++){
+            String dbRedisKey = AsyncRedisKeyEnum.ASYNC_DB.getKey() + i + "#" + entityService.getEntityTClass().getSimpleName();
+            long saveSize = redisService.scardString(dbRedisKey);
+            for(long k = 0; k < saveSize; k++){
+                String playerKey = redisService.spopString(dbRedisKey);
+                if(StringUtils.isEmpty(playerKey)){
+                    break;
+                }
+                //查找玩家数据进行存储
+
+            }
+
+        }
         System.out.println("down");
     }
 
@@ -50,4 +68,6 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
                 .getGenericSuperclass()).getActualTypeArguments()[0];
         return result;
     }
+
+    public abstract EntityService getWrapperEntityService();
 }
