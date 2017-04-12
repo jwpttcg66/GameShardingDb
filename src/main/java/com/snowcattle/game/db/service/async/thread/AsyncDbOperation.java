@@ -19,8 +19,7 @@ import java.util.concurrent.TimeUnit;
  * 异步执行更新中心
  *  这个类采用模版编程
  */
-@Service
-public class AsyncDbOperation<T extends EntityService> extends TimerTask {
+public abstract class AsyncDbOperation<T extends EntityService> extends TimerTask {
 
     @Autowired
     private RedisService redisService;

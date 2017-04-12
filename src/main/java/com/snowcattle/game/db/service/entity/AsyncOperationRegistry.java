@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.entity;
 
 import com.snowcattle.game.db.common.GlobalConstants;
 import com.snowcattle.game.db.common.Loggers;
+import com.snowcattle.game.db.common.annotation.AsyncEntityOperation;
 import com.snowcattle.game.db.common.annotation.AsyncEntityServiceSave;
 import com.snowcattle.game.db.common.loader.scanner.ClassScanner;
 import com.snowcattle.game.db.service.config.DbConfig;
@@ -14,9 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by jiangwenping on 17/4/11.
+ * 异步服务注册中心
  */
 @Service
-public class EntityServiceRegistry {
+public class AsyncOperationRegistry {
 
     public static Logger logger = Loggers.dbServerLogger;
 
@@ -34,7 +36,7 @@ public class EntityServiceRegistry {
     private ConcurrentHashMap<String, Class> registryMap = new ConcurrentHashMap<String, Class>();
 
     public void startup() throws Exception {
-        loadPackage(dbConfig.getEntiyServicePackageName(),
+        loadPackage(dbConfig.getAsyncOperationPackageName(),
                 GlobalConstants.ClassConstants.Ext);
     }
 
@@ -56,8 +58,8 @@ public class EntityServiceRegistry {
                 Class<?> messageClass = Class.forName(realClass);
 
                 logger.info("EntityServiceRegistry load:" + messageClass);
-                AsyncEntityServiceSave asyncEntityServiceSave = messageClass.getAnnotation(AsyncEntityServiceSave.class);
-                if(asyncEntityServiceSave != null) {
+                AsyncEntityOperation asyncEntityOperation = messageClass.getAnnotation(AsyncEntityOperation.class);
+                if(asyncEntityOperation != null) {
                     registryMap.put(messageClass.getSimpleName(), messageClass);
                 }
             }
@@ -80,7 +82,7 @@ public class EntityServiceRegistry {
         this.registryMap = registryMap;
     }
 
-    public Collection getAllEntityServiceRegistry(){
+    public Collection<Class> getAllEntityServiceRegistry(){
         return registryMap.values();
     }
 

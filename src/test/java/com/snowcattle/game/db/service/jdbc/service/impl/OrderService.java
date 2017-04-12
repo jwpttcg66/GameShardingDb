@@ -1,6 +1,5 @@
 package com.snowcattle.game.db.service.jdbc.service.impl;
 
-import com.snowcattle.game.db.common.annotation.AsyncEntityServiceSave;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.IOrderService;
@@ -13,7 +12,6 @@ import java.util.List;
  * Created by jiangwenping on 17/3/20.
  */
 @Service
-@AsyncEntityServiceSave
 public class OrderService extends EntityService<Order> implements IOrderService{
 
 

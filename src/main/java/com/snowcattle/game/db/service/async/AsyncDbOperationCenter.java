@@ -1,7 +1,9 @@
 package com.snowcattle.game.db.service.async;
 
+import com.snowcattle.game.db.service.async.thread.AsyncDbOperation;
 import com.snowcattle.game.db.service.config.DbConfig;
-import com.snowcattle.game.db.service.entity.EntityServiceRegistry;
+import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
+import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.ExecutorUtil;
 import com.snowcattle.game.thread.executor.NonOrderedQueuePoolExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class AsyncDbOperationCenter {
     private DbConfig dbConfig;
 
     @Autowired
-    private EntityServiceRegistry entityServiceRegistry;
+    private AsyncOperationRegistry asyncOperationRegistry;
 
     public void start() throws Exception {
         int coreSize =  dbConfig.getAsyncDbOperationSaveWorkerSize();
@@ -38,8 +40,12 @@ public class AsyncDbOperationCenter {
         scheduledExecutorService = Executors.newScheduledThreadPool(selectSize);
 
         //开始调度线程
-        entityServiceRegistry.startup();
+        asyncOperationRegistry.startup();
 
+        Collection<Class> collection = asyncOperationRegistry.getAllEntityServiceRegistry();
+        for(Class classes: collection){
+            Object object = classes.newInstance();
+        }
     }
 
     public void stop()throws Exception {

@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by jiangwenping on 17/4/10.
- * 异步执行存储的服务
+ * Created by jwp on 2017/4/12.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface AsyncEntityServiceSave {
+public @interface AsyncEntityOperation {
 }
+
