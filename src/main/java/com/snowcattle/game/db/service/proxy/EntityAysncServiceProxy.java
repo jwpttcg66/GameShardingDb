@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.proxy;
 
+import com.snowcattle.game.db.service.async.AsyncDbRegisterCenter;
 import com.snowcattle.game.db.service.redis.AsyncSave;
 import com.snowcattle.game.db.service.redis.RedisInterface;
 import com.snowcattle.game.db.service.redis.RedisListInterface;
@@ -27,9 +28,12 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
 
     private RedisService redisService;
 
-    public EntityAysncServiceProxy(RedisService redisService) {
+    private AsyncDbRegisterCenter asyncDbRegisterCenter;
+
+    public EntityAysncServiceProxy(RedisService redisService, AsyncDbRegisterCenter asyncDbRegisterCenter) {
         super(redisService, false);
         this.redisService = redisService;
+        this.asyncDbRegisterCenter = asyncDbRegisterCenter;
     }
 
     @Override

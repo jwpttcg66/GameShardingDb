@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.proxy;
 
+import com.snowcattle.game.db.service.async.AsyncDbRegisterCenter;
 import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.service.entity.EntityService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -9,14 +10,19 @@ import org.springframework.stereotype.Service;
 
 /**
  * Created by jiangwenping on 17/3/29.
+ * 实体存储异步代理服务工厂
  */
 @Service
 public class EntityAysncServiceProxyFactory {
+
     @Autowired
     private RedisService redisService;
 
-    private EntityAysncServiceProxy createProxy(EntityService EntityService){
-        return new EntityAysncServiceProxy<>(redisService);
+    @Autowired
+    private AsyncDbRegisterCenter asyncDbRegisterCenter;
+
+    private EntityAysncServiceProxy createProxy(EntityService EntityService, AsyncDbRegisterCenter asyncDbRegisterCenter){
+        return new EntityAysncServiceProxy<>(redisService, asyncDbRegisterCenter);
     }
 
     private <T extends  EntityService> T  createProxyService(T entityService, EntityAysncServiceProxy entityAysncServiceProxy){
@@ -29,7 +35,7 @@ public class EntityAysncServiceProxyFactory {
     }
 
     public <T extends  EntityService> T createProxyService(T entityService) throws Exception {
-        T proxyEntityService = (T) createProxyService(entityService, createProxy(entityService));
+        T proxyEntityService = (T) createProxyService(entityService, createProxy(entityService, asyncDbRegisterCenter));
         BeanUtils.copyProperties(proxyEntityService, entityService);
         return proxyEntityService;
     }
@@ -40,5 +46,13 @@ public class EntityAysncServiceProxyFactory {
 
     public void setRedisService(RedisService redisService) {
         this.redisService = redisService;
+    }
+
+    public AsyncDbRegisterCenter getAsyncDbRegisterCenter() {
+        return asyncDbRegisterCenter;
+    }
+
+    public void setAsyncDbRegisterCenter(AsyncDbRegisterCenter asyncDbRegisterCenter) {
+        this.asyncDbRegisterCenter = asyncDbRegisterCenter;
     }
 }
