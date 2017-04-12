@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * Created by jwp on 2017/4/12.
  */
 @Service
-public class AsyncDbOperationCenter {
+public class AsyncDbOperationCenter extends DbOperationCenter{
 
     /**
      * 执行db落得第线程数量
@@ -34,18 +34,6 @@ public class AsyncDbOperationCenter {
 
     @Autowired
     private AsyncOperationRegistry asyncOperationRegistry;
-
-    /**
-     * 事务redis服务
-     */
-    @Autowired
-    private RGTRedisService rgtRedisService;
-
-    /**
-     * 事务服务
-     */
-    @Autowired
-    private TransactionService transactionService;
 
     public void start() throws Exception {
         int coreSize =  dbConfig.getAsyncDbOperationSaveWorkerSize();
@@ -71,21 +59,5 @@ public class AsyncDbOperationCenter {
         if(scheduledExecutorService != null){
             ExecutorUtil.shutdownAndAwaitTermination(scheduledExecutorService, 60, TimeUnit.SECONDS);
         }
-    }
-
-    public RGTRedisService getRgtRedisService() {
-        return rgtRedisService;
-    }
-
-    public void setRgtRedisService(RGTRedisService rgtRedisService) {
-        this.rgtRedisService = rgtRedisService;
-    }
-
-    public TransactionService getTransactionService() {
-        return transactionService;
-    }
-
-    public void setTransactionService(TransactionService transactionService) {
-        this.transactionService = transactionService;
     }
 }
