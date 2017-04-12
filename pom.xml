@@ -30,7 +30,7 @@
         <mysql.version>5.1.30</mysql.version>
         <commons.dbcp.version>1.4</commons.dbcp.version>
         <GameThreadPool.version>1.1</GameThreadPool.version>
-
+        <redis-game-transaction.version>1.8.009</redis-game-transaction.version>
     </properties>
 
     <dependencies>
@@ -213,7 +213,7 @@
         <dependency>
             <groupId>com.github.jwpttcg66</groupId>
             <artifactId>redis-game-transaction</artifactId>
-            <version>1.8.001</version>
+            <version>${redis-game-transaction.version}</version>
         </dependency>
     </dependencies>
 
