@@ -1215,40 +1215,6 @@ public class RedisService{
 		}
 		return sucess;
 	} 
-	public <T> void setObject(String key,T object){
-		Jedis jedis = null;
-		boolean sucess = true;
-		try {
-			jedis = jedisPool.getResource();
-			jedis.set(key.getBytes(), CodecUtil.encode(object));
-		} catch (Exception e) {
-			sucess = false;
-			returnBrokenResource(jedis, "setObject:"+key, e);
-		} finally {
-			if (sucess && jedis != null) {
-				returnResource(jedis);
-			}
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <T> T getObject(String key){
-		Jedis jedis = null;
-		boolean sucess = true;
-		try {
-			jedis = jedisPool.getResource();
-			T object = (T) CodecUtil.decode(jedis.get(key.getBytes()));
-			return object;
-		} catch (Exception e) {
-			sucess = false;
-			returnBrokenResource(jedis, "getObject:"+key, e);
-		} finally {
-			if (sucess && jedis != null) {
-				returnResource(jedis);
-			}
-		}
-		return null;
-	}
 	public boolean exists(String key){
 		Jedis jedis = null;
 		boolean sucess = true;
