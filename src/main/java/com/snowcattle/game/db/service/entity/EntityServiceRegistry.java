@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,6 +23,16 @@ public class EntityServiceRegistry {
     @Autowired
     private DbConfig dbConfig;
 
+    /**
+     * 包体扫描
+     */
+    public ClassScanner messageScanner = new ClassScanner();
+
+    /**
+     * 注册map
+     */
+    private ConcurrentHashMap<String, Class> registryMap = new ConcurrentHashMap<String, Class>();
+
     public void startup() throws Exception {
         loadPackage(dbConfig.getEntiyServicePackageName(),
                 GlobalConstants.ClassConstants.Ext);
@@ -31,9 +42,7 @@ public class EntityServiceRegistry {
 
     }
 
-    public ClassScanner messageScanner = new ClassScanner();
 
-    private ConcurrentHashMap<String, Class> registryMap = new ConcurrentHashMap<String, Class>();
 
     public void loadPackage(String namespace, String ext) throws Exception {
         String[] fileNames = messageScanner.scannerPackage(namespace, ext);
@@ -49,7 +58,6 @@ public class EntityServiceRegistry {
                 logger.info("EntityServiceRegistry load:" + messageClass);
                 AsyncEntityServiceSave asyncEntityServiceSave = messageClass.getAnnotation(AsyncEntityServiceSave.class);
                 if(asyncEntityServiceSave != null) {
-
                     registryMap.put(messageClass.getSimpleName(), messageClass);
                 }
             }
@@ -63,4 +71,17 @@ public class EntityServiceRegistry {
     public void setDbConfig(DbConfig dbConfig) {
         this.dbConfig = dbConfig;
     }
+
+    public ConcurrentHashMap<String, Class> getRegistryMap() {
+        return registryMap;
+    }
+
+    public void setRegistryMap(ConcurrentHashMap<String, Class> registryMap) {
+        this.registryMap = registryMap;
+    }
+
+    public Collection getAllEntityServiceRegistry(){
+        return registryMap.values();
+    }
+
 }

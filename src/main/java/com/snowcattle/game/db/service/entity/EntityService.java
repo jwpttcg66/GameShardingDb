@@ -45,7 +45,6 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
 
     private static ThreadLocal<SqlSession> threadLocal = new ThreadLocal<SqlSession>();
 
-
     /**
      * 插入实体
      *
