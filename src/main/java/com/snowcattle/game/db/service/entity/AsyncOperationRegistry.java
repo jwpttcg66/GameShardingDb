@@ -4,7 +4,9 @@ import com.snowcattle.game.db.common.GlobalConstants;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.AsyncEntityOperation;
 import com.snowcattle.game.db.common.loader.scanner.ClassScanner;
+import com.snowcattle.game.db.service.async.thread.AsyncDbOperation;
 import com.snowcattle.game.db.service.config.DbConfig;
+import com.snowcattle.game.db.util.DbBeanUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class AsyncOperationRegistry {
     @Autowired
     private DbConfig dbConfig;
 
+    @Autowired
+    private DbBeanUtils dbBeanUtils;
+
     /**
      * 包体扫描
      */
@@ -32,7 +37,7 @@ public class AsyncOperationRegistry {
     /**
      * 注册map
      */
-    private ConcurrentHashMap<String, Class> registryMap = new ConcurrentHashMap<String, Class>();
+    private ConcurrentHashMap<String, AsyncDbOperation> opeartionMap = new ConcurrentHashMap<String, AsyncDbOperation>();
 
     public void startup() throws Exception {
         loadPackage(dbConfig.getAsyncOperationPackageName(),
@@ -56,10 +61,11 @@ public class AsyncOperationRegistry {
                         - (ext.length()));
                 Class<?> messageClass = Class.forName(realClass);
 
-                logger.info("EntityServiceRegistry load:" + messageClass);
+                logger.info("AsyncEntityOperation load:" + messageClass);
                 AsyncEntityOperation asyncEntityOperation = messageClass.getAnnotation(AsyncEntityOperation.class);
                 if(asyncEntityOperation != null) {
-                    registryMap.put(messageClass.getSimpleName(), messageClass);
+                    AsyncDbOperation asyncDbOperation = (AsyncDbOperation) dbBeanUtils.getBean(asyncEntityOperation.bean());
+                    opeartionMap.put(messageClass.getSimpleName(), asyncDbOperation);
                 }
             }
         }
@@ -73,16 +79,23 @@ public class AsyncOperationRegistry {
         this.dbConfig = dbConfig;
     }
 
-    public ConcurrentHashMap<String, Class> getRegistryMap() {
-        return registryMap;
+    public ConcurrentHashMap<String, AsyncDbOperation> getOpeartionMap() {
+        return opeartionMap;
     }
 
-    public void setRegistryMap(ConcurrentHashMap<String, Class> registryMap) {
-        this.registryMap = registryMap;
+    public void setOpeartionMap(ConcurrentHashMap<String, AsyncDbOperation> opeartionMap) {
+        this.opeartionMap = opeartionMap;
     }
 
-    public Collection<Class> getAllEntityServiceRegistry(){
-        return registryMap.values();
+    public Collection<AsyncDbOperation> getAllAsyncEntityOperation(){
+        return opeartionMap.values();
     }
 
+    public DbBeanUtils getDbBeanUtils() {
+        return dbBeanUtils;
+    }
+
+    public void setDbBeanUtils(DbBeanUtils dbBeanUtils) {
+        this.dbBeanUtils = dbBeanUtils;
+    }
 }

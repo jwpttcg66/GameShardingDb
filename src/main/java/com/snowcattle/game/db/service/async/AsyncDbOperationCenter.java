@@ -44,10 +44,8 @@ public class AsyncDbOperationCenter extends DbOperationCenter{
         //开始调度线程
         asyncOperationRegistry.startup();
 
-        Collection<Class> collection = asyncOperationRegistry.getAllEntityServiceRegistry();
-        for(Class classes: collection){
-            Object object = classes.newInstance();
-            AsyncDbOperation asyncDbOperation = (AsyncDbOperation) object;
+        Collection<AsyncDbOperation> collection = asyncOperationRegistry.getAllAsyncEntityOperation();
+        for(AsyncDbOperation asyncDbOperation: collection){
             scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 60, TimeUnit.SECONDS);
         }
     }

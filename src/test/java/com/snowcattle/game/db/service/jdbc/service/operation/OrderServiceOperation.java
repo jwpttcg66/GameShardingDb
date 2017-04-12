@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * Created by jwp on 2017/4/12.
  */
 @Service
-@AsyncEntityOperation
+@AsyncEntityOperation(bean = "orderServiceOperation")
 public class OrderServiceOperation extends AsyncDbOperation<OrderService> {
 
     @Autowired
