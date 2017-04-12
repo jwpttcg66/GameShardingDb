@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.jdbc.service;
+package com.snowcattle.game.db.service.jdbc.service.entity;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 

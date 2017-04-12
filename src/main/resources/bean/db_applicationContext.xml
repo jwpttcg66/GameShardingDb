@@ -27,6 +27,6 @@
         <property name="dbId" value="1"/>
         <property name="asyncDbOperationSaveWorkerSize" value="1"/>
         <property name="asyncDbOperationSelectWorkerSize" value="1"/>
-        <property name="entiyServicePackageName" value="com.snowcattle.game.db"/>
+        <property name="asyncOperationPackageName" value="com.snowcattle.game.db"/>
     </bean>
 </beans>

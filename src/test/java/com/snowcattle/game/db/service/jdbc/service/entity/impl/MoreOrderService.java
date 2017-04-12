@@ -1,8 +1,8 @@
-package com.snowcattle.game.db.service.jdbc.service.impl;
+package com.snowcattle.game.db.service.jdbc.service.entity.impl;
 
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
-import com.snowcattle.game.db.service.jdbc.service.IMoreOrderService;
+import com.snowcattle.game.db.service.jdbc.service.entity.IMoreOrderService;
 import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
 import org.springframework.stereotype.Service;
 

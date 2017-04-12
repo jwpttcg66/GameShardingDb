@@ -2,8 +2,8 @@ package com.snowcattle.game.db.service.jdbc.test;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.entity.Tocken;
-import com.snowcattle.game.db.service.jdbc.service.impl.OrderService;
-import com.snowcattle.game.db.service.jdbc.service.impl.TockenService;
+import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
+import com.snowcattle.game.db.service.jdbc.service.entity.impl.TockenService;
 import com.snowcattle.game.db.service.proxy.EnityProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
