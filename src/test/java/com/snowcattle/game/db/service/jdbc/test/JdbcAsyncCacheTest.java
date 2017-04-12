@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.jdbc.test;
 
+import com.snowcattle.game.db.service.async.AsyncDbOperationCenter;
 import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
@@ -17,8 +18,10 @@ public class JdbcAsyncCacheTest {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         AsyncOperationRegistry asyncOperationRegistry = (AsyncOperationRegistry) classPathXmlApplicationContext.getBean("asyncOperationRegistry");
-        asyncOperationRegistry.startup();
+//        asyncOperationRegistry.startup();
 
+        AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
+        asyncDbOperationCenter.start();
 
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);

@@ -40,7 +40,7 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     @Override
     public void run() {
-
+        System.out.println("down");
     }
 
     //获取模版参数类

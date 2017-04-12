@@ -45,6 +45,8 @@ public class AsyncDbOperationCenter {
         Collection<Class> collection = asyncOperationRegistry.getAllEntityServiceRegistry();
         for(Class classes: collection){
             Object object = classes.newInstance();
+            AsyncDbOperation asyncDbOperation = (AsyncDbOperation) object;
+            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 60, TimeUnit.SECONDS);
         }
     }
 
