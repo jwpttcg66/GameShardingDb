@@ -1,13 +1,21 @@
 package com.snowcattle.game.db.service.async.thread;
 
-import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionEntityFactory;
+import com.redis.transaction.enums.GameTransactionCommitResult;
+import com.redis.transaction.enums.GameTransactionEntityCause;
+import com.redis.transaction.service.RGTRedisService;
+import com.redis.transaction.service.TransactionService;
+import com.snowcattle.game.db.common.Loggers;
+import com.snowcattle.game.db.service.async.transaction.entity.AsyncDBSaveTransactionEntity;
+import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionCauseFactory;
 import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionEntityCauseFactory;
+import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionEntityFactory;
+import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
 import com.snowcattle.game.db.service.redis.RedisService;
-import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
 import com.snowcattle.game.thread.executor.NonOrderedQueuePoolExecutor;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +30,33 @@ import java.util.TimerTask;
 @Service
 public abstract class AsyncDbOperation<T extends EntityService> extends TimerTask {
 
+    private Logger operationLogger = Loggers.dbLogger;
     /**
      * db里面的redis服务
      */
     @Autowired
     private RedisService redisService;
 
+    /**
+     * 事务redis服务
+     */
+    @Autowired
+    private RGTRedisService rgtRedisService;
+
+    /**
+     * 事务服务
+     */
+    @Autowired
+    private TransactionService transactionService;
+
     @Autowired
     private DbGameTransactionEntityFactory dbGameTransactionEntityFactory;
 
     @Autowired
     private DbGameTransactionEntityCauseFactory dbGameTransactionEntityCauseFactory;
+
+    @Autowired
+    private DbGameTransactionCauseFactory dbGameTransactionCauseFactory;
 
     /**
      * 执行db落得第线程数量
@@ -49,6 +73,7 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     @Override
     public void run() {
+        operationLogger.debug("保存");
         EntityService entityService = getWrapperEntityService();
         EntityServiceShardingStrategy entityServiceShardingStrategy = entityService.getEntityServiceShardingStrategy();
         int size = entityServiceShardingStrategy.getDbCount();
@@ -72,8 +97,15 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
                 break;
             }
             //查找玩家数据进行存储 进行redis-game-transaction 加锁
+            GameTransactionEntityCause gameTransactionEntityCause = dbGameTransactionEntityCauseFactory.getAsyncDbSave();
+            AsyncDBSaveTransactionEntity asyncDBSaveTransactionEntity = dbGameTransactionEntityFactory.createAsyncDBSaveTransactionEntity(gameTransactionEntityCause, rgtRedisService, simpleClassName, playerKey);
+            GameTransactionCommitResult commitResult = transactionService.commitTransaction(dbGameTransactionCauseFactory.getAsyncDbSave(), asyncDBSaveTransactionEntity);
+            if(!commitResult.equals(GameTransactionCommitResult.SUCCESS)){
+                //如果事务失败，说明没有权限禁行数据存储操作
+                redisService.saddStrings(dbRedisKey, playerKey);
+            }
 
-
+            operationLogger.debug("async save success" + playerKey);
         }
     }
 
@@ -109,5 +141,29 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     public void setDbGameTransactionEntityCauseFactory(DbGameTransactionEntityCauseFactory dbGameTransactionEntityCauseFactory) {
         this.dbGameTransactionEntityCauseFactory = dbGameTransactionEntityCauseFactory;
+    }
+
+    public RGTRedisService getRgtRedisService() {
+        return rgtRedisService;
+    }
+
+    public void setRgtRedisService(RGTRedisService rgtRedisService) {
+        this.rgtRedisService = rgtRedisService;
+    }
+
+    public TransactionService getTransactionService() {
+        return transactionService;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    public DbGameTransactionCauseFactory getDbGameTransactionCauseFactory() {
+        return dbGameTransactionCauseFactory;
+    }
+
+    public void setDbGameTransactionCauseFactory(DbGameTransactionCauseFactory dbGameTransactionCauseFactory) {
+        this.dbGameTransactionCauseFactory = dbGameTransactionCauseFactory;
     }
 }

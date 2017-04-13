@@ -1,11 +1,8 @@
 package com.snowcattle.game.db.service.async;
 
-import com.redis.transaction.service.RGTRedisService;
-import com.redis.transaction.service.TransactionService;
 import com.snowcattle.game.db.service.async.thread.AsyncDbOperation;
 import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
-import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.util.ExecutorUtil;
 import com.snowcattle.game.thread.executor.NonOrderedQueuePoolExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Created by jwp on 2017/4/12.
  */
 @Service
-public class AsyncDbOperationCenter extends DbOperationCenter{
+public class AsyncDbOperationCenter {
 
     /**
      * 执行db落得第线程数量
@@ -46,7 +43,8 @@ public class AsyncDbOperationCenter extends DbOperationCenter{
 
         Collection<AsyncDbOperation> collection = asyncOperationRegistry.getAllAsyncEntityOperation();
         for(AsyncDbOperation asyncDbOperation: collection){
-            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 60, TimeUnit.SECONDS);
+//            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 60, TimeUnit.SECONDS);
+            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 5, TimeUnit.SECONDS);
         }
     }
 
