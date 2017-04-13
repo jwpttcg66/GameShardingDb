@@ -49,19 +49,7 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                 case insert:
                     AbstractEntity abstractEntity = (AbstractEntity) args[0];
                     updateAllFieldEntity(abstractEntity);
-                    //放入异步存储的key
-                    if(abstractEntity instanceof AsyncSave) {
-////                        AsyncSave asyncCacheKeyEntity = (AsyncSave) abstractEntity;
-//                        if(abstractEntity instanceof  RedisInterface) {
-////                            redisService.lpushString(asyncCacheKeyEntity.getAsyncCacheKey(), EntityUtils.getRedisKey((RedisInterface) abstractEntity));
-//                        }else{
-//                            proxyLogger.error("async save interface not RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
-//                        }
-
-                        asyncDbRegisterCenter.asyncRegisterEntity((EntityService) obj, dbOperationEnum, abstractEntity);
-                    }else{
-                        proxyLogger.error("async save interface not asynccachekey " + abstractEntity.getClass().getSimpleName() + " use " + abstractEntity.toString());
-                    }
+                    aysncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case insertBatch:
                     List<AbstractEntity> entityList = (List<AbstractEntity>) args[0];
@@ -70,6 +58,7 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                 case update:
                     abstractEntity = (AbstractEntity) args[0];
                     updateChangedFieldEntity(abstractEntity);
+                    aysncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case updateBatch:
                     entityList = (List<AbstractEntity>) args[0];
@@ -77,7 +66,9 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                     break;
                 case delete:
                     abstractEntity = (AbstractEntity) args[0];
-                    deleteEntity(abstractEntity);
+//                    deleteEntity(abstractEntity);
+                    //如果是删除， db删除后执行回调
+                    aysncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case deleteBatch:
                     entityList = (List<AbstractEntity>) args[0];
@@ -111,5 +102,14 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
             }
         }
         return result;
+    }
+
+    public void aysncSaveEntity(EntityService entityService, DbOperationEnum dbOperationEnum, AbstractEntity abstractEntity){
+        //放入异步存储的key
+        if(abstractEntity instanceof AsyncSave) {
+            asyncDbRegisterCenter.asyncRegisterEntity(entityService, dbOperationEnum, abstractEntity);
+        }else{
+            proxyLogger.error("async save interface not asynccachekey " + abstractEntity.getClass().getSimpleName() + " use " + abstractEntity.toString());
+        }
     }
 }

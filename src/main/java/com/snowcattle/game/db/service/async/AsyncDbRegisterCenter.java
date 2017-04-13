@@ -52,18 +52,17 @@ public class AsyncDbRegisterCenter {
 
     public void asyncRegisterEntity(EntityService entityService, DbOperationEnum dbOperationEnum, AbstractEntity entity){
         AsyncEntityWrapper asyncEntityWrapper = null;
-        if(dbOperationEnum.equals(DbOperationEnum.insert)){
+        if(dbOperationEnum.equals(DbOperationEnum.insert) || dbOperationEnum.equals(DbOperationEnum.delete)){
             Map<String, String> map = EntityUtils.getCacheValueMap(entity);
             asyncEntityWrapper = new AsyncEntityWrapper(dbOperationEnum, entity.getClass().getSimpleName(), map);
         }else if(dbOperationEnum.equals(DbOperationEnum.update)){
             Map<String, String> map = EntityUtils.getProxyChangedCacheValueMap(entity);
             asyncEntityWrapper = new AsyncEntityWrapper(dbOperationEnum, entity.getClass().getSimpleName(), map);
-        }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
-
         }
         asyncEntity(entityService, asyncEntityWrapper, entity);
         if(logger.isDebugEnabled()) {
             logger.debug("async register entity " + entity.getClass().getSimpleName() + " id: " + entity.getId() + " userId:" + entity.getUserId());
         }
     }
+
 }

@@ -98,14 +98,15 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
             }
             //查找玩家数据进行存储 进行redis-game-transaction 加锁
             GameTransactionEntityCause gameTransactionEntityCause = dbGameTransactionEntityCauseFactory.getAsyncDbSave();
-            AsyncDBSaveTransactionEntity asyncDBSaveTransactionEntity = dbGameTransactionEntityFactory.createAsyncDBSaveTransactionEntity(gameTransactionEntityCause, rgtRedisService, simpleClassName, playerKey);
+            AsyncDBSaveTransactionEntity asyncDBSaveTransactionEntity = dbGameTransactionEntityFactory.createAsyncDBSaveTransactionEntity(gameTransactionEntityCause, rgtRedisService, simpleClassName, playerKey, entityService, redisService);
             GameTransactionCommitResult commitResult = transactionService.commitTransaction(dbGameTransactionCauseFactory.getAsyncDbSave(), asyncDBSaveTransactionEntity);
             if(!commitResult.equals(GameTransactionCommitResult.SUCCESS)){
                 //如果事务失败，说明没有权限禁行数据存储操作
                 redisService.saddStrings(dbRedisKey, playerKey);
             }
-
-            operationLogger.debug("async save success" + playerKey);
+            if(operationLogger.isDebugEnabled()) {
+                operationLogger.debug("async save success" + playerKey);
+            }
         }
     }
 
