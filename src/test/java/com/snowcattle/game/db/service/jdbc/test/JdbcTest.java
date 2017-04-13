@@ -14,7 +14,7 @@ import java.util.List;
 public class JdbcTest {
     public static long userId = 99999;
     public static long id = 3603;
-    public static int batchStart = 60000000;
+    public static int batchStart = 70000000;
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderService(classPathXmlApplicationContext);

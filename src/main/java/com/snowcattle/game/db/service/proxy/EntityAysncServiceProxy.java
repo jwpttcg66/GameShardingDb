@@ -51,12 +51,14 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                     updateAllFieldEntity(abstractEntity);
                     //放入异步存储的key
                     if(abstractEntity instanceof AsyncSave) {
-//                        AsyncSave asyncCacheKeyEntity = (AsyncSave) abstractEntity;
-                        if(abstractEntity instanceof  RedisInterface) {
-//                            redisService.lpushString(asyncCacheKeyEntity.getAsyncCacheKey(), EntityUtils.getRedisKey((RedisInterface) abstractEntity));
-                        }else{
-                            proxyLogger.error("async save interface not RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
-                        }
+////                        AsyncSave asyncCacheKeyEntity = (AsyncSave) abstractEntity;
+//                        if(abstractEntity instanceof  RedisInterface) {
+////                            redisService.lpushString(asyncCacheKeyEntity.getAsyncCacheKey(), EntityUtils.getRedisKey((RedisInterface) abstractEntity));
+//                        }else{
+//                            proxyLogger.error("async save interface not RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
+//                        }
+
+                        asyncDbRegisterCenter.asyncRegisterEntity((EntityService) obj, abstractEntity);
                     }else{
                         proxyLogger.error("async save interface not asynccachekey " + abstractEntity.getClass().getSimpleName() + " use " + abstractEntity.toString());
                     }

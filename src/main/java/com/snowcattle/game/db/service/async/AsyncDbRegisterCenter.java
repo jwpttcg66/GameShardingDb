@@ -41,4 +41,8 @@ public class AsyncDbRegisterCenter {
         redisService.rPushString(aysncUnionKey, asyncEntityWrapper.serialize());
         redisService.saddString(AsyncRedisKeyEnum.ASYNC_DB.getKey() + dbSelectId + "#" + entity.getClass().getSimpleName(), aysncUnionKey);
     }
+
+    public void asyncRegisterEntity(EntityService entityService, AbstractEntity entity){
+        System.out.println("异步保存");
+    }
 }
