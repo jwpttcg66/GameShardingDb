@@ -58,7 +58,7 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
 //                            proxyLogger.error("async save interface not RedisInterface " + abstractEntity.getClass().getSimpleName() + " use RedisListInterface " + abstractEntity.toString());
 //                        }
 
-                        asyncDbRegisterCenter.asyncRegisterEntity((EntityService) obj, abstractEntity);
+                        asyncDbRegisterCenter.asyncRegisterEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     }else{
                         proxyLogger.error("async save interface not asynccachekey " + abstractEntity.getClass().getSimpleName() + " use " + abstractEntity.toString());
                     }

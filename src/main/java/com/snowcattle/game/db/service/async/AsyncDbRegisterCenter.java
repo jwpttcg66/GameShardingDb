@@ -1,13 +1,17 @@
 package com.snowcattle.game.db.service.async;
 
+import com.snowcattle.game.db.common.enums.DbOperationEnum;
+import com.snowcattle.game.db.entity.AbstractEntity;
+import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
 import com.snowcattle.game.db.service.redis.RedisInterface;
 import com.snowcattle.game.db.service.redis.RedisListInterface;
 import com.snowcattle.game.db.service.redis.RedisService;
-import com.snowcattle.game.db.entity.AbstractEntity;
-import com.snowcattle.game.db.service.entity.EntityService;
+import com.snowcattle.game.db.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * Created by jiangwenping on 17/4/6.
@@ -42,7 +46,17 @@ public class AsyncDbRegisterCenter {
         redisService.saddString(AsyncRedisKeyEnum.ASYNC_DB.getKey() + dbSelectId + "#" + entity.getClass().getSimpleName(), aysncUnionKey);
     }
 
-    public void asyncRegisterEntity(EntityService entityService, AbstractEntity entity){
+    public void asyncRegisterEntity(EntityService entityService, DbOperationEnum dbOperationEnum, AbstractEntity entity){
+        AsyncEntityWrapper asyncEntityWrapper = null;
+        if(dbOperationEnum.equals(DbOperationEnum.insert)){
+            Map<String, String> map = EntityUtils.getCacheValueMap(entity);
+            asyncEntityWrapper = new AsyncEntityWrapper(dbOperationEnum, entity.getClass().getSimpleName(), map);
+        }else if(dbOperationEnum.equals(DbOperationEnum.update)){
+
+        }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
+
+        }
+        asyncEntity(entityService, asyncEntityWrapper, entity);
         System.out.println("异步保存");
     }
 }
