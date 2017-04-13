@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * 实体代理服务
  */
 @Service
-public class EnityProxyFactory {
+public class EntityProxyFactory {
 
     private EntityProxy createProxy(IEntity entity){
         return new EntityProxy(entity);

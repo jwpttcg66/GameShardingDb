@@ -2,7 +2,7 @@ package com.snowcattle.game.db.service.jdbc.test;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
-import com.snowcattle.game.db.service.proxy.EnityProxyFactory;
+import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 public class JdbcTest {
     public static long userId = 99999;
     public static long id = 3603;
-    public static int batchStart = 90000000;
+    public static int batchStart = 90011110;
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
@@ -38,10 +38,10 @@ public class JdbcTest {
     }
 
     public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-        EnityProxyFactory enityProxyFactory = (EnityProxyFactory) classPathXmlApplicationContext.getBean("enityProxyFactory");
+        EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
         List<Order> updateList = new ArrayList<>();
         for (Order order : orderList) {
-            Order proxyOrder = enityProxyFactory.createProxyEntity(order);
+            Order proxyOrder = entityProxyFactory.createProxyEntity(order);
             proxyOrder.setStatus("dddd");
             proxyOrder.setUserId(userId);
             proxyOrder.setId(order.getId());
@@ -100,8 +100,8 @@ public class JdbcTest {
 
 
     public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
-        EnityProxyFactory enityProxyFactory = (EnityProxyFactory) classPathXmlApplicationContext.getBean("enityProxyFactory");
-        Order proxyOrder = enityProxyFactory.createProxyEntity(order);
+        EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
+        Order proxyOrder = entityProxyFactory.createProxyEntity(order);
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 

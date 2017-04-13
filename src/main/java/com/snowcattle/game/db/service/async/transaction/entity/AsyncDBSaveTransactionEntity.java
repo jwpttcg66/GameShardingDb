@@ -10,10 +10,13 @@ import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.async.AsyncEntityWrapper;
 import com.snowcattle.game.db.service.entity.EntityService;
+import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.util.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+
+import java.util.Map;
 
 /**
  * Created by jwp on 2017/4/12.
@@ -37,11 +40,15 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
      */
     private String playerKey;
 
-    public AsyncDBSaveTransactionEntity(GameTransactionEntityCause cause, String playerKey, IRGTRedisService irgtRedisService, EntityService entityService, RedisService redisService) {
+    private EntityProxyFactory entityProxyFactory;
+
+    public AsyncDBSaveTransactionEntity(GameTransactionEntityCause cause, String playerKey, IRGTRedisService irgtRedisService, EntityService entityService, RedisService redisService
+                                        , EntityProxyFactory entityProxyFactory) {
         super(cause, playerKey, irgtRedisService);
         this.playerKey = playerKey;
         this.entityService = entityService;
         this.redisService = redisService;
+        this.entityProxyFactory = entityProxyFactory;
     }
 
     @Override
@@ -75,6 +82,15 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
         if(dbOperationEnum.equals(DbOperationEnum.insert)){
             AbstractEntity abstractEntity = ObjectUtils.getObjFromMap(asyncEntityWrapper.getPrarms(), targeClasses);
             entityService.insertEntity(abstractEntity);
+        }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
+            AbstractEntity abstractEntity = ObjectUtils.getObjFromMap(asyncEntityWrapper.getPrarms(), targeClasses);
+            entityService.deleteEntity(abstractEntity);
+        }else if(dbOperationEnum.equals(DbOperationEnum.update)){
+            AbstractEntity abstractEntity = (AbstractEntity) targeClasses.newInstance();
+            abstractEntity =  entityProxyFactory.createProxyEntity(abstractEntity);
+            Map<String, String > changeStrings = asyncEntityWrapper.getPrarms();
+            ObjectUtils.getObjFromMap(changeStrings, abstractEntity);
+            entityService.updateEntity(abstractEntity);
         }
     }
     @Override

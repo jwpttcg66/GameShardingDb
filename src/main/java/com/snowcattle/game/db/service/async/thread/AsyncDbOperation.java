@@ -10,6 +10,7 @@ import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactio
 import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionEntityCauseFactory;
 import com.snowcattle.game.db.service.async.transaction.factory.DbGameTransactionEntityFactory;
 import com.snowcattle.game.db.service.entity.EntityService;
+import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
 import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.sharding.EntityServiceShardingStrategy;
@@ -57,6 +58,9 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     @Autowired
     private DbGameTransactionCauseFactory dbGameTransactionCauseFactory;
+
+    @Autowired
+    private EntityProxyFactory entityProxyFactory;
 
     /**
      * 执行db落得第线程数量
@@ -168,5 +172,14 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     public void setDbGameTransactionCauseFactory(DbGameTransactionCauseFactory dbGameTransactionCauseFactory) {
         this.dbGameTransactionCauseFactory = dbGameTransactionCauseFactory;
+    }
+
+
+    public EntityProxyFactory getEntityProxyFactory() {
+        return entityProxyFactory;
+    }
+
+    public void setEntityProxyFactory(EntityProxyFactory entityProxyFactory) {
+        this.entityProxyFactory = entityProxyFactory;
     }
 }
