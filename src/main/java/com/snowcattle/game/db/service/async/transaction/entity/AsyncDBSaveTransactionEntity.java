@@ -5,10 +5,12 @@ import com.redis.transaction.enums.GameTransactionCommitResult;
 import com.redis.transaction.enums.GameTransactionEntityCause;
 import com.redis.transaction.exception.GameTransactionException;
 import com.redis.transaction.service.IRGTRedisService;
+import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.service.async.AsyncEntityWrapper;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.redis.RedisService;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 
 /**
  * Created by jwp on 2017/4/12.
@@ -16,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity {
 
+    private Logger logger = Loggers.dbErrorLogger;
     /**
      * db中redis服务
      */
@@ -51,11 +54,9 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
                 //开始保存数据库
                 AsyncEntityWrapper asyncEntityWrapper = new AsyncEntityWrapper();
                 asyncEntityWrapper.deserialize(popKey);
-                //开始进行反射，存储到mysql
-                String className = asyncEntityWrapper.getSimpleClassName();
-
+                saveAsyncEntityWrapper(asyncEntityWrapper);
             }catch (Exception e){
-
+                logger.error(e.toString(), e);
                 startFlag = false;
             }
 
@@ -63,6 +64,16 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
         }while(startFlag);
     }
 
+    private void saveAsyncEntityWrapper(AsyncEntityWrapper asyncEntityWrapper) throws Exception {
+        //开始进行反射，存储到mysql
+        String className = asyncEntityWrapper.getSimpleClassName();
+//        Class targeClasses = Class.forName(className);
+//        AbstractEntity abstractEntity = (AbstractEntity) targeClasses.newInstance();
+//        DbOperationEnum dbOperationEnum = asyncEntityWrapper.getDbOperationEnum();
+//        if(dbOperationEnum.equals(DbOperationEnum.insert)){
+//            entityService.insertEntity(abstractEntity);
+//        }
+    }
     @Override
     public void rollback() throws GameTransactionException {
 

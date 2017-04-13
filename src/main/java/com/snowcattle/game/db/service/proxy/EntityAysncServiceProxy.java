@@ -24,7 +24,7 @@ import java.util.List;
  * 存储策略为全部存入缓存(包括删除)，然后存入队列，进行异步线程存入db
  */
 public class EntityAysncServiceProxy<T extends EntityService>  extends EntityServiceProxy implements MethodInterceptor {
-    private static final Logger proxyLogger = Loggers.dbServiceProxy;
+    private static final Logger proxyLogger = Loggers.dbServiceProxyLogger;
 
     private RedisService redisService;
 

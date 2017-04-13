@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class EntityServiceProxy<T extends EntityService>  implements MethodInterceptor {
 
-    private static final Logger proxyLogger = Loggers.dbServiceProxy;
+    private static final Logger proxyLogger = Loggers.dbServiceProxyLogger;
 
     private RedisService redisService;
 
