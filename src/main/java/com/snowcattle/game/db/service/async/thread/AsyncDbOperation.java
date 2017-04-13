@@ -73,7 +73,9 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     @Override
     public void run() {
-        operationLogger.debug("保存");
+        if(operationLogger.isDebugEnabled()){
+            operationLogger.debug("start async db operaiont");
+        }
         EntityService entityService = getWrapperEntityService();
         EntityServiceShardingStrategy entityServiceShardingStrategy = entityService.getEntityServiceShardingStrategy();
         int size = entityServiceShardingStrategy.getDbCount();
@@ -101,7 +103,7 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
             AsyncDBSaveTransactionEntity asyncDBSaveTransactionEntity = dbGameTransactionEntityFactory.createAsyncDBSaveTransactionEntity(gameTransactionEntityCause, rgtRedisService, simpleClassName, playerKey, entityService, redisService);
             GameTransactionCommitResult commitResult = transactionService.commitTransaction(dbGameTransactionCauseFactory.getAsyncDbSave(), asyncDBSaveTransactionEntity);
             if(!commitResult.equals(GameTransactionCommitResult.SUCCESS)){
-                //如果事务失败，说明没有权限禁行数据存储操作
+                //如果事务失败，说明没有权限禁行数据存储操作,需要放回去下次继续存储
                 redisService.saddStrings(dbRedisKey, playerKey);
             }
             if(operationLogger.isDebugEnabled()) {
