@@ -6,9 +6,12 @@ import com.redis.transaction.enums.GameTransactionEntityCause;
 import com.redis.transaction.exception.GameTransactionException;
 import com.redis.transaction.service.IRGTRedisService;
 import com.snowcattle.game.db.common.Loggers;
+import com.snowcattle.game.db.common.enums.DbOperationEnum;
+import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.async.AsyncEntityWrapper;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.redis.RedisService;
+import com.snowcattle.game.db.util.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
@@ -66,13 +69,13 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
 
     private void saveAsyncEntityWrapper(AsyncEntityWrapper asyncEntityWrapper) throws Exception {
         //开始进行反射，存储到mysql
-        String className = asyncEntityWrapper.getSimpleClassName();
-//        Class targeClasses = Class.forName(className);
-//        AbstractEntity abstractEntity = (AbstractEntity) targeClasses.newInstance();
-//        DbOperationEnum dbOperationEnum = asyncEntityWrapper.getDbOperationEnum();
-//        if(dbOperationEnum.equals(DbOperationEnum.insert)){
-//            entityService.insertEntity(abstractEntity);
-//        }
+//        String className = asyncEntityWrapper.getSimpleClassName();
+        Class targeClasses = entityService.getEntityTClass();
+        DbOperationEnum dbOperationEnum = asyncEntityWrapper.getDbOperationEnum();
+        if(dbOperationEnum.equals(DbOperationEnum.insert)){
+            AbstractEntity abstractEntity = ObjectUtils.getObjFromMap(asyncEntityWrapper.getPrarms(), targeClasses);
+            entityService.insertEntity(abstractEntity);
+        }
     }
     @Override
     public void rollback() throws GameTransactionException {

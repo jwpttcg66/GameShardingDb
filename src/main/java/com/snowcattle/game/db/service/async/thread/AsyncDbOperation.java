@@ -74,7 +74,7 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
     @Override
     public void run() {
         if(operationLogger.isDebugEnabled()){
-            operationLogger.debug("start async db operaiont");
+            operationLogger.debug("start async db operation");
         }
         EntityService entityService = getWrapperEntityService();
         EntityServiceShardingStrategy entityServiceShardingStrategy = entityService.getEntityServiceShardingStrategy();
