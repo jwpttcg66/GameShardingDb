@@ -20,12 +20,12 @@ public class JdbcAsyncCacheTest {
         AsyncOperationRegistry asyncOperationRegistry = (AsyncOperationRegistry) classPathXmlApplicationContext.getBean("asyncOperationRegistry");
 //        asyncOperationRegistry.startup();
 
-        AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
-        asyncDbOperationCenter.start();
-
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 
         insertTest(classPathXmlApplicationContext, orderService);
+        AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
+        asyncDbOperationCenter.start();
+
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
