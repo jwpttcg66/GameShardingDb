@@ -80,15 +80,15 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
         Class targeClasses = entityService.getEntityTClass();
         DbOperationEnum dbOperationEnum = asyncEntityWrapper.getDbOperationEnum();
         if(dbOperationEnum.equals(DbOperationEnum.insert)){
-            AbstractEntity abstractEntity = ObjectUtils.getObjFromMap(asyncEntityWrapper.getPrarms(), targeClasses);
+            AbstractEntity abstractEntity = ObjectUtils.getObjFromMap(asyncEntityWrapper.getParams(), targeClasses);
             entityService.insertEntity(abstractEntity);
         }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
-            AbstractEntity abstractEntity = ObjectUtils.getObjFromMap(asyncEntityWrapper.getPrarms(), targeClasses);
+            AbstractEntity abstractEntity = ObjectUtils.getObjFromMap(asyncEntityWrapper.getParams(), targeClasses);
             entityService.deleteEntity(abstractEntity);
         }else if(dbOperationEnum.equals(DbOperationEnum.update)){
             AbstractEntity abstractEntity = (AbstractEntity) targeClasses.newInstance();
             abstractEntity =  entityProxyFactory.createProxyEntity(abstractEntity);
-            Map<String, String > changeStrings = asyncEntityWrapper.getPrarms();
+            Map<String, String > changeStrings = asyncEntityWrapper.getParams();
             ObjectUtils.getObjFromMap(changeStrings, abstractEntity);
             entityService.updateEntity(abstractEntity);
         }

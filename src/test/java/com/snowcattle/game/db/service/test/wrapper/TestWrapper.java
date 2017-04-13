@@ -6,6 +6,11 @@ import com.snowcattle.game.db.service.jdbc.entity.Tocken;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by jiangwenping on 17/4/6.
  */
@@ -21,7 +26,7 @@ public class TestWrapper {
         proxyOrder.setStatus("修改了3");
 
 
-        AsyncEntityWrapper asyncEntityWrapper = new AsyncEntityWrapper(DbOperationEnum.insert, tocken.getClass().getSimpleName(),proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+        AsyncEntityWrapper asyncEntityWrapper = new AsyncEntityWrapper(DbOperationEnum.insert,proxyOrder.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
         String string = asyncEntityWrapper.serialize();
         System.out.println(string);
         AsyncEntityWrapper newAsyncEntityWrapper = new AsyncEntityWrapper();
@@ -30,5 +35,19 @@ public class TestWrapper {
 
 //        Class classes = Class.forName(tocken.getClass().getName());
 //        System.out.println(classes);
+
+        asyncEntityWrapper = new AsyncEntityWrapper();
+        List<Map<String ,String>> paramList = new ArrayList<>();
+        Map<String , String> paramsMap = new HashMap<>();
+        paramsMap.put("key1", "value2");
+        paramList.add(paramsMap);
+
+        asyncEntityWrapper.setParamList(paramList);
+
+        String serialize = asyncEntityWrapper.serialize();
+        System.out.println(serialize);
+        asyncEntityWrapper = new AsyncEntityWrapper();
+        asyncEntityWrapper.deserialize(serialize);
+        System.out.println(asyncEntityWrapper);
     }
 }

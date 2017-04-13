@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.snowcattle.game.db.common.JsonSerializer;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,22 +26,23 @@ public class AsyncEntityWrapper implements JsonSerializer{
      */
     private DbOperationEnum dbOperationEnum;
 
-    /**
-     *  名字的简写，用于反射生成对象
-     */
-    private String simpleClassName;
+//    /**
+//     *  名字的简写，用于反射生成对象
+//     */
+//    private String simpleClassName;
 
-    private Map<String ,String> prarms = new HashMap<>();
+    private Map<String ,String> params = new HashMap<>();
+
+    private List<Map<String ,String>> paramList = new ArrayList<>();
 
     public AsyncEntityWrapper() {
 
     }
 
-    public AsyncEntityWrapper(DbOperationEnum dbOperationEnum, String simpleClassName, Map<String ,String> prarms)  {
+    public AsyncEntityWrapper(DbOperationEnum dbOperationEnum, Map<String ,String> params)  {
         this.dbOperationEnum = dbOperationEnum;
         this.wrapperTime = System.currentTimeMillis();
-        this.simpleClassName = simpleClassName;
-        this.prarms = prarms;
+        this.params = params;
     }
 
     public long getWrapperTime() {
@@ -68,28 +71,23 @@ public class AsyncEntityWrapper implements JsonSerializer{
         AsyncEntityWrapper asyncEntityWrapper= JSON.parseObject(pack, this.getClass());
         this.setWrapperTime(asyncEntityWrapper.getWrapperTime());
         this.setDbOperationEnum(asyncEntityWrapper.getDbOperationEnum());
-        this.setPrarms(asyncEntityWrapper.getPrarms());
+        this.setParams(asyncEntityWrapper.getParams());
+        this.setParamList(asyncEntityWrapper.getParamList());
     }
 
-    public AsyncEntityWrapper(long wrapperTime, DbOperationEnum dbOperationEnum, Map<String, String> prarms) {
-        this.wrapperTime = wrapperTime;
-        this.dbOperationEnum = dbOperationEnum;
-        this.prarms = prarms;
+    public Map<String, String> getParams() {
+        return params;
     }
 
-    public Map<String, String> getPrarms() {
-        return prarms;
+    public void setParams(Map<String, String> params) {
+        this.params = params;
     }
 
-    public void setPrarms(Map<String, String> prarms) {
-        this.prarms = prarms;
+    public List<Map<String, String>> getParamList() {
+        return paramList;
     }
 
-    public String getSimpleClassName() {
-        return simpleClassName;
-    }
-
-    public void setSimpleClassName(String simpleClassName) {
-        this.simpleClassName = simpleClassName;
+    public void setParamList(List<Map<String, String>> paramList) {
+        this.paramList = paramList;
     }
 }
