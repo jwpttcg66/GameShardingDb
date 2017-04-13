@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.util;
 
+import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.redis.RedisInterface;
 import com.snowcattle.game.db.service.redis.RedisListInterface;
 import com.snowcattle.game.db.common.annotation.FieldSave;
@@ -33,6 +34,16 @@ public class EntityUtils {
             map.put(fieldName, value);
         }
         return map;
+    }
+
+    /**
+     * 获取代理对象里面变化的值
+     * @param iEntity
+     * @return
+     */
+    public static Map<String, String> getProxyChangedCacheValueMap(AbstractEntity entity){
+        Map<String, Object> change = entity.getEntityProxyWrapper().getEntityProxy().getChangeParamSet();
+        return ObjectUtils.getTransferMap(change);
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.snowcattle.game.db.util;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.jdbc.Null;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -10,8 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by jwp on 2017/2/28.
@@ -88,16 +85,27 @@ public class ObjectUtils {
 
     public static String getFieldsValueStr(Object obj,String fieldName){
         Object o = ObjectUtils.getFieldsValueObj(obj, fieldName);
-        //如果为空则输出为""
-        if(o == null){
-            return "";
-        }
-        if(o instanceof Date){
-            return TimeUtils.dateToString((Date)o);
-        }
-        return o.toString();
+        return getObjectString(o);
     }
 
+    public static String getObjectString(Object object){
+        //如果为空则输出为""
+        if(object == null){
+            return "";
+        }
+        if(object instanceof Date){
+            return TimeUtils.dateToString((Date)object);
+        }
+        return object.toString();
+    }
+
+    public static Map<String, String> getTransferMap(Map<String, Object> map){
+        Map<String, String> transferMap = new HashMap<>();
+        for(Map.Entry<String, Object> entry: map.entrySet()){
+            transferMap.put(entry.getKey(), getObjectString(entry.getValue()));
+        }
+        return transferMap;
+    }
 //	public static String getFieldsValueStr(Object obj,String[] fieldName){
 //		Map<String,String> keyMap=ObjectUtils.getMap(obj, fieldName);
 //		StringBuilder sb=new StringBuilder();

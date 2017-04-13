@@ -1,5 +1,6 @@
 package com.snowcattle.game.db.service.async;
 
+import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.entity.EntityService;
@@ -8,6 +9,7 @@ import com.snowcattle.game.db.service.redis.RedisInterface;
 import com.snowcattle.game.db.service.redis.RedisListInterface;
 import com.snowcattle.game.db.service.redis.RedisService;
 import com.snowcattle.game.db.util.EntityUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ import java.util.Map;
  */
 @Service
 public class AsyncDbRegisterCenter {
+
+    private Logger logger = Loggers.dbLogger;
 
     @Autowired
     private RedisService redisService;
@@ -52,11 +56,14 @@ public class AsyncDbRegisterCenter {
             Map<String, String> map = EntityUtils.getCacheValueMap(entity);
             asyncEntityWrapper = new AsyncEntityWrapper(dbOperationEnum, entity.getClass().getSimpleName(), map);
         }else if(dbOperationEnum.equals(DbOperationEnum.update)){
-
+            Map<String, String> map = EntityUtils.getProxyChangedCacheValueMap(entity);
+            asyncEntityWrapper = new AsyncEntityWrapper(dbOperationEnum, entity.getClass().getSimpleName(), map);
         }else if(dbOperationEnum.equals(DbOperationEnum.delete)){
 
         }
         asyncEntity(entityService, asyncEntityWrapper, entity);
-        System.out.println("异步保存");
+        if(logger.isDebugEnabled()) {
+            logger.debug("async register entity " + entity.getClass().getSimpleName() + " id: " + entity.getId() + " userId:" + entity.getUserId());
+        }
     }
 }
