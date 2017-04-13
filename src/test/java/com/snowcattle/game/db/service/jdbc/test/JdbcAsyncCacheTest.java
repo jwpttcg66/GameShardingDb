@@ -24,7 +24,8 @@ public class JdbcAsyncCacheTest {
         asyncDbOperationCenter.start();
 
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
-//        insertTest(classPathXmlApplicationContext, orderService);
+
+        insertTest(classPathXmlApplicationContext, orderService);
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);

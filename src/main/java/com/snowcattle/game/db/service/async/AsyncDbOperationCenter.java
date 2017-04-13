@@ -43,8 +43,8 @@ public class AsyncDbOperationCenter {
 
         Collection<AsyncDbOperation> collection = asyncOperationRegistry.getAllAsyncEntityOperation();
         for(AsyncDbOperation asyncDbOperation: collection){
-//            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 60, TimeUnit.SECONDS);
-            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 5, TimeUnit.SECONDS);
+            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 60, TimeUnit.SECONDS);
+//            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 5, TimeUnit.SECONDS);
         }
     }
 
