@@ -1,8 +1,6 @@
 package com.snowcattle.game.db.service.jdbc.test.longEntity.onetoone;
 
-import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
-import com.snowcattle.game.db.service.jdbc.service.entity.impl.MoreOrderService;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
@@ -21,14 +19,14 @@ public class JdbcCacheTest {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);
-        insertBatchTest(classPathXmlApplicationContext, orderService);
+//        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-        getBatchOrderList(classPathXmlApplicationContext, orderService);
+//        getBatchOrderList(classPathXmlApplicationContext, orderService);
 
     }
 
@@ -36,15 +34,13 @@ public class JdbcCacheTest {
         JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
-    public static List<MoreOrder> getBatchOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
+    public static List<Order> getBatchOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
         EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
-        MoreOrder moreOrder = new MoreOrder();
-        MoreOrder proxyOrder = entityProxyFactory.createProxyEntity(moreOrder);
-//        MoreOrder proxyOrder = moreOrder;
+        Order order = new Order();
+        Order proxyOrder = entityProxyFactory.createProxyEntity(order);
         proxyOrder.setUserId(userId);
         proxyOrder.setStatus("测试列表插入" + JdbcTest.batchStart);
-        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
-        List<MoreOrder> orderList = moreOrderService.getEntityList(proxyOrder);
+        List<Order> orderList = orderService.getEntityList(proxyOrder);
         System.out.println(orderList);
         return orderList;
     }
@@ -54,19 +50,17 @@ public class JdbcCacheTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
         int startSize = JdbcTest.batchStart;
         int endSize = startSize + 10;
-        List<MoreOrder> list = new ArrayList<>();
+        List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
-            MoreOrder order = new MoreOrder();
+            Order order = new Order();
             order.setUserId(userId);
             order.setId((long)i);
             order.setStatus("测试列表插入" + i);
             list.add(order);
         }
-
-        moreOrderService.insertOrderList(list);
+        orderService.insertOrderList(list);
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
@@ -94,12 +88,5 @@ public class JdbcCacheTest {
         EntityServiceProxyFactory entityServiceProxyFactory = (EntityServiceProxyFactory) classPathXmlApplicationContext.getBean("entityServiceProxyFactory");
         orderService = entityServiceProxyFactory.createProxyService(orderService);
         return orderService;
-    }
-
-    public static MoreOrderService getMoreOrderProxyService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
-        MoreOrderService moreOrderService = (MoreOrderService) classPathXmlApplicationContext.getBean("moreOrderService");
-        EntityServiceProxyFactory entityServiceProxyFactory = (EntityServiceProxyFactory) classPathXmlApplicationContext.getBean("entityServiceProxyFactory");
-        moreOrderService = entityServiceProxyFactory.createProxyService(moreOrderService);
-        return moreOrderService;
     }
 }

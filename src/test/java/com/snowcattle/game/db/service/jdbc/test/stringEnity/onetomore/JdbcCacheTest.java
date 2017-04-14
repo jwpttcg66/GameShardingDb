@@ -4,7 +4,6 @@ import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.MoreOrderService;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
-import com.snowcattle.game.db.service.jdbc.test.longEntity.onetoone.JdbcTest;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -67,7 +66,7 @@ public class JdbcCacheTest {
             list.add(order);
         }
 
-        moreOrderService.insertOrderList(list);
+        moreOrderService.insertEntityBatch(list);
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {

@@ -8,6 +8,15 @@ import java.util.List;
  * Created by jiangwenping on 17/4/5.
  */
 public interface IMoreOrderService {
-    public List<MoreOrder> getOrderList(MoreOrder moreOrder);
-    public void insertOrderList(List<MoreOrder> orderList);
+    public List<MoreOrder> getMoreOrderList(MoreOrder moreOrder);
+    public void insertMoreOrderList(List<MoreOrder> orderList);
+
+    public long insertMoreOrder(MoreOrder moreOrder);
+    public MoreOrder getMoreOrder(long userId, long id);
+    public List<MoreOrder> getMoreOrderList(long userId);
+    public List<MoreOrder> getMoreOrderList(long userId, String status);
+    void updateOrder(MoreOrder order);
+    void deleteOrder(MoreOrder order);
+    public void updateMoreOrderList(List<MoreOrder> orderList);
+    public void deleteMoreOrderList(List<MoreOrder> orderList);
 }

@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.jdbc.test.stringEnity.onetoone;
+package com.snowcattle.game.db.service.jdbc.test.tps;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.mapper.OrderMapper;
