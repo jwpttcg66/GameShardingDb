@@ -5,6 +5,7 @@ import com.snowcattle.game.db.service.redis.RedisInterface;
 import com.snowcattle.game.db.service.redis.RedisListInterface;
 import com.snowcattle.game.db.common.annotation.FieldSave;
 import com.snowcattle.game.db.entity.IEntity;
+import com.snowcattle.game.db.service.redis.RedisService;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -75,5 +76,126 @@ public class EntityUtils {
     //获取rediskey
     public static String getRedisKeyByRedisListInterface(RedisListInterface redisInterface){
         return redisInterface.getRedisKeyEnumString() + redisInterface.getShardingKey();
+    }
+
+
+    /**
+     * 更新变化字段
+     * @param entity
+     */
+    public static void updateChangedFieldEntity(RedisService redisService, AbstractEntity entity){
+        if (entity != null) {
+            if (entity instanceof RedisInterface) {
+                RedisInterface redisInterface = (RedisInterface) entity;
+                redisService.updateObjectHashMap(EntityUtils.getRedisKey(redisInterface), entity.getEntityProxyWrapper().getEntityProxy().getChangeParamSet());
+            } else if (entity instanceof RedisListInterface) {
+                RedisListInterface redisListInterface = (RedisListInterface) entity;
+                List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                redisListInterfaceList.add(redisListInterface);
+                redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface(redisListInterface), redisListInterfaceList);
+            }
+        }
+    }
+
+    /**
+     * 更新所有字段
+     * @param entity
+     */
+    public static void updateAllFieldEntity(RedisService redisService, AbstractEntity entity){
+        if (entity != null) {
+            if (entity instanceof RedisInterface) {
+                RedisInterface redisInterface = (RedisInterface) entity;
+                redisService.setObjectToHash(EntityUtils.getRedisKey(redisInterface), entity);
+            } else if (entity instanceof RedisListInterface) {
+                RedisListInterface redisListInterface = (RedisListInterface) entity;
+                List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                redisListInterfaceList.add(redisListInterface);
+                redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface(redisListInterface), redisListInterfaceList);
+            }
+        }
+    }
+
+    /**
+     * 删除实体
+     * @param abstractEntity
+     */
+    public static void deleteEntity(RedisService redisService, AbstractEntity abstractEntity){
+        if (abstractEntity != null) {
+            if (abstractEntity instanceof RedisInterface) {
+                RedisInterface redisInterface = (RedisInterface) abstractEntity;
+                redisService.deleteKey(EntityUtils.getRedisKey(redisInterface));
+            }else if(abstractEntity instanceof RedisListInterface){
+                RedisListInterface redisListInterface = (RedisListInterface) abstractEntity;
+                redisService.hdel(EntityUtils.getRedisKeyByRedisListInterface(redisListInterface), redisListInterface.getSubUniqueKey());
+            }
+        }
+    }
+
+    /**
+     * 更新所有字段实体列表
+     * @param entityList
+     */
+    public static void updateAllFieldEntityList(RedisService redisService, List<AbstractEntity> entityList){
+        //拿到第一个，看一下类型
+        if(entityList.size() > 0){
+            AbstractEntity entity = entityList.get(0);
+            if(entity instanceof  RedisInterface){
+                for(AbstractEntity abstractEntity : entityList){
+                    updateAllFieldEntity(redisService, entity);
+                }
+            }else if(entity instanceof RedisListInterface){
+                List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                for(AbstractEntity abstractEntity : entityList){
+                    redisListInterfaceList.add((RedisListInterface) abstractEntity);
+                }
+                redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface((RedisListInterface) entity), redisListInterfaceList);
+            }
+        }
+    }
+
+    /**
+     * 更新变化字段实体列表
+     * @param entityList
+     */
+    public static void updateChangedFieldEntityList(RedisService redisService, List<AbstractEntity> entityList){
+        if(entityList.size() > 0) {
+            AbstractEntity entity = entityList.get(0);
+            if (entity != null) {
+                if (entity instanceof RedisInterface) {
+                    for(AbstractEntity abstractEntity : entityList){
+                        updateChangedFieldEntity(redisService, entity);
+                    }
+                } else if (entity instanceof RedisListInterface) {
+
+                    List<RedisListInterface> redisListInterfaceList = new ArrayList<>();
+                    for(AbstractEntity abstractEntity : entityList) {
+                        RedisListInterface redisListInterface = (RedisListInterface) abstractEntity;
+                        redisListInterfaceList.add(redisListInterface);
+                    }
+                    redisService.setListToHash(EntityUtils.getRedisKeyByRedisListInterface((RedisListInterface) entity), redisListInterfaceList);
+                }
+            }
+        }
+    }
+
+    //删除实体列表
+    public static void deleteEntityList(RedisService redisService, List<AbstractEntity> entityList){
+        if(entityList.size() > 0) {
+            AbstractEntity entity = entityList.get(0);
+            if (entity != null) {
+                if (entity instanceof RedisInterface) {
+                    for(AbstractEntity abstractEntity : entityList){
+                        deleteEntity(redisService, abstractEntity);
+                    }
+                } else if (entity instanceof RedisListInterface) {
+                    List<String> redisListInterfaceList = new ArrayList<>();
+                    for(AbstractEntity abstractEntity : entityList) {
+                        RedisListInterface redisListInterface = (RedisListInterface) abstractEntity;
+                        redisListInterfaceList.add(redisListInterface.getSubUniqueKey());
+                    }
+                    redisService.hdel(EntityUtils.getRedisKeyByRedisListInterface((RedisListInterface) entity), redisListInterfaceList.toArray(new String[0]));
+                }
+            }
+        }
     }
 }

@@ -26,11 +26,6 @@ public class AsyncEntityWrapper implements JsonSerializer{
      */
     private DbOperationEnum dbOperationEnum;
 
-//    /**
-//     *  名字的简写，用于反射生成对象
-//     */
-//    private String simpleClassName;
-
     private Map<String ,String> params = new HashMap<>();
 
     private List<Map<String ,String>> paramList = new ArrayList<>();

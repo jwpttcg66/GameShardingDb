@@ -23,7 +23,7 @@ import java.util.List;
  * Created by jiangwenping on 17/3/29.
  * 存储策略为全部存入缓存(包括删除)，然后存入队列，进行异步线程存入db
  */
-public class EntityAysncServiceProxy<T extends EntityService>  extends EntityServiceProxy implements MethodInterceptor {
+public class EntityAysncServiceProxy<T extends EntityService> extends  EntityServiceProxy implements MethodInterceptor {
     private static final Logger proxyLogger = Loggers.dbServiceProxyLogger;
 
     private RedisService redisService;
@@ -31,7 +31,7 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
     private AsyncDbRegisterCenter asyncDbRegisterCenter;
 
     public EntityAysncServiceProxy(RedisService redisService, AsyncDbRegisterCenter asyncDbRegisterCenter) {
-        super(redisService, false);
+        super(redisService, true);
         this.redisService = redisService;
         this.asyncDbRegisterCenter = asyncDbRegisterCenter;
     }
@@ -48,22 +48,22 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
             switch (dbOperationEnum) {
                 case insert:
                     AbstractEntity abstractEntity = (AbstractEntity) args[0];
-                    updateAllFieldEntity(abstractEntity);
+                    EntityUtils.updateAllFieldEntity(redisService, abstractEntity);
                     asyncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case insertBatch:
                     List<AbstractEntity> entityList = (List<AbstractEntity>) args[0];
-                    updateAllFieldEntityList(entityList);
+                    EntityUtils.updateAllFieldEntityList(redisService, entityList);
                     asyncBatchSaveEntity((EntityService)obj, dbOperationEnum, entityList);
                     break;
                 case update:
                     abstractEntity = (AbstractEntity) args[0];
-                    updateChangedFieldEntity(abstractEntity);
+                    EntityUtils.updateChangedFieldEntity(redisService, abstractEntity);
                     asyncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case updateBatch:
                     entityList = (List<AbstractEntity>) args[0];
-                    updateChangedFieldEntityList(entityList);
+                    EntityUtils.updateChangedFieldEntityList(redisService, entityList);
                     asyncBatchSaveEntity((EntityService) obj, dbOperationEnum, entityList);
                     break;
                 case delete:
@@ -74,7 +74,7 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                     break;
                 case deleteBatch:
                     entityList = (List<AbstractEntity>) args[0];
-                    deleteEntityList(entityList);
+                    EntityUtils.deleteEntityList(redisService, entityList);
                     asyncBatchSaveEntity((EntityService) obj, dbOperationEnum, entityList);
                     break;
                 case query:
