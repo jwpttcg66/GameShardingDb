@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.jdbc.test;
+package com.snowcattle.game.db.service.jdbc.test.longEntity.onetoone;
 
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.entity.Order;

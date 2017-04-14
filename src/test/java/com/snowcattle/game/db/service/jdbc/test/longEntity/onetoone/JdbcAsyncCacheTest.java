@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.jdbc.test;
+package com.snowcattle.game.db.service.jdbc.test.longEntity.onetoone;
 
 import com.snowcattle.game.db.service.async.AsyncDbOperationCenter;
 import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
