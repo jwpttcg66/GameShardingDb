@@ -19,21 +19,20 @@ public class JdbcTest {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderService(classPathXmlApplicationContext);
-//        insertTest(classPathXmlApplicationContext, orderService);
-//        insertBatchTest(classPathXmlApplicationContext, orderService);
-//        Order order = getTest(classPathXmlApplicationContext, orderService);
-//        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
-//        updateTest(classPathXmlApplicationContext, orderService, order);
-//        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        deleteTest(classPathXmlApplicationContext, orderService, order);
-//        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        getOrderList(classPathXmlApplicationContext, orderService);
+        insertTest(classPathXmlApplicationContext, orderService);
+        insertBatchTest(classPathXmlApplicationContext, orderService);
+        Order order = getTest(classPathXmlApplicationContext, orderService);
+        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
+        updateTest(classPathXmlApplicationContext, orderService, order);
+        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
+        deleteTest(classPathXmlApplicationContext, orderService, order);
+        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
+        getOrderList(classPathXmlApplicationContext, orderService);
     }
 
 
 
     public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-       //test2
         orderService.deleteEntityBatch(orderList);
     }
 

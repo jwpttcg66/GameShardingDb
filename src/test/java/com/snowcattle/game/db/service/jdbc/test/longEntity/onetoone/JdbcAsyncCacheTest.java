@@ -18,21 +18,19 @@ public class JdbcAsyncCacheTest {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         AsyncOperationRegistry asyncOperationRegistry = (AsyncOperationRegistry) classPathXmlApplicationContext.getBean("asyncOperationRegistry");
-//        asyncOperationRegistry.startup();
-
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 
         insertTest(classPathXmlApplicationContext, orderService);
         AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
         asyncDbOperationCenter.start();
 
-//        insertBatchTest(classPathXmlApplicationContext, orderService);
-//        Order order = getTest(classPathXmlApplicationContext, orderService);
-//        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
-//        updateTest(classPathXmlApplicationContext, orderService, order);
-//        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        deleteTest(classPathXmlApplicationContext, orderService, order);
-//        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
+        insertBatchTest(classPathXmlApplicationContext, orderService);
+        Order order = getTest(classPathXmlApplicationContext, orderService);
+        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
+        updateTest(classPathXmlApplicationContext, orderService, order);
+        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
+        deleteTest(classPathXmlApplicationContext, orderService, order);
+        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
 
     }
 
