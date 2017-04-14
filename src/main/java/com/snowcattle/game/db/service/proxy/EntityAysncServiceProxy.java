@@ -104,12 +104,36 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
         return result;
     }
 
+    /**
+     * 个体放入异步注册中心
+     * @param entityService
+     * @param dbOperationEnum
+     * @param abstractEntity
+     */
     public void aysncSaveEntity(EntityService entityService, DbOperationEnum dbOperationEnum, AbstractEntity abstractEntity){
         //放入异步存储的key
         if(abstractEntity instanceof AsyncSave) {
             asyncDbRegisterCenter.asyncRegisterEntity(entityService, dbOperationEnum, abstractEntity);
         }else{
             proxyLogger.error("async save interface not asynccachekey " + abstractEntity.getClass().getSimpleName() + " use " + abstractEntity.toString());
+        }
+    }
+
+    /**
+     * 批量放入异步注册中心
+     * @param entityService
+     * @param dbOperationEnum
+     * @param abstractEntityList
+     */
+    public void aysncBatchSaveEntity(EntityService entityService, DbOperationEnum dbOperationEnum, List<AbstractEntity> abstractEntityList){
+        if(abstractEntityList.size() > 0) {
+            AbstractEntity abstractEntity = abstractEntityList.get(0);
+            //放入异步存储的key
+            if (abstractEntity instanceof AsyncSave) {
+                asyncDbRegisterCenter.asyncBatchRegisterEntity(entityService, dbOperationEnum, abstractEntityList);
+            } else {
+                proxyLogger.error("async batch save interface not asynccachekey " + abstractEntity.getClass().getSimpleName() + " use " + abstractEntity.toString());
+            }
         }
     }
 }
