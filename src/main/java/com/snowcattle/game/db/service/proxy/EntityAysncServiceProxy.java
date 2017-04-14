@@ -49,30 +49,33 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
                 case insert:
                     AbstractEntity abstractEntity = (AbstractEntity) args[0];
                     updateAllFieldEntity(abstractEntity);
-                    aysncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
+                    asyncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case insertBatch:
                     List<AbstractEntity> entityList = (List<AbstractEntity>) args[0];
                     updateAllFieldEntityList(entityList);
+                    asyncBatchSaveEntity((EntityService)obj, dbOperationEnum, entityList);
                     break;
                 case update:
                     abstractEntity = (AbstractEntity) args[0];
                     updateChangedFieldEntity(abstractEntity);
-                    aysncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
+                    asyncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case updateBatch:
                     entityList = (List<AbstractEntity>) args[0];
                     updateChangedFieldEntityList(entityList);
+                    asyncBatchSaveEntity((EntityService) obj, dbOperationEnum, entityList);
                     break;
                 case delete:
                     abstractEntity = (AbstractEntity) args[0];
 //                    deleteEntity(abstractEntity);
                     //如果是删除， db删除后执行回调
-                    aysncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
+                    asyncSaveEntity((EntityService) obj, dbOperationEnum, abstractEntity);
                     break;
                 case deleteBatch:
                     entityList = (List<AbstractEntity>) args[0];
                     deleteEntityList(entityList);
+                    asyncBatchSaveEntity((EntityService) obj, dbOperationEnum, entityList);
                     break;
                 case query:
                     abstractEntity = (AbstractEntity) args[0];
@@ -110,7 +113,7 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
      * @param dbOperationEnum
      * @param abstractEntity
      */
-    public void aysncSaveEntity(EntityService entityService, DbOperationEnum dbOperationEnum, AbstractEntity abstractEntity){
+    public void asyncSaveEntity(EntityService entityService, DbOperationEnum dbOperationEnum, AbstractEntity abstractEntity){
         //放入异步存储的key
         if(abstractEntity instanceof AsyncSave) {
             asyncDbRegisterCenter.asyncRegisterEntity(entityService, dbOperationEnum, abstractEntity);
@@ -125,7 +128,7 @@ public class EntityAysncServiceProxy<T extends EntityService>  extends EntitySer
      * @param dbOperationEnum
      * @param abstractEntityList
      */
-    public void aysncBatchSaveEntity(EntityService entityService, DbOperationEnum dbOperationEnum, List<AbstractEntity> abstractEntityList){
+    public void asyncBatchSaveEntity(EntityService entityService, DbOperationEnum dbOperationEnum, List<AbstractEntity> abstractEntityList){
         if(abstractEntityList.size() > 0) {
             AbstractEntity abstractEntity = abstractEntityList.get(0);
             //放入异步存储的key
