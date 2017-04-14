@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.jdbc.test.longEntity.onetoone;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
+import com.snowcattle.game.db.service.jdbc.test.TestConstants;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -13,7 +14,6 @@ import java.util.List;
  * Created by jiangwenping on 17/3/20.
  */
 public class JdbcCacheTest {
-    public static long userId = 99999;
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
@@ -38,8 +38,8 @@ public class JdbcCacheTest {
         EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
         Order order = new Order();
         Order proxyOrder = entityProxyFactory.createProxyEntity(order);
-        proxyOrder.setUserId(userId);
-        proxyOrder.setStatus("测试列表插入" + JdbcTest.batchStart);
+        proxyOrder.setUserId(TestConstants.userId);
+        proxyOrder.setStatus("测试列表插入" + TestConstants.batchStart);
         List<Order> orderList = orderService.getEntityList(proxyOrder);
         System.out.println(orderList);
         return orderList;
@@ -50,12 +50,12 @@ public class JdbcCacheTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        int startSize = JdbcTest.batchStart;
+        int startSize = TestConstants.batchStart;
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
             Order order = new Order();
-            order.setUserId(userId);
+            order.setUserId(TestConstants.userId);
             order.setId((long)i);
             order.setStatus("测试列表插入" + i);
             list.add(order);

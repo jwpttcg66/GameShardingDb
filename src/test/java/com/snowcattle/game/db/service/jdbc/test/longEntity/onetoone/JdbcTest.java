@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.jdbc.test.longEntity.onetoone;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
+import com.snowcattle.game.db.service.jdbc.test.TestConstants;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -12,9 +13,6 @@ import java.util.List;
  * Created by jiangwenping on 17/3/20.
  */
 public class JdbcTest {
-    public static long userId = 99999;
-    public static long id = 3603;
-    public static int batchStart = 90011110;
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
@@ -42,7 +40,7 @@ public class JdbcTest {
         for (Order order : orderList) {
             Order proxyOrder = entityProxyFactory.createProxyEntity(order);
             proxyOrder.setStatus("dddd");
-            proxyOrder.setUserId(userId);
+            proxyOrder.setUserId(TestConstants.userId);
             proxyOrder.setId(order.getId());
             updateList.add(proxyOrder);
         }
@@ -50,12 +48,12 @@ public class JdbcTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        int startSize = batchStart;
+        int startSize = TestConstants.batchStart;
         int endSize = startSize + 10;
         List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
             Order order = new Order();
-            order.setUserId(userId);
+            order.setUserId(TestConstants.userId);
             order.setId((long)i);
             order.setStatus("测试列表插入" + i);
             list.add(order);
@@ -65,19 +63,19 @@ public class JdbcTest {
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        List<Order> order = orderService.getOrderList(userId);
+        List<Order> order = orderService.getOrderList(TestConstants.userId);
         System.out.println(order);
         return order;
     }
 
     public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
 
-        int startSize = batchStart;
-        int endSize = batchStart+1;
+        int startSize = TestConstants.batchStart;
+        int endSize = TestConstants.batchStart+1;
 
         for (int i = startSize; i < endSize; i++) {
             Order order = new Order();
-            order.setUserId(userId);
+            order.setUserId(TestConstants.userId);
             order.setId((long) i);
             order.setStatus("测试插入" + i);
             orderService.insertOrder(order);
@@ -85,7 +83,7 @@ public class JdbcTest {
     }
 
     public static Order getTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        Order order = orderService.getOrder(userId, id);
+        Order order = orderService.getOrder(TestConstants.userId, TestConstants.id);
         System.out.println(order);
         return order;
     }
@@ -97,13 +95,13 @@ public class JdbcTest {
         proxyOrder.setStatus("修改了3");
         orderService.updateOrder(proxyOrder);
 
-        Order queryOrder = orderService.getOrder(userId, id);
+        Order queryOrder = orderService.getOrder(TestConstants.userId, TestConstants.id);
         System.out.println(queryOrder.getStatus());
     }
 
     public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
         orderService.deleteOrder(order);
-        Order queryOrder = orderService.getOrder(userId, id);
+        Order queryOrder = orderService.getOrder(TestConstants.userId, TestConstants.id);
         System.out.println(queryOrder);
     }
 
