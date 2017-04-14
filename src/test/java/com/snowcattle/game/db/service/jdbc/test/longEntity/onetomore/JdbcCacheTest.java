@@ -19,16 +19,16 @@ public class JdbcCacheTest {
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
-        OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
+        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
 //        insertTest(classPathXmlApplicationContext, orderService);
-        insertBatchTest(classPathXmlApplicationContext, orderService);
+        insertBatchTest(classPathXmlApplicationContext, moreOrderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
 //        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
 //        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-        getBatchOrderList(classPathXmlApplicationContext, orderService);
+        getBatchOrderList(classPathXmlApplicationContext, moreOrderService);
 
     }
 
@@ -36,14 +36,14 @@ public class JdbcCacheTest {
         com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
-    public static List<MoreOrder> getBatchOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
+    public static List<MoreOrder> getBatchOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService) throws Exception {
         EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
         MoreOrder moreOrder = new MoreOrder();
         MoreOrder proxyOrder = entityProxyFactory.createProxyEntity(moreOrder);
 //        MoreOrder proxyOrder = moreOrder;
         proxyOrder.setUserId(userId);
         proxyOrder.setStatus("测试列表插入" + com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.batchStart);
-        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
+//        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
         List<MoreOrder> orderList = moreOrderService.getEntityList(proxyOrder);
         System.out.println(orderList);
         return orderList;
@@ -53,8 +53,7 @@ public class JdbcCacheTest {
         com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
-    public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
+    public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService) throws Exception {
         int startSize = com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.batchStart;
         int endSize = startSize + 10;
         List<MoreOrder> list = new ArrayList<>();
@@ -69,31 +68,24 @@ public class JdbcCacheTest {
         moreOrderService.insertEntityBatch(list);
     }
 
-    public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        return com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.getOrderList(classPathXmlApplicationContext, orderService);
+    public static List<MoreOrder> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService) throws Exception {
+        return com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.getMoreOrderList(classPathXmlApplicationContext, moreOrderService);
     }
 
-    public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-        com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.insertTest(classPathXmlApplicationContext, orderService);
+    public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService) {
+        com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.insertTest(classPathXmlApplicationContext, moreOrderService);
     }
 
-    public static Order getTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {
-       return com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.getTest(classPathXmlApplicationContext, orderService);
+    public static MoreOrder getTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService) {
+       return com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.getTest(classPathXmlApplicationContext, moreOrderService);
     }
 
-    public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
-       com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.updateTest(classPathXmlApplicationContext, orderService, order);
+    public static void updateTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService, MoreOrder moreOrder) throws Exception {
+       com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.updateTest(classPathXmlApplicationContext, moreOrderService, moreOrder);
     }
 
-    public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, Order order) throws Exception {
-      com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.deleteTest(classPathXmlApplicationContext, orderService, order);
-    }
-
-    public static OrderService getOrderProxyService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
-        OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
-        EntityServiceProxyFactory entityServiceProxyFactory = (EntityServiceProxyFactory) classPathXmlApplicationContext.getBean("entityServiceProxyFactory");
-        orderService = entityServiceProxyFactory.createProxyService(orderService);
-        return orderService;
+    public static void deleteTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService, MoreOrder moreOrder) throws Exception {
+      com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.deleteTest(classPathXmlApplicationContext, moreOrderService, moreOrder);
     }
 
     public static MoreOrderService getMoreOrderProxyService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
