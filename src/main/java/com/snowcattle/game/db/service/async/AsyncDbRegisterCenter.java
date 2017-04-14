@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +32,7 @@ public class AsyncDbRegisterCenter {
     @Autowired
     private RedisService redisService;
 
-    public void asyncEntity(EntityService entityService, AsyncEntityWrapper asyncEntityWrapper, AbstractEntity entity){
+    private void asyncEntity(EntityService entityService, AsyncEntityWrapper asyncEntityWrapper, AbstractEntity entity){
         //计算处于那个db
         long selectId = entityService.getShardingId(entity);
         int dbSelectId = entityService.getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId);
@@ -50,6 +52,12 @@ public class AsyncDbRegisterCenter {
         redisService.saddString(AsyncRedisKeyEnum.ASYNC_DB.getKey() + dbSelectId + "#" + entity.getClass().getSimpleName(), aysncUnionKey);
     }
 
+    /**
+     * 异步个体更新
+     * @param entityService
+     * @param dbOperationEnum
+     * @param entity
+     */
     public void asyncRegisterEntity(EntityService entityService, DbOperationEnum dbOperationEnum, AbstractEntity entity){
         AsyncEntityWrapper asyncEntityWrapper = null;
         if(dbOperationEnum.equals(DbOperationEnum.insert) || dbOperationEnum.equals(DbOperationEnum.delete)){
@@ -64,5 +72,44 @@ public class AsyncDbRegisterCenter {
             logger.debug("async register entity " + entity.getClass().getSimpleName() + " id: " + entity.getId() + " userId:" + entity.getUserId());
         }
     }
+
+    /**
+     * 异步批量更新
+     * @param entityService
+     * @param dbOperationEnum
+     * @param entitiyList
+     */
+    public void asyncBatchRegisterEntity(EntityService entityService, DbOperationEnum dbOperationEnum, List<AbstractEntity> entitiyList){
+        AsyncEntityWrapper asyncEntityWrapper = null;
+        if(entitiyList.size() > 0) {
+            if (dbOperationEnum.equals(DbOperationEnum.insertBatch) || dbOperationEnum.equals(DbOperationEnum.deleteBatch)) {
+                List<Map<String, String>> paramList = new ArrayList<>();
+                for (AbstractEntity entity : entitiyList) {
+                    Map<String, String> map = EntityUtils.getCacheValueMap(entity);
+                    paramList.add(map);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("async batch register entity " + entity.getClass().getSimpleName() + " id: " + entity.getId() + " userId:" + entity.getUserId());
+                    }
+                }
+                asyncEntityWrapper = new AsyncEntityWrapper(dbOperationEnum, paramList);
+            } else if (dbOperationEnum.equals(DbOperationEnum.updateBatch)) {
+                List<Map<String, String>> paramList = new ArrayList<>();
+                for (AbstractEntity entity : entitiyList) {
+                    Map<String, String> map = EntityUtils.getProxyChangedCacheValueMap(entity);
+                    paramList.add(map);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("async batch register entity " + entity.getClass().getSimpleName() + " id: " + entity.getId() + " userId:" + entity.getUserId());
+                    }
+                }
+                asyncEntityWrapper = new AsyncEntityWrapper(dbOperationEnum, paramList);
+            }
+            AbstractEntity entity = entitiyList.get(0);
+            asyncEntity(entityService, asyncEntityWrapper, entity);
+        } else {
+            logger.debug("async batch register entity null dbOperationEnum is " + dbOperationEnum);
+        }
+    }
+
+
 
 }

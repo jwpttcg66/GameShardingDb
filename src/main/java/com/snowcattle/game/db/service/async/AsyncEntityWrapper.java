@@ -45,6 +45,13 @@ public class AsyncEntityWrapper implements JsonSerializer{
         this.params = params;
     }
 
+    public AsyncEntityWrapper(DbOperationEnum dbOperationEnum, List<Map<String ,String>> paramList)  {
+        this.dbOperationEnum = dbOperationEnum;
+        this.wrapperTime = System.currentTimeMillis();
+        this.paramList = paramList;
+    }
+
+
     public long getWrapperTime() {
         return wrapperTime;
     }
