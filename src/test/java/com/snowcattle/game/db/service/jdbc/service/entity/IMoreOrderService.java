@@ -15,8 +15,8 @@ public interface IMoreOrderService {
     public MoreOrder getMoreOrder(long userId, long id);
     public List<MoreOrder> getMoreOrderList(long userId);
     public List<MoreOrder> getMoreOrderList(long userId, String status);
-    void updateOrder(MoreOrder order);
-    void deleteOrder(MoreOrder order);
+    void updateMoreOrder(MoreOrder order);
+    void deleteMoreOrder(MoreOrder order);
     public void updateMoreOrderList(List<MoreOrder> orderList);
     public void deleteMoreOrderList(List<MoreOrder> orderList);
 }

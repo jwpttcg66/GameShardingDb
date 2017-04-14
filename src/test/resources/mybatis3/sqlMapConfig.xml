@@ -23,11 +23,13 @@
     <typeAliases>
         <typeAlias alias="order" type="com.snowcattle.game.db.service.jdbc.entity.Order"/>
         <typeAlias alias="tocken" type="com.snowcattle.game.db.service.jdbc.entity.Tocken"/>
+        <typeAlias alias="moreOrder" type="com.snowcattle.game.db.service.jdbc.entity.MoreOrder"/>
     </typeAliases>
 
     <mappers>
         <mapper resource="mybatis3/mappers/orderMapper.xml"/>
         <mapper resource="mybatis3/mappers/tockenMapper.xml"/>
+        <mapper resource="mybatis3/mappers/moreOrderMapper.xml"/>
     </mappers>
 
 </configuration>

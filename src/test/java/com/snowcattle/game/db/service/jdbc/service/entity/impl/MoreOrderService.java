@@ -58,12 +58,12 @@ public class MoreOrderService extends EntityService<MoreOrder> implements IMoreO
 
 
     @Override
-    public void updateOrder(MoreOrder order) {
+    public void updateMoreOrder(MoreOrder order) {
         updateEntity(order);
     }
 
     @Override
-    public void deleteOrder(MoreOrder order) {
+    public void deleteMoreOrder(MoreOrder order) {
         deleteEntity(order);
     }
 
