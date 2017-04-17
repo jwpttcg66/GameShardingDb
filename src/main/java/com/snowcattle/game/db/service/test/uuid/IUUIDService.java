@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.uuid;
+package com.snowcattle.game.db.service.test.uuid;
 
 /**
  * Created by jiangwenping on 17/3/16.

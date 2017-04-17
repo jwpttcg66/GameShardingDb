@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.uuid;
+package com.snowcattle.game.db.service.test.uuid;
 
 import org.springframework.stereotype.Service;
 
