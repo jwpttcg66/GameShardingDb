@@ -75,7 +75,7 @@ public class JdbcTest {
         }
         long end  = System.currentTimeMillis();
 
-        long time = end = start;
+        long time = end - start;
         System.out.println("存储" + TestConstants.saveSize + "耗时" + time);
 
     }
