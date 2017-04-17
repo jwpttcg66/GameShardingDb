@@ -10,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Created by jwp on 2017/3/24.
  */
-public class JdbcBatchTest {
+public class JdbcBatchOriginTest {
     public static void main(String[] args) {
        commonTest();
     }
@@ -23,9 +23,10 @@ public class JdbcBatchTest {
         try {
             OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
             Order order = new Order();
-            int startSize = 30000;
+            int startSize = 431100;
             int endSize = startSize + 200;
             long startTime = System.currentTimeMillis();
+            long userId = startSize;
             for(int i= startSize; i< endSize; i++) {
                 long id = i;
                 order.setUserId(id);
@@ -38,7 +39,7 @@ public class JdbcBatchTest {
             long endTime = System.currentTimeMillis();
             System.out.println(endTime - startTime);
         }catch (Exception e){
-
+            e.printStackTrace();
         }finally {
             sqlSession.close();
         }
