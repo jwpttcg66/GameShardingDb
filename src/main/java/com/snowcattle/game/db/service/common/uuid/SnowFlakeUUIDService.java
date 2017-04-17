@@ -117,5 +117,12 @@ public class SnowFlakeUUIDService implements IUUIDService{
         }
         return timestamp;
     }
+
+    public void setNodeId(int nodeId) {
+        if (nodeId < 0 || nodeId > maxNodeId) {
+            throw new IllegalArgumentException(String.format("node must be between %s and %s", 0, maxNodeId));
+        }
+        this.nodeId = nodeId;
+    }
 }
 
