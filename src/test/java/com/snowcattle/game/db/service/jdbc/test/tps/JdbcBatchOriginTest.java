@@ -23,8 +23,8 @@ public class JdbcBatchOriginTest {
         try {
             OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
             Order order = new Order();
-            int startSize = 431100;
-            int endSize = startSize + 200;
+            int startSize = 4311000;
+            int endSize = startSize + 2000;
             long startTime = System.currentTimeMillis();
             long userId = startSize;
             for(int i= startSize; i< endSize; i++) {
