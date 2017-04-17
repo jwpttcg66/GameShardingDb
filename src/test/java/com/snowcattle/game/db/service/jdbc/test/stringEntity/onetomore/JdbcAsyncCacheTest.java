@@ -43,7 +43,7 @@
 //    }
 //
 //    public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-//        com.snowcattle.game.db.service.jdbc.test.stringEnity.onetomore.JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
+//        com.snowcattle.game.db.service.jdbc.test.stringEntity.onetomore.JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //    }
 //
 //    public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {

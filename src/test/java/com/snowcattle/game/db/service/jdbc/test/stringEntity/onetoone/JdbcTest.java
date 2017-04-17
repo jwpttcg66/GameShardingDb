@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.jdbc.test.stringEnity.onetoone;
+package com.snowcattle.game.db.service.jdbc.test.stringEntity.onetoone;
 
 import com.snowcattle.game.db.service.jdbc.entity.Tocken;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.TockenService;
