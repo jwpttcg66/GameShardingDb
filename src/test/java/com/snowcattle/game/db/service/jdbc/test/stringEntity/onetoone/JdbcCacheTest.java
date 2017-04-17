@@ -16,7 +16,7 @@ public class JdbcCacheTest extends JdbcTest{
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
-        TockenService tockenService = getOrderProxyService(classPathXmlApplicationContext);
+        TockenService tockenService = getTockenProxyService(classPathXmlApplicationContext);
         insertTest(classPathXmlApplicationContext, tockenService);
         insertBatchTest(classPathXmlApplicationContext, tockenService);
         Tocken tocken = getTest(classPathXmlApplicationContext, tockenService);
@@ -25,11 +25,11 @@ public class JdbcCacheTest extends JdbcTest{
         updateBatchTest(classPathXmlApplicationContext, tockenService, tockenList);
         deleteTest(classPathXmlApplicationContext, tockenService, tocken);
         deleteBatchTest(classPathXmlApplicationContext, tockenService, tockenList);
-        getBatchOrderList(classPathXmlApplicationContext, tockenService);
+        getBatchTockenList(classPathXmlApplicationContext, tockenService);
 
     }
 
-    public static List<Tocken> getBatchOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, TockenService tockenService) throws Exception {
+    public static List<Tocken> getBatchTockenList(ClassPathXmlApplicationContext classPathXmlApplicationContext, TockenService tockenService) throws Exception {
         EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
         Tocken tocken = new Tocken();
         Tocken proxyTocken = entityProxyFactory.createProxyEntity(tocken);
@@ -40,7 +40,7 @@ public class JdbcCacheTest extends JdbcTest{
         return orderList;
     }
 
-    public static TockenService getOrderProxyService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
+    public static TockenService getTockenProxyService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
         TockenService tockenService = (TockenService) classPathXmlApplicationContext.getBean("tockenService");
         EntityServiceProxyFactory entityServiceProxyFactory = (EntityServiceProxyFactory) classPathXmlApplicationContext.getBean("entityServiceProxyFactory");
         tockenService = entityServiceProxyFactory.createProxyService(tockenService);
