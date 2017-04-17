@@ -4,7 +4,7 @@
 //import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
 //import com.snowcattle.game.db.service.jdbc.entity.Order;
 //import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
-//import com.snowcattle.game.db.service.jdbc.test.longEntity.onetoone.JdbcTest;
+//import com.snowcattle.game.db.service.jdbc.common.longEntity.onetoone.JdbcTest;
 //import com.snowcattle.game.db.service.proxy.EntityAysncServiceProxyFactory;
 //import org.springframework.context.support.ClassPathXmlApplicationContext;
 //
@@ -43,7 +43,7 @@
 //    }
 //
 //    public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
-//        com.snowcattle.game.db.service.jdbc.test.stringEntity.onetomore.JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
+//        com.snowcattle.game.db.service.jdbc.common.stringEntity.onetomore.JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //    }
 //
 //    public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {

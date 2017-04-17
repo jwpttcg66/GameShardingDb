@@ -27,7 +27,7 @@
             <!--<bean id="handlers" class="org.eclipse.jetty.server.handler.HandlerList">  -->
                 <!--<property name="handlers">  -->
                     <!--<list>  -->
-                        <!--<bean class="com.snowcattle.game.db.service.test.jetty.MyHandler" />  -->
+                        <!--<bean class="com.snowcattle.game.db.service.commonon.jetty.MyHandler" />  -->
                         <!--<bean class="org.eclipse.jetty.server.handler.DefaultHandler" />  -->
                     <!--</list>  -->
                 <!--</property>  -->
