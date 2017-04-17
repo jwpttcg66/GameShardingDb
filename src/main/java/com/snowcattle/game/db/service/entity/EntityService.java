@@ -259,7 +259,8 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
                 CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
                 entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
                 IDBMapper<T> mapper = getBatchTemplateMapper(sqlSession, entity);
-                mapper.insertEntity(entity);
+                long insertReuslt = mapper.insertEntity(entity);
+                result.add(insertReuslt);
             }
             commitBatchSession();
         }catch (Exception e){
