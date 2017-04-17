@@ -51,7 +51,7 @@ public class JdbcCacheTest {
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
         int startSize = TestConstants.batchStart;
-        int endSize = startSize + 10;
+        int endSize = startSize + TestConstants.saveSize;
         List<Order> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
             Order order = new Order();

@@ -40,7 +40,7 @@ public class JdbcCacheTest {
         MoreOrder proxyOrder = entityProxyFactory.createProxyEntity(moreOrder);
 //        MoreOrder proxyOrder = moreOrder;
         proxyOrder.setUserId(TestConstants.userId);
-        proxyOrder.setStatus("测试列表插入" + com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.batchStart);
+        proxyOrder.setStatus("测试列表插入" + TestConstants.batchStart);
 //        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
         List<MoreOrder> orderList = moreOrderService.getEntityList(proxyOrder);
         System.out.println(orderList);
@@ -52,8 +52,8 @@ public class JdbcCacheTest {
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService) throws Exception {
-        int startSize = com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.batchStart;
-        int endSize = startSize + 10;
+        int startSize = TestConstants.batchStart;
+        int endSize = startSize + TestConstants.saveSize;
         List<MoreOrder> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
             MoreOrder order = new MoreOrder();
