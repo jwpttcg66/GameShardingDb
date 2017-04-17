@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by jiangwenping on 17/3/21.
  */
 public interface IDBMapper<T extends IEntity> {
-    public int insertEntity(T entity);
+    public long insertEntity(T entity);
     public IEntity getEntity(T entity);
     public List<T> getEntityList(T entity);
     public List<T> getEntityList(T entity, RowBounds rowBounds);
