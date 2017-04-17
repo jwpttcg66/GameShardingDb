@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore;
 
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.MoreOrderService;
+import com.snowcattle.game.db.service.jdbc.test.TestConstants;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -13,19 +14,18 @@ import java.util.List;
  * Created by jiangwenping on 17/3/20.
  */
 public class JdbcCacheTest {
-    public static long userId = 99999;
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
-//        insertTest(classPathXmlApplicationContext, orderService);
+        insertTest(classPathXmlApplicationContext, moreOrderService);
         insertBatchTest(classPathXmlApplicationContext, moreOrderService);
-//        Order order = getTest(classPathXmlApplicationContext, orderService);
-//        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
-//        updateTest(classPathXmlApplicationContext, orderService, order);
-//        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        deleteTest(classPathXmlApplicationContext, orderService, order);
-//        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
+        MoreOrder order = getTest(classPathXmlApplicationContext, moreOrderService);
+        List<MoreOrder> orderList = getOrderList(classPathXmlApplicationContext, moreOrderService);
+        updateTest(classPathXmlApplicationContext, moreOrderService, order);
+        updateBatchTest(classPathXmlApplicationContext, moreOrderService, orderList);
+        deleteTest(classPathXmlApplicationContext, moreOrderService, order);
+        deleteBatchTest(classPathXmlApplicationContext, moreOrderService, orderList);
         getBatchOrderList(classPathXmlApplicationContext, moreOrderService);
 
     }
@@ -39,7 +39,7 @@ public class JdbcCacheTest {
         MoreOrder moreOrder = new MoreOrder();
         MoreOrder proxyOrder = entityProxyFactory.createProxyEntity(moreOrder);
 //        MoreOrder proxyOrder = moreOrder;
-        proxyOrder.setUserId(userId);
+        proxyOrder.setUserId(TestConstants.userId);
         proxyOrder.setStatus("测试列表插入" + com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.batchStart);
 //        MoreOrderService moreOrderService = getMoreOrderProxyService(classPathXmlApplicationContext);
         List<MoreOrder> orderList = moreOrderService.getEntityList(proxyOrder);
@@ -57,7 +57,7 @@ public class JdbcCacheTest {
         List<MoreOrder> list = new ArrayList<>();
         for (int i = startSize; i < endSize; i++) {
             MoreOrder order = new MoreOrder();
-            order.setUserId(userId);
+            order.setUserId(TestConstants.userId);
             order.setId((long)i);
             order.setStatus("测试列表插入" + i);
             list.add(order);
