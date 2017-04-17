@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.jdbc.test.tps;
+package com.snowcattle.game.db.service.jdbc.test.tps.singleThread;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.mapper.OrderMapper;
