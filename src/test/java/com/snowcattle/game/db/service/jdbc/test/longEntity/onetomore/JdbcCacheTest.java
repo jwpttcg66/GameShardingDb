@@ -1,9 +1,7 @@
 package com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore;
 
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
-import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.MoreOrderService;
-import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -32,7 +30,7 @@ public class JdbcCacheTest {
 
     }
 
-    public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
+    public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService orderService, List<MoreOrder> orderList) throws Exception {
         com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 
@@ -49,7 +47,7 @@ public class JdbcCacheTest {
         return orderList;
     }
 
-    public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
+    public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService orderService, List<MoreOrder> orderList) throws Exception {
         com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore.JdbcTest.updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
     }
 

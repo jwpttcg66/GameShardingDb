@@ -1,9 +1,7 @@
 package com.snowcattle.game.db.service.jdbc.test.longEntity.onetomore;
 
 import com.snowcattle.game.db.service.jdbc.entity.MoreOrder;
-import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.MoreOrderService;
-import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -26,30 +24,30 @@ public class JdbcTest {
         MoreOrder moreOrder = getTest(classPathXmlApplicationContext, moreOrderService);
         List<MoreOrder> orderList = getMoreOrderList(classPathXmlApplicationContext, moreOrderService);
         updateTest(classPathXmlApplicationContext, moreOrderService, moreOrder);
-//        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        deleteTest(classPathXmlApplicationContext, orderService, order);
-//        deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
-//        getOrderList(classPathXmlApplicationContext, orderService);
+        updateBatchTest(classPathXmlApplicationContext, moreOrderService, orderList);
+        deleteTest(classPathXmlApplicationContext, moreOrderService, moreOrder);
+        deleteBatchTest(classPathXmlApplicationContext, moreOrderService, orderList);
+        getMoreOrderList(classPathXmlApplicationContext, moreOrderService);
     }
 
 
 
-    public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
+    public static void deleteBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService, List<MoreOrder> orderList) throws Exception {
        //test2
-        orderService.deleteEntityBatch(orderList);
+        moreOrderService.deleteEntityBatch(orderList);
     }
 
-    public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService, List<Order> orderList) throws Exception {
+    public static void updateBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService, List<MoreOrder> orderList) throws Exception {
         EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
-        List<Order> updateList = new ArrayList<>();
-        for (Order order : orderList) {
-            Order proxyOrder = entityProxyFactory.createProxyEntity(order);
+        List<MoreOrder> updateList = new ArrayList<>();
+        for (MoreOrder moreOrder : orderList) {
+            MoreOrder proxyOrder = entityProxyFactory.createProxyEntity(moreOrder);
             proxyOrder.setStatus("dddd");
             proxyOrder.setUserId(userId);
-            proxyOrder.setId(order.getId());
+            proxyOrder.setId(moreOrder.getId());
             updateList.add(proxyOrder);
         }
-        orderService.updateOrderList(updateList);
+        moreOrderService.updateMoreOrderList(updateList);
     }
 
     public static void insertBatchTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, MoreOrderService moreOrderService) throws Exception {
