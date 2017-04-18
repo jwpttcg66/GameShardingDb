@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.jdbc.test.tps.singleThread;
 
 import com.snowcattle.game.db.service.jdbc.entity.Order;
 import com.snowcattle.game.db.service.jdbc.mapper.OrderMapper;
+import com.snowcattle.game.db.service.jdbc.test.TestConstants;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,8 +24,8 @@ public class JdbcBatchOriginTest {
         try {
             OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
             Order order = new Order();
-            int startSize = 4311000;
-            int endSize = startSize + 2000;
+            int startSize = TestConstants.batchStart;
+            int endSize = startSize + TestConstants.saveSize;
             long startTime = System.currentTimeMillis();
             long userId = startSize;
             for(int i= startSize; i< endSize; i++) {
