@@ -3,6 +3,7 @@ package com.snowcattle.game.db.service.jdbc.test.tps.mutilthread.sync.noCache;
 import com.snowcattle.game.db.service.common.uuid.SnowFlakeUUIDService;
 import com.snowcattle.game.db.service.jdbc.service.entity.impl.OrderService;
 import com.snowcattle.game.db.service.jdbc.test.tps.mutilthread.SaveRunable;
+import com.snowcattle.game.db.service.proxy.EntityServiceProxyFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.CountDownLatch;
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by jwp on 2017/4/18.
  */
-public class NoCacheTest {
+public class CacheTest {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
         OrderService orderService = getOrderService(classPathXmlApplicationContext);
@@ -33,8 +34,10 @@ public class NoCacheTest {
         System.out.println("所有存储" + number.get() + "耗时" + time);
     }
 
-    public static OrderService getOrderService(ClassPathXmlApplicationContext classPathXmlApplicationContext) {
+    public static OrderService getOrderService(ClassPathXmlApplicationContext classPathXmlApplicationContext) throws Exception {
         OrderService orderService = (OrderService) classPathXmlApplicationContext.getBean("orderService");
+        EntityServiceProxyFactory entityServiceProxyFactory = (EntityServiceProxyFactory) classPathXmlApplicationContext.getBean("entityServiceProxyFactory");
+        orderService = entityServiceProxyFactory.createProxyService(orderService);
         return orderService;
     }
 }

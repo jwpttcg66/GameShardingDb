@@ -1,4 +1,4 @@
-package com.snowcattle.game.db.service.jdbc.test.tps.mutilthread.sync;
+package com.snowcattle.game.db.service.jdbc.test.tps.mutilthread;
 
 import com.snowcattle.game.db.service.common.uuid.SnowFlakeUUIDService;
 import com.snowcattle.game.db.service.jdbc.entity.Order;
