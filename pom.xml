@@ -6,7 +6,7 @@
 
     <groupId>com.snowcattle.game</groupId>
     <artifactId>game-sharding-db</artifactId>
-    <version>1.1.001</version>
+    <version>1.2.001</version>
 
     <repositories>
         <repository>
