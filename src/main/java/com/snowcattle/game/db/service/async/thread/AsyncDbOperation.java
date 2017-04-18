@@ -110,6 +110,8 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
             if(StringUtils.isEmpty(playerKey)){
                 break;
             }
+            //如果性能不够的话，这里可以采用countdownlatch， 将下面逻辑进行封装，执行多线程更新
+
             //查找玩家数据进行存储 进行redis-game-transaction 加锁
             GameTransactionEntityCause gameTransactionEntityCause = dbGameTransactionEntityCauseFactory.getAsyncDbSave();
             AsyncDBSaveTransactionEntity asyncDBSaveTransactionEntity = dbGameTransactionEntityFactory.createAsyncDBSaveTransactionEntity(gameTransactionEntityCause, rgtRedisService, simpleClassName, playerKey, entityService, redisService);
