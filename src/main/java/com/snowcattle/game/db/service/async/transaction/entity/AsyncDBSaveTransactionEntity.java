@@ -9,6 +9,7 @@ import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.AbstractEntity;
 import com.snowcattle.game.db.service.async.AsyncEntityWrapper;
+import com.snowcattle.game.db.service.async.thread.AsyncDbOperationMonitor;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.proxy.EntityProxyFactory;
 import com.snowcattle.game.db.service.redis.RedisService;
@@ -44,6 +45,8 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
     private String playerKey;
 
     private EntityProxyFactory entityProxyFactory;
+
+    private AsyncDbOperationMonitor asyncDbOperationMonitor;
 
     public AsyncDBSaveTransactionEntity(GameTransactionEntityCause cause, String playerKey, IRGTRedisService irgtRedisService, EntityService entityService, RedisService redisService
                                         , EntityProxyFactory entityProxyFactory) {
@@ -122,6 +125,8 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
             entityService.deleteEntityBatch(abstractEntityList);
             //TODO进行回调删除
         }
+
+        asyncDbOperationMonitor.monitor();
     }
     @Override
     public void rollback() throws GameTransactionException {
@@ -131,5 +136,13 @@ public class AsyncDBSaveTransactionEntity extends AbstractGameTransactionEntity 
     @Override
     public GameTransactionCommitResult trycommit() throws GameTransactionException {
         return GameTransactionCommitResult.SUCCESS;
+    }
+
+    public AsyncDbOperationMonitor getAsyncDbOperationMonitor() {
+        return asyncDbOperationMonitor;
+    }
+
+    public void setAsyncDbOperationMonitor(AsyncDbOperationMonitor asyncDbOperationMonitor) {
+        this.asyncDbOperationMonitor = asyncDbOperationMonitor;
     }
 }

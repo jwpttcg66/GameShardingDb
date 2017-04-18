@@ -16,7 +16,6 @@ public class JdbcAsyncCacheTest extends JdbcCacheTest{
 
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(new String[]{"bean/*.xml"});
-        AsyncOperationRegistry asyncOperationRegistry = (AsyncOperationRegistry) classPathXmlApplicationContext.getBean("asyncOperationRegistry");
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 
         insertTest(classPathXmlApplicationContext, orderService);

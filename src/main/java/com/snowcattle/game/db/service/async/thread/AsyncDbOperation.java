@@ -67,6 +67,11 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
      */
     private NonOrderedQueuePoolExecutor operationExecutor;
 
+    /**
+     * 监视器
+     */
+    private AsyncDbOperationMonitor asyncDbOperationMonitor;
+
     public NonOrderedQueuePoolExecutor getOperationExecutor() {
         return operationExecutor;
     }
@@ -80,12 +85,15 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
         if(operationLogger.isDebugEnabled()){
             operationLogger.debug("start async db operation");
         }
+        asyncDbOperationMonitor.start();
         EntityService entityService = getWrapperEntityService();
         EntityServiceShardingStrategy entityServiceShardingStrategy = entityService.getEntityServiceShardingStrategy();
         int size = entityServiceShardingStrategy.getDbCount();
         for(int i = 0; i < size; i++){
             saveDb(i, entityService);
         }
+        asyncDbOperationMonitor.printInfo(this.getClass().getSimpleName());
+        asyncDbOperationMonitor.stop();
     }
 
     /**
@@ -105,6 +113,7 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
             //查找玩家数据进行存储 进行redis-game-transaction 加锁
             GameTransactionEntityCause gameTransactionEntityCause = dbGameTransactionEntityCauseFactory.getAsyncDbSave();
             AsyncDBSaveTransactionEntity asyncDBSaveTransactionEntity = dbGameTransactionEntityFactory.createAsyncDBSaveTransactionEntity(gameTransactionEntityCause, rgtRedisService, simpleClassName, playerKey, entityService, redisService);
+            asyncDBSaveTransactionEntity.setAsyncDbOperationMonitor(asyncDbOperationMonitor);
             GameTransactionCommitResult commitResult = transactionService.commitTransaction(dbGameTransactionCauseFactory.getAsyncDbSave(), asyncDBSaveTransactionEntity);
             if(!commitResult.equals(GameTransactionCommitResult.SUCCESS)){
                 //如果事务失败，说明没有权限禁行数据存储操作,需要放回去下次继续存储
@@ -181,5 +190,13 @@ public abstract class AsyncDbOperation<T extends EntityService> extends TimerTas
 
     public void setEntityProxyFactory(EntityProxyFactory entityProxyFactory) {
         this.entityProxyFactory = entityProxyFactory;
+    }
+
+    public AsyncDbOperationMonitor getAsyncDbOperationMonitor() {
+        return asyncDbOperationMonitor;
+    }
+
+    public void setAsyncDbOperationMonitor(AsyncDbOperationMonitor asyncDbOperationMonitor) {
+        this.asyncDbOperationMonitor = asyncDbOperationMonitor;
     }
 }

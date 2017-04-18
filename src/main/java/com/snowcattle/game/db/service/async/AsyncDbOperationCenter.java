@@ -2,6 +2,7 @@ package com.snowcattle.game.db.service.async;
 
 import com.snowcattle.game.db.common.DbServiceName;
 import com.snowcattle.game.db.service.async.thread.AsyncDbOperation;
+import com.snowcattle.game.db.service.async.thread.AsyncDbOperationMonitor;
 import com.snowcattle.game.db.service.common.service.IDbService;
 import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
@@ -52,6 +53,9 @@ public class AsyncDbOperationCenter implements IDbService{
         Collection<AsyncDbOperation> collection = asyncOperationRegistry.getAllAsyncEntityOperation();
         for(AsyncDbOperation asyncDbOperation: collection){
 //            scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 60, TimeUnit.SECONDS);
+            AsyncDbOperationMonitor  asyncDbOperationMonitor = new AsyncDbOperationMonitor();
+            asyncDbOperation.setAsyncDbOperationMonitor(asyncDbOperationMonitor);
+
             scheduledExecutorService.scheduleAtFixedRate(asyncDbOperation, 0, 5, TimeUnit.SECONDS);
         }
     }
