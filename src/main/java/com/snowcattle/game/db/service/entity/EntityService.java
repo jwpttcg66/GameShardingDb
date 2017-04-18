@@ -163,7 +163,6 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
     @DbOperation(operation = DbOperationEnum.delete)
     public void deleteEntity(T entity) {
         long selectId = getShardingId(entity);
-        ;
         CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
         entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
         IDBMapper<T> idbMapper = getTemplateMapper(entity);

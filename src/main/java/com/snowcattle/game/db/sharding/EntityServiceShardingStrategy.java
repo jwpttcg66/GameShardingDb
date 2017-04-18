@@ -28,12 +28,23 @@ public class EntityServiceShardingStrategy {
      */
     private int pageLimit = 50;
 
+    /**
+     * 是否开放sharding
+     */
+    private boolean openSharding = true;
+
     public String getShardingDBKeyByUserId(long userId) {
+        if(!openSharding){
+            return dataSource;
+        }
         long dbIndex = userId % dbCount;
         return dataSource+ dbIndex;
     }
 
     public int getShardingDBTableIndexByUserId(long userId){
+        if(!openSharding){
+            return 0;
+        }
         return (int) (userId%tableCount);
     }
 
@@ -75,5 +86,13 @@ public class EntityServiceShardingStrategy {
 
     public void setPageFlag(boolean pageFlag) {
         this.pageFlag = pageFlag;
+    }
+
+    public boolean isOpenSharding() {
+        return openSharding;
+    }
+
+    public void setOpenSharding(boolean openSharding) {
+        this.openSharding = openSharding;
     }
 }
