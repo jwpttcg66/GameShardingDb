@@ -106,15 +106,6 @@ public class ObjectUtils {
         }
         return transferMap;
     }
-//	public static String getFieldsValueStr(Object obj,String[] fieldName){
-//		Map<String,String> keyMap=ObjectUtils.getMap(obj, fieldName);
-//		StringBuilder sb=new StringBuilder();
-//		for(String keyName:fieldName){
-//			sb.append(keyMap.get(keyName)).append("#");
-//		}
-//		return sb.toString();
-//	}
-
 
     public static String getFieldsValueStr(Object obj,String[] fieldName){
         Map<String,String> keyMap=ObjectUtils.getMap(obj, fieldName);

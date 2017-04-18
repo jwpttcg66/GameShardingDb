@@ -1,8 +1,10 @@
 package com.snowcattle.game.db.service.async;
 
+import com.snowcattle.game.db.common.DbServiceName;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.enums.DbOperationEnum;
 import com.snowcattle.game.db.entity.AbstractEntity;
+import com.snowcattle.game.db.service.common.service.IDbService;
 import com.snowcattle.game.db.service.entity.EntityService;
 import com.snowcattle.game.db.service.redis.AsyncRedisKeyEnum;
 import com.snowcattle.game.db.service.redis.RedisInterface;
@@ -25,7 +27,7 @@ import java.util.Map;
  *  然后把玩家变动通知，放入到玩家身上。
  */
 @Service
-public class AsyncDbRegisterCenter {
+public class AsyncDbRegisterCenter implements IDbService{
 
     private Logger logger = Loggers.dbLogger;
 
@@ -111,5 +113,18 @@ public class AsyncDbRegisterCenter {
     }
 
 
+    @Override
+    public String getDbServiceName() {
+        return DbServiceName.asyncDbRegisterCenter;
+    }
 
+    @Override
+    public void startup() throws Exception {
+
+    }
+
+    @Override
+    public void shutdown() throws Exception {
+
+    }
 }

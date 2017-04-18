@@ -1,5 +1,9 @@
 package com.snowcattle.game.db.service.common.uuid;
 
+import com.snowcattle.game.db.common.DbServiceName;
+import com.snowcattle.game.db.service.common.service.IDbService;
+import com.snowcattle.game.db.service.config.DbConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,7 +11,7 @@ import org.springframework.stereotype.Service;
  * 低15为为同一时间序列号32768, 中间10位位服务器节点最大为1024， 高38位位当前时间跟开始时间的差值，(1L << 38) / (1000L * 60 * 60 * 24 * 365) 可以用8年
  */
 @Service
-public class SnowFlakeUUIDService implements IUUIDService{
+public class SnowFlakeUUIDService implements IUUIDService, IDbService{
     // ==============================Fields===========================================
     /** 开始时间截 (2017-01-01) */
     private final long twepoch = 1483200000000L;
@@ -37,6 +41,9 @@ public class SnowFlakeUUIDService implements IUUIDService{
 
     //节点号（0-1024）
     private int nodeId;
+
+    @Autowired
+    private DbConfig dbConfig;
 
     //用于spring构造
     public SnowFlakeUUIDService() {
@@ -123,6 +130,29 @@ public class SnowFlakeUUIDService implements IUUIDService{
             throw new IllegalArgumentException(String.format("node must be between %s and %s", 0, maxNodeId));
         }
         this.nodeId = nodeId;
+    }
+
+    @Override
+    public String getDbServiceName() {
+        return DbServiceName.uuidService;
+    }
+
+    @Override
+    public void startup() throws Exception {
+        setNodeId(dbConfig.getDbId());
+    }
+
+    @Override
+    public void shutdown() throws Exception {
+
+    }
+
+    public DbConfig getDbConfig() {
+        return dbConfig;
+    }
+
+    public void setDbConfig(DbConfig dbConfig) {
+        this.dbConfig = dbConfig;
     }
 }
 

@@ -1,6 +1,8 @@
 package com.snowcattle.game.db.service.async;
 
+import com.snowcattle.game.db.common.DbServiceName;
 import com.snowcattle.game.db.service.async.thread.AsyncDbOperation;
+import com.snowcattle.game.db.service.common.service.IDbService;
 import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.service.entity.AsyncOperationRegistry;
 import com.snowcattle.game.db.util.ExecutorUtil;
@@ -17,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * Created by jwp on 2017/4/12.
  */
 @Service
-public class AsyncDbOperationCenter {
+public class AsyncDbOperationCenter implements IDbService{
 
     /**
      * 执行db落得第线程数量
@@ -32,7 +34,13 @@ public class AsyncDbOperationCenter {
     @Autowired
     private AsyncOperationRegistry asyncOperationRegistry;
 
-    public void start() throws Exception {
+    @Override
+    public String getDbServiceName() {
+        return DbServiceName.asyncDbOperationCenter;
+    }
+
+    @Override
+    public void startup() throws Exception {
         int coreSize =  dbConfig.getAsyncDbOperationSaveWorkerSize();
         operationExecutor = new NonOrderedQueuePoolExecutor(coreSize);
         int selectSize = dbConfig.getAsyncDbOperationSaveWorkerSize();
@@ -48,7 +56,8 @@ public class AsyncDbOperationCenter {
         }
     }
 
-    public void stop()throws Exception {
+    @Override
+    public void shutdown() throws Exception {
         if(operationExecutor != null){
             ExecutorUtil.shutdownAndAwaitTermination(operationExecutor, 60, TimeUnit.SECONDS);
         }

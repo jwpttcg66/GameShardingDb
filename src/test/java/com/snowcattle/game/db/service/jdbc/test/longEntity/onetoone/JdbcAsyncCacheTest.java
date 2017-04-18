@@ -20,9 +20,6 @@ public class JdbcAsyncCacheTest extends JdbcCacheTest{
         OrderService orderService = getOrderProxyService(classPathXmlApplicationContext);
 
         insertTest(classPathXmlApplicationContext, orderService);
-        AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
-        asyncDbOperationCenter.start();
-
         insertBatchTest(classPathXmlApplicationContext, orderService);
         Order order = getTest(classPathXmlApplicationContext, orderService);
         List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
@@ -30,6 +27,9 @@ public class JdbcAsyncCacheTest extends JdbcCacheTest{
         updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
         deleteTest(classPathXmlApplicationContext, orderService, order);
         deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
+
+        AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
+        asyncDbOperationCenter.startup();
 
     }
 

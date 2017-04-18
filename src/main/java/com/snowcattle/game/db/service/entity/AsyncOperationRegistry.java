@@ -1,10 +1,12 @@
 package com.snowcattle.game.db.service.entity;
 
+import com.snowcattle.game.db.common.DbServiceName;
 import com.snowcattle.game.db.common.GlobalConstants;
 import com.snowcattle.game.db.common.Loggers;
 import com.snowcattle.game.db.common.annotation.AsyncEntityOperation;
 import com.snowcattle.game.db.common.loader.scanner.ClassScanner;
 import com.snowcattle.game.db.service.async.thread.AsyncDbOperation;
+import com.snowcattle.game.db.service.common.service.IDbService;
 import com.snowcattle.game.db.service.config.DbConfig;
 import com.snowcattle.game.db.util.DbBeanUtils;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 异步服务注册中心
  */
 @Service
-public class AsyncOperationRegistry {
+public class AsyncOperationRegistry implements IDbService{
 
     public static Logger logger = Loggers.dbServerLogger;
 
@@ -38,6 +40,11 @@ public class AsyncOperationRegistry {
      * 注册map
      */
     private ConcurrentHashMap<String, AsyncDbOperation> opeartionMap = new ConcurrentHashMap<String, AsyncDbOperation>();
+
+    @Override
+    public String getDbServiceName() {
+        return DbServiceName.asyncOperationRegistry;
+    }
 
     public void startup() throws Exception {
         loadPackage(dbConfig.getAsyncOperationPackageName(),

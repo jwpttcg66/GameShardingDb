@@ -28,7 +28,7 @@ public class JdbcAsyncCacheTest extends JdbcCacheTest{
         deleteBatchTest(classPathXmlApplicationContext, orderService, orderList);
 
         AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
-        asyncDbOperationCenter.start();
+        asyncDbOperationCenter.startup();
 
     }
 
