@@ -30,9 +30,6 @@ public class AsyncCacheTest {
             saveRunable.start();
         }
         countDownLatch.await();
-        long endTime  = System.currentTimeMillis();
-
-        long time = endTime - startTime;
         AsyncDbOperationCenter asyncDbOperationCenter = (AsyncDbOperationCenter) classPathXmlApplicationContext.getBean("asyncDbOperationCenter");
         asyncDbOperationCenter.startup();
     }

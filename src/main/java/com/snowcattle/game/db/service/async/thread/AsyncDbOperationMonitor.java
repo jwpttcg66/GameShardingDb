@@ -19,21 +19,27 @@ public class AsyncDbOperationMonitor{
 
     public AtomicLong count;
 
-    public long startTime;
+//    public long startTime;
 
-//    public long startTime = System.currentTimeMillis();
+    private boolean totalFlag = true;
+    public long startTime = System.currentTimeMillis();
 
     public void start(){
-        this.count.set(0);
-        startTime = System.currentTimeMillis();
+        if(!totalFlag){
+            this.count.set(0);
+            startTime = System.currentTimeMillis();
+        }
+
     }
     public void monitor(){
-        this.count.incrementAndGet();
+        this.count.getAndIncrement();
     }
 
     public void stop()
     {
-        this.count.set(0);
+        if(!totalFlag) {
+            this.count.set(0);
+        }
     }
 
     public void printInfo(String opeartionName){
