@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Created by jiangwenping on 17/3/16.
- * 类次方法需要使用代理
+ * 类需要使用代理 会通过此注解，注入到代理对象的变化集合里
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

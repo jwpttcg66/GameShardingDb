@@ -10,6 +10,7 @@ import com.snowcattle.game.db.service.redis.RedisListInterface;
 
 /**
  * Created by jwp on 2017/3/24.
+ * 实体
  */
 @EntitySave
 @DbMapper(mapper = MoreOrderMapper.class)

@@ -4,6 +4,8 @@
 
 将同步存储底层落地抽象为EntityService, 具体存储服务可继承EntityService
 
+### [使用手册](https://github.com/jwpttcg66/GameShardingDb/wiki)
+
 ### 参考demo为test下jdbc
 
 #### 贡献源码&合作&交流
