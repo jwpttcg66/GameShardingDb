@@ -29,28 +29,22 @@ public class SaveRunable extends  Thread{
      */
     private AtomicLong count;
 
-    /**
-     * 开始数量
-     */
-    private int start;
-
     private CountDownLatch countDownLatch;
 
-    public SaveRunable(OrderService orderService, SnowFlakeUUIDService snowFlakeUUIDService, AtomicLong count, int start, CountDownLatch countDownLatch) {
+    public SaveRunable(OrderService orderService, SnowFlakeUUIDService snowFlakeUUIDService, AtomicLong count, CountDownLatch countDownLatch) {
         this.orderService = orderService;
         this.snowFlakeUUIDService = snowFlakeUUIDService;
         this.count = count;
-        this.start = start;
         this.countDownLatch = countDownLatch;
     }
 
     @Override
     public void run() {
-        int startSize = start;
-        int endSize = startSize+TestConstants.saveSize;
+        int startSize = 0;
+        int endSize = TestConstants.saveSize;
 
         long start = System.currentTimeMillis();
-        for (int i = startSize; i < endSize; i++) {
+        for (int i = startSize; i < TestConstants.saveSize; i++) {
             Order order = new Order();
             order.setId(snowFlakeUUIDService.nextId());
             order.setStatus("测试插入" + i);

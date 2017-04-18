@@ -24,8 +24,7 @@ public class NoCacheTest {
 
         long startTime = System.currentTimeMillis();
         for(int i = 0; i < threadSize; i++){
-            int start = TestConstants.batchStart + i * TestConstants.saveSize;
-            SaveRunable saveRunable = new SaveRunable(orderService, snowFlakeUUIDService, number,start, countDownLatch);
+            SaveRunable saveRunable = new SaveRunable(orderService, snowFlakeUUIDService, number, countDownLatch);
             saveRunable.start();
         }
         countDownLatch.await();
