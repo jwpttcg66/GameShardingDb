@@ -44,12 +44,12 @@ public class SaveRunable extends  Thread{
         int endSize = TestConstants.saveSize;
 
         long start = System.currentTimeMillis();
+
         for (int i = startSize; i < endSize; i++) {
             Order order = new Order();
             order.setId(snowFlakeUUIDService.nextId());
             order.setStatus("测试插入" + i);
-            order.setUserId(i++);
-//            order.setUserId(TestConstants.userId);
+            order.setUserId(TestConstants.userId);
             orderService.insertOrder(order);
             count.incrementAndGet();
         }
