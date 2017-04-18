@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * Created by jwp on 2017/3/24.
+ * 映射到mybatis db
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
