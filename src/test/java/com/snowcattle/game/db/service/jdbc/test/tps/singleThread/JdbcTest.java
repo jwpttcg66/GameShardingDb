@@ -31,6 +31,7 @@ public class JdbcTest {
         long start = System.currentTimeMillis();
         for (int i = startSize; i < endSize; i++) {
             Order order = new Order();
+            order.setUserId(TestConstants.userId);
             order.setId(snowFlakeUUIDService.nextId());
             order.setStatus("测试插入" + i);
             orderService.insertOrder(order);

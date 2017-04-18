@@ -48,6 +48,7 @@ public class SaveRunable extends  Thread{
             Order order = new Order();
             order.setId(snowFlakeUUIDService.nextId());
             order.setStatus("测试插入" + i);
+            order.setUserId(TestConstants.userId);
             orderService.insertOrder(order);
             count.incrementAndGet();
         }
