@@ -8,12 +8,28 @@ import java.util.Map;
 
 /**
  * Created by jiangwenping on 17/3/21.
+ * 基础mapper
  */
 public interface IDBMapper<T extends IEntity> {
     public long insertEntity(T entity);
     public IEntity getEntity(T entity);
     public List<T> getEntityList(T entity);
     public List<T> getEntityList(T entity, RowBounds rowBounds);
+
+    /**
+     * 直接查找db，无缓存
+     * @param entity
+     * @return
+     */
+    public List<T> queryList(Map map);
+
+    /**
+     * 直接查找db，无缓存
+     * @param entity
+     * @return
+     */
+    public List<T> queryList(Map map,RowBounds rowBounds);
+
     public void updateEntityByMap(Map map);
     public void deleteEntity(T entity);
 }

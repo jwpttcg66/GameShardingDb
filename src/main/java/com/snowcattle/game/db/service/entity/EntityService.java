@@ -123,6 +123,47 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         return result;
     }
 
+    public List<T> queryList(T entity) {
+        long selectId = getShardingId(entity);
+        CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
+        entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
+        IDBMapper<T> idbMapper = getTemplateMapper(entity);
+        List<T> result = null;
+
+        Map hashMap = new HashMap<>();
+        hashMap.put("sharding_table_index", entity.getSharding_table_index());
+        hashMap.put("userId", entity.getUserId());
+        EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
+        if(entityProxyWrapper != null){
+
+        }
+
+        EntityServiceShardingStrategy entityServiceShardingStrategy = getDefaultEntityServiceShardingStrategy();
+        try {
+            if(!entityServiceShardingStrategy.isPageFlag()){
+                result = idbMapper.queryList(hashMap);
+            }else{
+                int pageLimit = entityServiceShardingStrategy.getPageLimit();
+                PageRowBounds pageRowBounds = new PageRowBounds(0, pageLimit);
+                result = idbMapper.queryList(hashMap, pageRowBounds);
+                long count = pageRowBounds.getTotal().longValue();
+                if(count > pageLimit) {
+                    int offset = pageLimit;
+                    while (offset < count){
+                        pageRowBounds = new PageRowBounds(offset, pageLimit);
+                        result.addAll(idbMapper.queryList(hashMap, pageRowBounds));
+                        offset+=pageLimit;
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        } finally {
+        }
+        return result;
+    }
+
     /**
      * 修改实体
      *
@@ -139,10 +180,8 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         hashMap.put("id", entity.getId());
         EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
         //只有数据变化的时候才会更新
-        if (entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
-            if (entityProxyWrapper != null) {
-                hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
-            }
+        if (entityProxyWrapper != null && entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
+            hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
             IDBMapper<T> idbMapper = getTemplateMapper((T) entity);
             try {
                 idbMapper.updateEntityByMap(hashMap);
@@ -214,7 +253,9 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
     public void closeBatchSession() {
         SqlSession session = threadLocal.get();
         if (session != null) {
-            logger.debug("销毁");
+            if(logger.isDebugEnabled()) {
+                logger.debug("销毁");
+            }
             session.close();
             threadLocal.set(null);
         }
@@ -288,10 +329,8 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
                 hashMap.put("id", entity.getId());
                 EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
                 //只有数据变化的时候才会更新
-                if (entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
-                    if (entityProxyWrapper != null) {
-                        hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
-                    }
+                if (entityProxyWrapper != null && entityProxyWrapper.getEntityProxy().isDirtyFlag()) {
+                    hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
                     try {
                         mapper.updateEntityByMap(hashMap);
                     } catch (Exception e) {
