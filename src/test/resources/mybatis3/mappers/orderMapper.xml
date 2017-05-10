@@ -21,6 +21,29 @@
         where user_id=#{userId} order by id
     </select>
 
+
+    <sql id="query_order_where">
+        <trim prefix="where" prefixOverrides="and">
+            <if test="id!=null and id!='' ">
+                id=#{id}
+            </if>
+            <if test="user_id!=null and user_id!='' ">
+                user_id=#{user_id}
+            </if>
+            <if test="status!=null and status!='' ">
+                status=#{status}
+            </if>
+        </trim>
+    </sql>
+
+    <select id="filterList" resultType="order" parameterType="map">
+        select id, user_id, status
+        from `t_order_${sharding_table_index}`
+        <!-- 引用Sql片段 -->
+        <include refid="query_order_where"></include>
+        order by id
+    </select>
+
     <update id="updateEntityByMap" parameterType="map">
         update `t_order_${sharding_table_index}`
         <trim prefix="SET" suffixOverrides=",">

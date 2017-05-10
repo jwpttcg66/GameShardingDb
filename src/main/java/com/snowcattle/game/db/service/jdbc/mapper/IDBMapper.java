@@ -18,17 +18,17 @@ public interface IDBMapper<T extends IEntity> {
 
     /**
      * 直接查找db，无缓存
-     * @param entity
+     * @param map
      * @return
      */
-    public List<T> queryList(Map map);
+    public List<T> filterList(Map map);
 
     /**
      * 直接查找db，无缓存
-     * @param entity
+     * @param map
      * @return
      */
-    public List<T> queryList(Map map,RowBounds rowBounds);
+    public List<T> filterList(Map map,RowBounds rowBounds);
 
     public void updateEntityByMap(Map map);
     public void deleteEntity(T entity);

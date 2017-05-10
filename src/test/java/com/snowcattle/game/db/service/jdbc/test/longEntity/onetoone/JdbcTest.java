@@ -21,6 +21,7 @@ public class JdbcTest {
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
         List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
+//        List<Order> orderList = filterList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
@@ -64,6 +65,13 @@ public class JdbcTest {
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
         List<Order> order = orderService.getOrderList(TestConstants.userId);
+        System.out.println(order);
+        return order;
+    }
+
+    public static List<Order> filterList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
+
+        List<Order> order = orderService.filterList(TestConstants.userId, "1");
         System.out.println(order);
         return order;
     }

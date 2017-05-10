@@ -123,7 +123,7 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         return result;
     }
 
-    public List<T> queryList(T entity) {
+    public List<T> filterList(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
         entity.setSharding_table_index(getEntityServiceShardingStrategy().getShardingDBTableIndexByUserId(selectId));
@@ -135,23 +135,23 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         hashMap.put("userId", entity.getUserId());
         EntityProxyWrapper entityProxyWrapper = entity.getEntityProxyWrapper();
         if(entityProxyWrapper != null){
-
+            hashMap.putAll(entityProxyWrapper.getEntityProxy().getChangeParamSet());
         }
 
         EntityServiceShardingStrategy entityServiceShardingStrategy = getDefaultEntityServiceShardingStrategy();
         try {
             if(!entityServiceShardingStrategy.isPageFlag()){
-                result = idbMapper.queryList(hashMap);
+                result = idbMapper.filterList(hashMap);
             }else{
                 int pageLimit = entityServiceShardingStrategy.getPageLimit();
                 PageRowBounds pageRowBounds = new PageRowBounds(0, pageLimit);
-                result = idbMapper.queryList(hashMap, pageRowBounds);
+                result = idbMapper.filterList(hashMap, pageRowBounds);
                 long count = pageRowBounds.getTotal().longValue();
                 if(count > pageLimit) {
                     int offset = pageLimit;
                     while (offset < count){
                         pageRowBounds = new PageRowBounds(offset, pageLimit);
-                        result.addAll(idbMapper.queryList(hashMap, pageRowBounds));
+                        result.addAll(idbMapper.filterList(hashMap, pageRowBounds));
                         offset+=pageLimit;
                     }
                 }
