@@ -64,16 +64,20 @@ public class JdbcTest {
     }
 
     public static List<Order> getOrderList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-        List<Order> order = orderService.getOrderList(TestConstants.userId);
-        System.out.println(order);
-        return order;
+        List<Order> orderList = orderService.getOrderList(TestConstants.userId);
+        System.out.println(orderList);
+        return orderList;
     }
 
     public static List<Order> filterList(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) throws Exception {
-
-        List<Order> order = orderService.filterList(TestConstants.userId, "1");
-        System.out.println(order);
-        return order;
+        EntityProxyFactory entityProxyFactory = (EntityProxyFactory) classPathXmlApplicationContext.getBean("entityProxyFactory");
+        Order order = new Order();
+        Order proxyOrder = entityProxyFactory.createProxyEntity(order);
+        proxyOrder.setUserId(TestConstants.userId);
+        proxyOrder.setStatus("1");
+        List<Order> orderList = orderService.filterList(proxyOrder);
+        System.out.println(orderList);
+        return orderList;
     }
 
     public static void insertTest(ClassPathXmlApplicationContext classPathXmlApplicationContext, OrderService orderService) {

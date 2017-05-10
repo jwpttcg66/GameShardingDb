@@ -68,14 +68,6 @@ public class OrderService extends EntityService<Order> implements IOrderService{
     }
 
     @Override
-    public List<Order> filterList(long userId, String status) {
-        Order order = new Order();
-        order.setUserId(userId);
-        order.setStatus(status);
-        return filterList(order);
-    }
-
-    @Override
     public EntityServiceShardingStrategy getEntityServiceShardingStrategy() {
         return getDefaultEntityServiceShardingStrategy();
     }
