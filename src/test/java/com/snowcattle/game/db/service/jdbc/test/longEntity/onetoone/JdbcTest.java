@@ -20,8 +20,8 @@ public class JdbcTest {
 //        insertTest(classPathXmlApplicationContext, orderService);
 //        insertBatchTest(classPathXmlApplicationContext, orderService);
 //        Order order = getTest(classPathXmlApplicationContext, orderService);
-        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
-//        List<Order> orderList = filterList(classPathXmlApplicationContext, orderService);
+//        List<Order> orderList = getOrderList(classPathXmlApplicationContext, orderService);
+        List<Order> orderList = filterList(classPathXmlApplicationContext, orderService);
 //        updateTest(classPathXmlApplicationContext, orderService, order);
 //        updateBatchTest(classPathXmlApplicationContext, orderService, orderList);
 //        deleteTest(classPathXmlApplicationContext, orderService, order);
