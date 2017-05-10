@@ -123,6 +123,11 @@ public abstract class EntityService<T extends AbstractEntity> implements IEntity
         return result;
     }
 
+    /**
+     * RedisInterface直接查询db的list接口
+     * @param entity 需要实现代理
+     * @return
+     */
     public List<T> filterList(T entity) {
         long selectId = getShardingId(entity);
         CustomerContextHolder.setCustomerType(getEntityServiceShardingStrategy().getShardingDBKeyByUserId(selectId));
