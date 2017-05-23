@@ -28,6 +28,7 @@ public class redisTest {
 
         list = redisService.getListFromHash(EntityUtils.getRedisKeyByRedisListInterface(moreOrder), MoreOrder.class);
         System.out.println(list);
+
     }
 
     public static void testObject() throws Exception {

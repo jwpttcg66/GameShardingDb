@@ -197,13 +197,13 @@
             <artifactId>GameThreadPool</artifactId>
             <version>${GameThreadPool.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty.aggregate</groupId>
-            <artifactId>jetty-all</artifactId>
-            <version>8.0.4.v20111024</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jetty.aggregate</groupId>-->
+            <!--<artifactId>jetty-all</artifactId>-->
+            <!--<version>8.0.4.v20111024</version>-->
+            <!--<type>jar</type>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 		<dependency>
 		    <groupId>com.alibaba</groupId>
 		    <artifactId>druid</artifactId>
